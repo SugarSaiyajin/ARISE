@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/map_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+area_id = "town"
+title = "雲橋鎮"
+walkable = Rect2(9,44,462,172)
+obstacles = Array[Rect2]([Rect2(65, 80, 78, 44), Rect2(340, 96, 60, 37), Rect2(348, 166, 63, 39), Rect2(148, 174, 29, 34), Rect2(202, 80, 28, 25)])
+anchors = {"farm":Vector2(20,147),"npc":Vector2(130,144),"shop":Vector2(345,144),"smith":Vector2(311,181),"notice":Vector2(215,116),"forest":Vector2(454,147)}
+hitboxes = {"npc":Rect2(48,45,120,116),"shop":Rect2(328,74,86,84),"smith":Rect2(313,144,114,72),"notice":Rect2(199,76,36,48),"forest":Rect2(421,119,49,45)}
+spawn = Vector2(36,147)

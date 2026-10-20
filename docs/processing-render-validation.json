@@ -1,0 +1,11 @@
+{
+  "source": "Actual Godot Movie Maker mixed output",
+  "sample_rate": 48000,
+  "channels": 2,
+  "duration_seconds": 16.633333333333333,
+  "peak": 0.278778076171875,
+  "rms": 0.038898516446352005,
+  "shutdown_tail_is_silent": true,
+  "renderer": "Godot Compatibility / Mesa llvmpipe",
+  "physical_device_tested": false
+}

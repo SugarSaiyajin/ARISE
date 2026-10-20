@@ -1,0 +1,10 @@
+{
+  "source": "Actual Godot Movie Maker mixed output",
+  "sample_rate": 48000,
+  "channels": 2,
+  "duration_seconds": 7.6,
+  "peak": 0.244964599609375,
+  "rms": 0.03796125179256674,
+  "shutdown_tail_is_silent": true,
+  "physical_device_tested": false
+}

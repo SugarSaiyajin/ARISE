@@ -1,0 +1,9 @@
+{
+  "method": "Image generation using original ARISE hero as reference",
+  "generated_source_file": "exec-05a8108f-0744-4e36-a76b-6e78ce52c67b.png",
+  "asset": "assets/pixel/hero_eight.png",
+  "sha256": "0a906d1a9f158bac63101d317de2a0b87482a97d31607787b14eb665ac6ffcba",
+  "png_unchanged": true,
+  "registration_tool": "tools/register_hero_frames.py",
+  "layout": "scripts/hero_frames.gd"
+}

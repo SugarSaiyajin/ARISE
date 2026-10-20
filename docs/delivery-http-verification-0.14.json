@@ -1,0 +1,26 @@
+{
+  "apk": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.14.0/arise-0.14.0.apk",
+    "status": 200,
+    "size_bytes": 82178195,
+    "content_type": "application/octet-stream",
+    "sha256": "be68ae3be81f8275f7d6db209f149bcdab596906c9cfcb501e32b96ae913a29f",
+    "final_url": "https://raw.githubusercontent.com/SugarSaiyajin/ARISE/refs/heads/delivery/android-0.14.0/arise-0.14.0.apk"
+  },
+  "image": {
+    "url": "https://raw.githubusercontent.com/SugarSaiyajin/ARISE/refs/heads/delivery/android-0.14.0/character.png",
+    "status": 200,
+    "size_bytes": 147727,
+    "content_type": "image/png",
+    "sha256": "3e9fbd95aebc94d16472621aff606aebab5dc760a3cb7f3ee872a9d5a3c97e5a",
+    "final_url": "https://raw.githubusercontent.com/SugarSaiyajin/ARISE/refs/heads/delivery/android-0.14.0/character.png"
+  },
+  "page": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/tree/delivery/android-0.14.0",
+    "status": 200,
+    "size_bytes": 247928,
+    "content_type": "text/html; charset=utf-8",
+    "sha256": "85df783cac4a398bb1c7ee910c2898d8871734243cfa9b704b9a7cfb55a753c4",
+    "final_url": "https://github.com/SugarSaiyajin/ARISE/tree/delivery/android-0.14.0"
+  }
+}

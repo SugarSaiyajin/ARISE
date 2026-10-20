@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/map_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+area_id = "farm"
+title = "雲棲莊園"
+walkable = Rect2(9,44,462,172)
+obstacles = Array[Rect2]([Rect2(39, 72, 74, 44), Rect2(249, 64, 77, 41), Rect2(353, 85, 61, 38), Rect2(376, 159, 42, 28), Rect2(298, 120, 16, 20), Rect2(87, 170, 36, 14), Rect2(321, 160, 43, 24)])
+anchors = {"house":Vector2(81,123),"box":Vector2(123,139),"shop":Vector2(367,132),"town":Vector2(454,116),"repair":Vector2(330,195),"dryer":Vector2(105,198),"coop":Vector2(310,177),"fish":Vector2(282,116)}
+hitboxes = {"house":Rect2(38,56,76,66),"shop":Rect2(351,80,64,53),"dryer":Rect2(78,142,57,66),"fish":Rect2(245,55,86,65),"coop":Rect2(304,132,70,51),"repair":Rect2(296,190,71,28),"town":Rect2(433,101,35,34)}
+spawn = Vector2(232,200)

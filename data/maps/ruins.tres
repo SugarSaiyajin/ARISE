@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/map_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+area_id = "ruins"
+title = "星潮舊驛"
+walkable = Rect2(9,44,462,172)
+obstacles = Array[Rect2]([Rect2(142, 63, 77, 19), Rect2(285, 63, 55, 19), Rect2(214, 70, 10, 37), Rect2(282, 70, 10, 37), Rect2(244, 97, 32, 27), Rect2(148, 131, 24, 22), Rect2(355, 66, 71, 45), Rect2(98, 77, 18, 12), Rect2(333, 111, 18, 12), Rect2(366, 195, 18, 12), Rect2(350, 156, 23, 18), Rect2(312, 173, 22, 14)])
+anchors = {"forest":Vector2(20,147),"relic":Vector2(258,145),"inscription":Vector2(160,165),"fish":Vector2(387,125)}
+hitboxes = {"forest":Rect2(6,106,57,57),"relic":Rect2(235,75,48,79),"inscription":Rect2(139,117,43,56),"fish":Rect2(355,54,71,80)}
+spawn = Vector2(44,147)

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/map_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+area_id = "forest"
+title = "霧杉林"
+walkable = Rect2(9,44,462,172)
+obstacles = Array[Rect2]([Rect2(331,53,91,51),Rect2(429,156,28,39)])
+anchors = {"town":Vector2(20,147),"route":Vector2(454,147),"fish":Vector2(366,116)}
+hitboxes = {"town":Rect2(6,100,57,63),"route":Rect2(418,109,53,46),"fish":Rect2(331,53,56,74)}
+spawn = Vector2(36,147)

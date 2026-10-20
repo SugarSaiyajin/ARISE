@@ -1,0 +1,30 @@
+{
+  "composition": "Cloudbridge Waltz / 雲橋晨曲",
+  "authoring": "Original score and procedural sound synthesis for ARISE; no samples or recordings.",
+  "music": {
+    "tempo_bpm": 90,
+    "meter": "3/4",
+    "key": "D major / pentatonic lead",
+    "duration_seconds": 32
+  },
+  "format": {
+    "sample_rate": 22050,
+    "bits": 16
+  },
+  "loops": [
+    "cloudbridge_waltz",
+    "garden_ambience",
+    "rain_ambience"
+  ],
+  "effects": [
+    "hoe",
+    "seed",
+    "water",
+    "harvest",
+    "coin",
+    "talk",
+    "step",
+    "ui",
+    "rest"
+  ]
+}

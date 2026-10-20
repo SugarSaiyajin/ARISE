@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-21",
+  "approval": "User approved proposals before integration",
+  "files": [
+    {
+      "file": "animals_approved.png",
+      "sha256": "be12ec1eab145fec0f58fa2fa4a87eddd8d6561db5b7859c035fb57815658433",
+      "source": "Original image generation based on user-approved proposals 01–03",
+      "processing": "Original PNG copied unchanged; runtime texture regions only"
+    },
+    {
+      "file": "buildings_approved.png",
+      "sha256": "7833cff4242efc40db96ba3dfcff85fbb7670d63cd025f8adb45154241b3f0ae",
+      "source": "Original image generation based on user-approved proposals 01–03",
+      "processing": "Original PNG copied unchanged; runtime texture regions only"
+    },
+    {
+      "file": "hero_f_approved.png",
+      "sha256": "054c0aa6409601db710b64878dff24a80a1aaf8a6b404b5a2ab96c522b9b2d45",
+      "source": "Original image generation based on user-approved proposals 01–03",
+      "processing": "Original PNG copied unchanged; runtime texture regions only"
+    },
+    {
+      "file": "hero_m_approved.png",
+      "sha256": "9db51657bf7bc06ff35d07abdfe6754ecc8406de416ff4a480f2140be683e644",
+      "source": "Original image generation based on user-approved proposals 01–03",
+      "processing": "Original PNG copied unchanged; runtime texture regions only"
+    },
+    {
+      "file": "hero_ne_approved.png",
+      "sha256": "3fae7ba00e92697fec7e599ecce172ffb68cb0e666b4e509ef1b3a70c5ac3dba",
+      "source": "Original image generation based on user-approved proposals 01–03",
+      "processing": "Original PNG copied unchanged; runtime texture regions only"
+    },
+    {
+      "file": "items_approved.png",
+      "sha256": "349a3d6582b406e2176dcaa1844919f648e67706c15d6a95ee8341114a31f5cb",
+      "source": "Original image generation based on user-approved proposals 01–03",
+      "processing": "Original PNG copied unchanged; runtime texture regions only"
+    },
+    {
+      "file": "residents_approved.png",
+      "sha256": "81b825edd8da6a9e9e5aaa31ef0352bf03f0375ca8b2fd5bc501ad231183681e",
+      "source": "Original image generation based on user-approved proposals 01–03",
+      "processing": "Original PNG copied unchanged; runtime texture regions only"
+    },
+    {
+      "file": "terrain_approved.png",
+      "sha256": "6d297b1b7698e170c68db5001d15304c5d3a81d037e15a1581627fab06ca176c",
+      "source": "Original image generation based on user-approved proposals 01–03",
+      "processing": "Original PNG copied unchanged; runtime texture regions only"
+    }
+  ],
+  "hero_frames": "Each protagonist uses 56 main frames plus 8 northeast frames, 64 total. Northeast supplement is shared sheet with 16 poses.",
+  "concept_reference": "https://github.com/SugarSaiyajin/ARISE/tree/design/art-review-03",
+  "npc_animation_limit": "Nine resident designs have front standing sprites; walking schedules do not imply eight-direction NPC animations."
+}

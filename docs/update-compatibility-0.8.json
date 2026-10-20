@@ -1,0 +1,9 @@
+{
+  "previous_version": "0.7.0",
+  "current_version": "0.8.0",
+  "same_signing_certificate": true,
+  "signing_certificate_sha256": "f270b7784cb9ac8983724c0351a643e7115b8d2291d8126e20c940604bed19c2",
+  "package_name": "org.arise.cloudbridge",
+  "legacy_version_1_save_accepted": true,
+  "actual_update_install_tested": false
+}
