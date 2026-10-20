@@ -45,5 +45,6 @@
   "size_bytes": 82178195,
   "original_hash_matches": true,
   "screenshot_decode": "passed",
-  "delivery_url_verified": false
+  "delivery_url_verified": true,
+  "download_verification": "download-verification.json"
 }
