@@ -1,0 +1,29 @@
+{
+  "arise-0.21.0.apk": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.21.0/arise-0.21.0.apk",
+    "http_status": 200,
+    "bytes": 97389644,
+    "sha256": "1a8cc38d8c579f68f3c7b2841e3d3828b639e2197a69ddb1c0eaf964065aeea8",
+    "matches_local": true,
+    "content_type": "application/octet-stream",
+    "final_url": "https://raw.githubusercontent.com/SugarSaiyajin/ARISE/refs/heads/delivery/android-0.21.0/arise-0.21.0.apk"
+  },
+  "habitat-1.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.21.0/habitat-1.png",
+    "http_status": 200,
+    "bytes": 920399,
+    "sha256": "32072306be4075da331e74734c42cd3299638e5d4be085302bd52e0b9415896d",
+    "matches_local": true,
+    "content_type": "image/png",
+    "final_url": "https://raw.githubusercontent.com/SugarSaiyajin/ARISE/refs/heads/delivery/android-0.21.0/habitat-1.png"
+  },
+  "rabbit.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.21.0/rabbit.png",
+    "http_status": 200,
+    "bytes": 558152,
+    "sha256": "badabf0a07822dd4ac847bc969e27876e322ddca22804f7951b04712665b367a",
+    "matches_local": true,
+    "content_type": "image/png",
+    "final_url": "https://raw.githubusercontent.com/SugarSaiyajin/ARISE/refs/heads/delivery/android-0.21.0/rabbit.png"
+  }
+}

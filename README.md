@@ -32,3 +32,7 @@ Android 7.0+、ARM64、OpenGL ES 3.0。與 0.14 套件及簽章相同、版本�
 2693項不重複檢查通過（其中觸控與場景另在手機版面重跑），桌面與手機完整流程均通過，12個音訊檔通過。APK簽章、完整性、16KB ZIP／ELF對齊、零權限及開發檔案排除均通過。手機上實際觸控穩定性、效能與發熱仍待試玩。
 
 [APK驗證](validation.json) · [覆蓋更新相容性](update-compatibility.json) · [測試摘要](test-summary.json) · [檔案校驗碼](SHA256SUMS.txt)
+
+[HTTPS重新下載驗證](download-verification.json)：APK完整重新下載97,389,644 bytes，HTTP 200，SHA-256與成品一致。
+
+[Godot專案原始碼](https://github.com/SugarSaiyajin/ARISE/tree/feature/cloudbridge-ranch-0.21)
