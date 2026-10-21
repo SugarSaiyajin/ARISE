@@ -1,0 +1,42 @@
+{
+  "crops.png": {
+    "source_size": [
+      1536,
+      1024
+    ],
+    "sha256": "b3048232bf2cee61be8580d70b9e9b92d55788c29362a1381ab73970d14a5019",
+    "source_png_preserved": true,
+    "approval": "proposal04 user approved 2026-10-21",
+    "production": "image_gen reference-based original art"
+  },
+  "edric.png": {
+    "source_size": [
+      1024,
+      1536
+    ],
+    "sha256": "5e370d3d6b2a4aad5088b27471b2eb721a402c6de66a937b2d8fd3a5bfb2610e",
+    "source_png_preserved": true,
+    "approval": "proposal04 user approved 2026-10-21",
+    "production": "image_gen reference-based original art"
+  },
+  "facilities.png": {
+    "source_size": [
+      2172,
+      724
+    ],
+    "sha256": "257cdac3df4747049e096d2f7b9d3569844dd0986cb300f8100dbb5fb8104acc",
+    "source_png_preserved": true,
+    "approval": "proposal04 user approved 2026-10-21",
+    "production": "image_gen reference-based original art"
+  },
+  "suyue.png": {
+    "source_size": [
+      1254,
+      1254
+    ],
+    "sha256": "5314fa7040d4bbb67c64705245812850099aaf65b89ea37308f688d16ad97b06",
+    "source_png_preserved": true,
+    "approval": "proposal04 user approved 2026-10-21",
+    "production": "image_gen reference-based original art"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "0.25.0": {
+    "package": "org.arise.cloudbridge",
+    "version_code": 25,
+    "certificate_sha256": "f270b7784cb9ac8983724c0351a643e7115b8d2291d8126e20c940604bed19c2"
+  },
+  "0.26.0": {
+    "package": "org.arise.cloudbridge",
+    "version_code": 26,
+    "certificate_sha256": "f270b7784cb9ac8983724c0351a643e7115b8d2291d8126e20c940604bed19c2"
+  },
+  "update_compatible": true,
+  "physical_install_tested": false
+}
