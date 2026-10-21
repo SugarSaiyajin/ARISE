@@ -1,0 +1,930 @@
+{
+	"currency_or_material_grants": false,
+	"days_per_policy": 56,
+	"policies": {
+		"crop_farm": {
+			"care_total": 0,
+			"cash_spent": 1296,
+			"craft_total": 0,
+			"daily": [
+				{
+					"cash": 120,
+					"day": 1,
+					"earned": 0,
+					"energy_left": 74,
+					"harvested": 0,
+					"season": "春"
+				},
+				{
+					"cash": 192,
+					"day": 2,
+					"earned": 72,
+					"energy_left": 76,
+					"harvested": 4,
+					"season": "春"
+				},
+				{
+					"cash": 240,
+					"day": 3,
+					"earned": 144,
+					"energy_left": 76,
+					"harvested": 8,
+					"season": "春"
+				},
+				{
+					"cash": 288,
+					"day": 4,
+					"earned": 216,
+					"energy_left": 92,
+					"harvested": 12,
+					"season": "春"
+				},
+				{
+					"cash": 336,
+					"day": 5,
+					"earned": 288,
+					"energy_left": 76,
+					"harvested": 16,
+					"season": "春"
+				},
+				{
+					"cash": 384,
+					"day": 6,
+					"earned": 360,
+					"energy_left": 76,
+					"harvested": 20,
+					"season": "春"
+				},
+				{
+					"cash": 432,
+					"day": 7,
+					"earned": 432,
+					"energy_left": 76,
+					"harvested": 24,
+					"season": "春"
+				},
+				{
+					"cash": 480,
+					"day": 8,
+					"earned": 504,
+					"energy_left": 92,
+					"harvested": 28,
+					"season": "春"
+				},
+				{
+					"cash": 528,
+					"day": 9,
+					"earned": 576,
+					"energy_left": 76,
+					"harvested": 32,
+					"season": "春"
+				},
+				{
+					"cash": 576,
+					"day": 10,
+					"earned": 648,
+					"energy_left": 76,
+					"harvested": 36,
+					"season": "春"
+				},
+				{
+					"cash": 624,
+					"day": 11,
+					"earned": 720,
+					"energy_left": 76,
+					"harvested": 40,
+					"season": "春"
+				},
+				{
+					"cash": 672,
+					"day": 12,
+					"earned": 792,
+					"energy_left": 92,
+					"harvested": 44,
+					"season": "春"
+				},
+				{
+					"cash": 720,
+					"day": 13,
+					"earned": 864,
+					"energy_left": 76,
+					"harvested": 48,
+					"season": "春"
+				},
+				{
+					"cash": 768,
+					"day": 14,
+					"earned": 936,
+					"energy_left": 76,
+					"harvested": 52,
+					"season": "春"
+				},
+				{
+					"cash": 816,
+					"day": 15,
+					"earned": 1008,
+					"energy_left": 76,
+					"harvested": 56,
+					"season": "春"
+				},
+				{
+					"cash": 864,
+					"day": 16,
+					"earned": 1080,
+					"energy_left": 92,
+					"harvested": 60,
+					"season": "春"
+				},
+				{
+					"cash": 912,
+					"day": 17,
+					"earned": 1152,
+					"energy_left": 76,
+					"harvested": 64,
+					"season": "春"
+				},
+				{
+					"cash": 960,
+					"day": 18,
+					"earned": 1224,
+					"energy_left": 76,
+					"harvested": 68,
+					"season": "春"
+				},
+				{
+					"cash": 1008,
+					"day": 19,
+					"earned": 1296,
+					"energy_left": 76,
+					"harvested": 72,
+					"season": "春"
+				},
+				{
+					"cash": 1056,
+					"day": 20,
+					"earned": 1368,
+					"energy_left": 92,
+					"harvested": 76,
+					"season": "春"
+				},
+				{
+					"cash": 1104,
+					"day": 21,
+					"earned": 1440,
+					"energy_left": 76,
+					"harvested": 80,
+					"season": "春"
+				},
+				{
+					"cash": 1152,
+					"day": 22,
+					"earned": 1512,
+					"energy_left": 76,
+					"harvested": 84,
+					"season": "春"
+				},
+				{
+					"cash": 1200,
+					"day": 23,
+					"earned": 1584,
+					"energy_left": 76,
+					"harvested": 88,
+					"season": "春"
+				},
+				{
+					"cash": 1248,
+					"day": 24,
+					"earned": 1656,
+					"energy_left": 92,
+					"harvested": 92,
+					"season": "春"
+				},
+				{
+					"cash": 1296,
+					"day": 25,
+					"earned": 1728,
+					"energy_left": 76,
+					"harvested": 96,
+					"season": "春"
+				},
+				{
+					"cash": 1344,
+					"day": 26,
+					"earned": 1800,
+					"energy_left": 76,
+					"harvested": 100,
+					"season": "春"
+				},
+				{
+					"cash": 1392,
+					"day": 27,
+					"earned": 1872,
+					"energy_left": 76,
+					"harvested": 104,
+					"season": "春"
+				},
+				{
+					"cash": 1440,
+					"day": 28,
+					"earned": 1944,
+					"energy_left": 92,
+					"harvested": 108,
+					"season": "春"
+				},
+				{
+					"cash": 1488,
+					"day": 29,
+					"earned": 2016,
+					"energy_left": 76,
+					"harvested": 112,
+					"season": "夏"
+				},
+				{
+					"cash": 1536,
+					"day": 30,
+					"earned": 2088,
+					"energy_left": 92,
+					"harvested": 116,
+					"season": "夏"
+				},
+				{
+					"cash": 1584,
+					"day": 31,
+					"earned": 2160,
+					"energy_left": 92,
+					"harvested": 120,
+					"season": "夏"
+				},
+				{
+					"cash": 1632,
+					"day": 32,
+					"earned": 2232,
+					"energy_left": 76,
+					"harvested": 124,
+					"season": "夏"
+				},
+				{
+					"cash": 1680,
+					"day": 33,
+					"earned": 2304,
+					"energy_left": 76,
+					"harvested": 128,
+					"season": "夏"
+				},
+				{
+					"cash": 1728,
+					"day": 34,
+					"earned": 2376,
+					"energy_left": 76,
+					"harvested": 132,
+					"season": "夏"
+				},
+				{
+					"cash": 1776,
+					"day": 35,
+					"earned": 2448,
+					"energy_left": 92,
+					"harvested": 136,
+					"season": "夏"
+				},
+				{
+					"cash": 1824,
+					"day": 36,
+					"earned": 2520,
+					"energy_left": 92,
+					"harvested": 140,
+					"season": "夏"
+				},
+				{
+					"cash": 1872,
+					"day": 37,
+					"earned": 2592,
+					"energy_left": 76,
+					"harvested": 144,
+					"season": "夏"
+				},
+				{
+					"cash": 1920,
+					"day": 38,
+					"earned": 2664,
+					"energy_left": 76,
+					"harvested": 148,
+					"season": "夏"
+				},
+				{
+					"cash": 1968,
+					"day": 39,
+					"earned": 2736,
+					"energy_left": 76,
+					"harvested": 152,
+					"season": "夏"
+				},
+				{
+					"cash": 2016,
+					"day": 40,
+					"earned": 2808,
+					"energy_left": 92,
+					"harvested": 156,
+					"season": "夏"
+				},
+				{
+					"cash": 2064,
+					"day": 41,
+					"earned": 2880,
+					"energy_left": 92,
+					"harvested": 160,
+					"season": "夏"
+				},
+				{
+					"cash": 2112,
+					"day": 42,
+					"earned": 2952,
+					"energy_left": 76,
+					"harvested": 164,
+					"season": "夏"
+				},
+				{
+					"cash": 2160,
+					"day": 43,
+					"earned": 3024,
+					"energy_left": 76,
+					"harvested": 168,
+					"season": "夏"
+				},
+				{
+					"cash": 2208,
+					"day": 44,
+					"earned": 3096,
+					"energy_left": 76,
+					"harvested": 172,
+					"season": "夏"
+				},
+				{
+					"cash": 2256,
+					"day": 45,
+					"earned": 3168,
+					"energy_left": 92,
+					"harvested": 176,
+					"season": "夏"
+				},
+				{
+					"cash": 2304,
+					"day": 46,
+					"earned": 3240,
+					"energy_left": 92,
+					"harvested": 180,
+					"season": "夏"
+				},
+				{
+					"cash": 2352,
+					"day": 47,
+					"earned": 3312,
+					"energy_left": 76,
+					"harvested": 184,
+					"season": "夏"
+				},
+				{
+					"cash": 2400,
+					"day": 48,
+					"earned": 3384,
+					"energy_left": 76,
+					"harvested": 188,
+					"season": "夏"
+				},
+				{
+					"cash": 2448,
+					"day": 49,
+					"earned": 3456,
+					"energy_left": 76,
+					"harvested": 192,
+					"season": "夏"
+				},
+				{
+					"cash": 2496,
+					"day": 50,
+					"earned": 3528,
+					"energy_left": 92,
+					"harvested": 196,
+					"season": "夏"
+				},
+				{
+					"cash": 2544,
+					"day": 51,
+					"earned": 3600,
+					"energy_left": 92,
+					"harvested": 200,
+					"season": "夏"
+				},
+				{
+					"cash": 2592,
+					"day": 52,
+					"earned": 3672,
+					"energy_left": 76,
+					"harvested": 204,
+					"season": "夏"
+				},
+				{
+					"cash": 2640,
+					"day": 53,
+					"earned": 3744,
+					"energy_left": 76,
+					"harvested": 208,
+					"season": "夏"
+				},
+				{
+					"cash": 2688,
+					"day": 54,
+					"earned": 3816,
+					"energy_left": 76,
+					"harvested": 212,
+					"season": "夏"
+				},
+				{
+					"cash": 2736,
+					"day": 55,
+					"earned": 3888,
+					"energy_left": 92,
+					"harvested": 216,
+					"season": "夏"
+				},
+				{
+					"cash": 2784,
+					"day": 56,
+					"earned": 3960,
+					"energy_left": 92,
+					"harvested": 220,
+					"season": "夏"
+				}
+			],
+			"ending_cash": 2784,
+			"harvested": 220,
+			"shipping_income": 3960,
+			"storage": false,
+			"water_tool": 0
+		},
+		"mixed_farm": {
+			"care_total": 82,
+			"cash_spent": 2184,
+			"craft_total": 3,
+			"daily": [
+				{
+					"cash": 100,
+					"day": 1,
+					"earned": 0,
+					"energy_left": 74,
+					"harvested": 0,
+					"season": "春"
+				},
+				{
+					"cash": 172,
+					"day": 2,
+					"earned": 72,
+					"energy_left": 76,
+					"harvested": 4,
+					"season": "春"
+				},
+				{
+					"cash": 208,
+					"day": 3,
+					"earned": 108,
+					"energy_left": 57,
+					"harvested": 6,
+					"season": "春"
+				},
+				{
+					"cash": 244,
+					"day": 4,
+					"earned": 144,
+					"energy_left": 96,
+					"harvested": 8,
+					"season": "春"
+				},
+				{
+					"cash": 380,
+					"day": 5,
+					"earned": 292,
+					"energy_left": 74,
+					"harvested": 13,
+					"season": "春"
+				},
+				{
+					"cash": 404,
+					"day": 6,
+					"earned": 328,
+					"energy_left": 57,
+					"harvested": 15,
+					"season": "春"
+				},
+				{
+					"cash": 496,
+					"day": 7,
+					"earned": 460,
+					"energy_left": 78,
+					"harvested": 18,
+					"season": "春"
+				},
+				{
+					"cash": 574,
+					"day": 8,
+					"earned": 560,
+					"energy_left": 92,
+					"harvested": 22,
+					"season": "春"
+				},
+				{
+					"cash": 646,
+					"day": 9,
+					"earned": 644,
+					"energy_left": 55,
+					"harvested": 25,
+					"season": "春"
+				},
+				{
+					"cash": 670,
+					"day": 10,
+					"earned": 680,
+					"energy_left": 80,
+					"harvested": 27,
+					"season": "春"
+				},
+				{
+					"cash": 738,
+					"day": 11,
+					"earned": 780,
+					"energy_left": 76,
+					"harvested": 31,
+					"season": "春"
+				},
+				{
+					"cash": 602,
+					"day": 12,
+					"earned": 816,
+					"energy_left": 72,
+					"harvested": 33,
+					"season": "春"
+				},
+				{
+					"cash": 728,
+					"day": 13,
+					"earned": 996,
+					"energy_left": 75,
+					"harvested": 37,
+					"season": "春"
+				},
+				{
+					"cash": 796,
+					"day": 14,
+					"earned": 1096,
+					"energy_left": 75,
+					"harvested": 41,
+					"season": "春"
+				},
+				{
+					"cash": 640,
+					"day": 15,
+					"earned": 1132,
+					"energy_left": 56,
+					"harvested": 43,
+					"season": "春"
+				},
+				{
+					"cash": 722,
+					"day": 16,
+					"earned": 1226,
+					"energy_left": 95,
+					"harvested": 45,
+					"season": "春"
+				},
+				{
+					"cash": 824,
+					"day": 17,
+					"earned": 1374,
+					"energy_left": 81,
+					"harvested": 50,
+					"season": "春"
+				},
+				{
+					"cash": 906,
+					"day": 18,
+					"earned": 1468,
+					"energy_left": 64,
+					"harvested": 52,
+					"season": "春"
+				},
+				{
+					"cash": 998,
+					"day": 19,
+					"earned": 1600,
+					"energy_left": 85,
+					"harvested": 55,
+					"season": "春"
+				},
+				{
+					"cash": 902,
+					"day": 20,
+					"earned": 1726,
+					"energy_left": 90,
+					"harvested": 59,
+					"season": "春"
+				},
+				{
+					"cash": 960,
+					"day": 21,
+					"earned": 1810,
+					"energy_left": 61,
+					"harvested": 62,
+					"season": "春"
+				},
+				{
+					"cash": 1042,
+					"day": 22,
+					"earned": 1904,
+					"energy_left": 86,
+					"harvested": 64,
+					"season": "春"
+				},
+				{
+					"cash": 1110,
+					"day": 23,
+					"earned": 2004,
+					"energy_left": 82,
+					"harvested": 68,
+					"season": "春"
+				},
+				{
+					"cash": 1254,
+					"day": 24,
+					"earned": 2160,
+					"energy_left": 71,
+					"harvested": 70,
+					"season": "春"
+				},
+				{
+					"cash": 1380,
+					"day": 25,
+					"earned": 2340,
+					"energy_left": 82,
+					"harvested": 74,
+					"season": "春"
+				},
+				{
+					"cash": 1568,
+					"day": 26,
+					"earned": 2560,
+					"energy_left": 82,
+					"harvested": 78,
+					"season": "春"
+				},
+				{
+					"cash": 1592,
+					"day": 27,
+					"earned": 2596,
+					"energy_left": 63,
+					"harvested": 80,
+					"season": "春"
+				},
+				{
+					"cash": 1736,
+					"day": 28,
+					"earned": 2752,
+					"energy_left": 94,
+					"harvested": 82,
+					"season": "春"
+				},
+				{
+					"cash": 1847,
+					"day": 29,
+					"earned": 2909,
+					"energy_left": 80,
+					"harvested": 87,
+					"season": "夏"
+				},
+				{
+					"cash": 1991,
+					"day": 30,
+					"earned": 3065,
+					"energy_left": 71,
+					"harvested": 89,
+					"season": "夏"
+				},
+				{
+					"cash": 2082,
+					"day": 31,
+					"earned": 3216,
+					"energy_left": 92,
+					"harvested": 92,
+					"season": "夏"
+				},
+				{
+					"cash": 2313,
+					"day": 32,
+					"earned": 3493,
+					"energy_left": 80,
+					"harvested": 97,
+					"season": "夏"
+				},
+				{
+					"cash": 2337,
+					"day": 33,
+					"earned": 3529,
+					"energy_left": 63,
+					"harvested": 99,
+					"season": "夏"
+				},
+				{
+					"cash": 2481,
+					"day": 34,
+					"earned": 3685,
+					"energy_left": 86,
+					"harvested": 101,
+					"season": "夏"
+				},
+				{
+					"cash": 2479,
+					"day": 35,
+					"earned": 3849,
+					"energy_left": 88,
+					"harvested": 106,
+					"season": "夏"
+				},
+				{
+					"cash": 2509,
+					"day": 36,
+					"earned": 3947,
+					"energy_left": 69,
+					"harvested": 109,
+					"season": "夏"
+				},
+				{
+					"cash": 2739,
+					"day": 37,
+					"earned": 4189,
+					"energy_left": 86,
+					"harvested": 111,
+					"season": "夏"
+				},
+				{
+					"cash": 2983,
+					"day": 38,
+					"earned": 4479,
+					"energy_left": 80,
+					"harvested": 116,
+					"season": "夏"
+				},
+				{
+					"cash": 3008,
+					"day": 39,
+					"earned": 4516,
+					"energy_left": 63,
+					"harvested": 118,
+					"season": "夏"
+				},
+				{
+					"cash": 3058,
+					"day": 40,
+					"earned": 4614,
+					"energy_left": 92,
+					"harvested": 121,
+					"season": "夏"
+				},
+				{
+					"cash": 3381,
+					"day": 41,
+					"earned": 4983,
+					"energy_left": 88,
+					"harvested": 126,
+					"season": "夏"
+				},
+				{
+					"cash": 3532,
+					"day": 42,
+					"earned": 5146,
+					"energy_left": 63,
+					"harvested": 128,
+					"season": "夏"
+				},
+				{
+					"cash": 3537,
+					"day": 43,
+					"earned": 5183,
+					"energy_left": 86,
+					"harvested": 130,
+					"season": "夏"
+				},
+				{
+					"cash": 3781,
+					"day": 44,
+					"earned": 5473,
+					"energy_left": 80,
+					"harvested": 135,
+					"season": "夏"
+				},
+				{
+					"cash": 3899,
+					"day": 45,
+					"earned": 5631,
+					"energy_left": 69,
+					"harvested": 138,
+					"season": "夏"
+				},
+				{
+					"cash": 4050,
+					"day": 46,
+					"earned": 5794,
+					"energy_left": 94,
+					"harvested": 140,
+					"season": "夏"
+				},
+				{
+					"cash": 4168,
+					"day": 47,
+					"earned": 5958,
+					"energy_left": 80,
+					"harvested": 145,
+					"season": "夏"
+				},
+				{
+					"cash": 4319,
+					"day": 48,
+					"earned": 6121,
+					"energy_left": 63,
+					"harvested": 147,
+					"season": "夏"
+				},
+				{
+					"cash": 4437,
+					"day": 49,
+					"earned": 6279,
+					"energy_left": 84,
+					"harvested": 150,
+					"season": "夏"
+				},
+				{
+					"cash": 4648,
+					"day": 50,
+					"earned": 6536,
+					"energy_left": 88,
+					"harvested": 155,
+					"season": "夏"
+				},
+				{
+					"cash": 4673,
+					"day": 51,
+					"earned": 6573,
+					"energy_left": 71,
+					"harvested": 157,
+					"season": "夏"
+				},
+				{
+					"cash": 4824,
+					"day": 52,
+					"earned": 6736,
+					"energy_left": 86,
+					"harvested": 159,
+					"season": "夏"
+				},
+				{
+					"cash": 4942,
+					"day": 53,
+					"earned": 6900,
+					"energy_left": 80,
+					"harvested": 164,
+					"season": "夏"
+				},
+				{
+					"cash": 4992,
+					"day": 54,
+					"earned": 6998,
+					"energy_left": 61,
+					"harvested": 167,
+					"season": "夏"
+				},
+				{
+					"cash": 5222,
+					"day": 55,
+					"earned": 7240,
+					"energy_left": 94,
+					"harvested": 169,
+					"season": "夏"
+				},
+				{
+					"cash": 5466,
+					"day": 56,
+					"earned": 7530,
+					"energy_left": 88,
+					"harvested": 174,
+					"season": "夏"
+				}
+			],
+			"ending_cash": 5466,
+			"harvested": 174,
+			"shipping_income": 7530,
+			"storage": true,
+			"water_tool": 1
+		}
+	},
+	"policies_have_different_workloads": true,
+	"starting_cash": 120,
+	"travel_clock_and_path_time_modeled": false,
+	"type": "deterministic business-state simulation, not device gameplay"
+}

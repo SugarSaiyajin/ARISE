@@ -1,0 +1,79 @@
+{
+  "renderer": "Godot 4.6.3 desktop X11 llvmpipe with mobile UI",
+  "physical_android": false,
+  "video": {
+    "frames": 619,
+    "fps": 30,
+    "seconds": 20.633333333333333,
+    "width": 1280,
+    "height": 720,
+    "codec": "h264"
+  },
+  "screenshots": {
+    "estate-0.25-activity-choice.png": {
+      "bytes": 444624,
+      "sha256": "5b7689bb9dc632c8d114a4447318193ff5f660c67525b61386d33510c0aee2c0"
+    },
+    "estate-0.25-activity.png": {
+      "bytes": 435195,
+      "sha256": "3e688d87b73571a057edeb6f61a30e0e1e5d5c2d8b29319ca338c16b93232e87"
+    },
+    "estate-0.25-batch-preview.png": {
+      "bytes": 538294,
+      "sha256": "084d417fe0d7b48ba24bc0f16d7c3f10c6e02a23ecb8039ee4914b9cfc148651"
+    },
+    "estate-0.25-build-blocked.png": {
+      "bytes": 711241,
+      "sha256": "d2076a84867774bb765df174bb0e43c2577c60a3ec1481278634f0eb6376a2ee"
+    },
+    "estate-0.25-build-legal.png": {
+      "bytes": 703894,
+      "sha256": "d68ba5ea0f3e7ac9aa4b575b9acd77b037c453529690c3965c4999e818824c5e"
+    },
+    "estate-0.25-farm.png": {
+      "bytes": 834545,
+      "sha256": "de5ada315cd69df103a270fefc76eda99da2af5e58e5eab6c27af7c762a0ac52"
+    },
+    "estate-0.25-field.png": {
+      "bytes": 535554,
+      "sha256": "a13598d8952c1d49bc76b99613220d688c97825f7bbea351185880d48a2e07a9"
+    },
+    "estate-0.25-goals.png": {
+      "bytes": 402452,
+      "sha256": "243a5ab2ac4188ff09ac9103e4762e9761747f121f9a1c9da495609c5573128c"
+    },
+    "estate-0.25-harvest.png": {
+      "bytes": 827548,
+      "sha256": "924e18146c25a2a5bc600debbe9d5612a10cd5f8231921cc441a1890ac6f71b4"
+    },
+    "estate-0.25-hub.png": {
+      "bytes": 514353,
+      "sha256": "5241022e3091b00a7659c4b8c8355cf0caf191cfbacb1d918c4eade9c2b4c55b"
+    },
+    "estate-0.25-ranch-fed.png": {
+      "bytes": 735952,
+      "sha256": "da182eb4b96d5d2cdc69676f02d1f7372548926e0de718655c2b2381a180c05c"
+    },
+    "estate-0.25-ranch-preview.png": {
+      "bytes": 411353,
+      "sha256": "7e6e51b1c10eab082baf043dc832b462b906b0e1a907b3def3c961615159b515"
+    },
+    "estate-0.25-remembered.png": {
+      "bytes": 470845,
+      "sha256": "d4de7338f3957b490a4eb0f4f024ea943324965aa2d8c45885920075689dff93"
+    },
+    "estate-0.25-shipping.png": {
+      "bytes": 494326,
+      "sha256": "a3181bf73035749c72454cde224ec268f4da3f10975a9f2f09245fb0fa87e3c1"
+    },
+    "estate-0.25-summer-job.png": {
+      "bytes": 392853,
+      "sha256": "b8ef202711840b508014b957ea87f61a0c2956c14ff7290302bebf71e76efd26"
+    },
+    "estate-0.25-watering.png": {
+      "bytes": 828123,
+      "sha256": "130cc6fcfe74ddf0fcf3b3a64dc3a2bc10fef8c0afb65316ce687ad5e4489123"
+    }
+  },
+  "art_proposal_in_apk": false
+}
