@@ -1,4 +1,4 @@
-8ebd932d38cb68de459160107bef7e4861075306d1439bc5583e7bd74e703d59  README.md
+8be2253f0a091909beb7465de7148949d8356d7975ee3e2346e42e47cdfde93e  README.md
 8b818f0b7f0bb4fd3b5abf3cad029d7a440f406c394688d3666084a3a7c3ade2  arise-0.28.0.apk
 f74c393579b5342d05b381167c315456b04f55bbf8e4d855c206af9c11bce86e  docs/CHAPTER_028.md
 e6667da176a2d23336fc2d7e104494fe2c504f10ac5db941c98114c6975b2b6a  docs/autumn-review-exclusion-0.28.json
@@ -20,6 +20,7 @@ cece1916ea16fcf5e4c037f51bfce40d4274036668e7cfac5616f64b7c29139e  docs/chapter-0
 5e17d271fee0742445d7fd42df3851164ec2def6195329f2607272a67f3a5edd  docs/chapter-0.28-rotation.png
 269af98a792e522daf12459ee7337ecad72732747569c39fed51e3c063f4d020  docs/chapter-0.28-story.png
 534c000ed317cf5cafe6fd0c43ee14bb26cd788e12521222f95de62291570bf8  docs/chapter-render-validation.json
+415c25ba1cb3e45a5448cad54ce5ddb226eb2e655ea47a98dc2ad41ead7687b1  docs/delivery-http-verification-0.28.json
 76a1a0939d9bb4273fd5ff247e5e4f798c8127d9924777bfffee99d36e1a62c9  docs/design-review-05/README.md
 0ae1521ba953bffbb47d206f11fb21dae874237e53f9ce0e66e9f6c21d3e98c4  docs/design-review-05/autumn.png
 527c31c26615fd8d26f1402022f2f0d6a96de0a1d743da4530ceb93bda932c1a  docs/update-compatibility-0.28.json

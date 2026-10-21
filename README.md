@@ -33,3 +33,5 @@ Android7以上、ARM64、OpenGL ES3。檔案104,307,407 bytes，低於GitHub單�
 APK SHA256：`8b818f0b7f0bb4fd3b5abf3cad029d7a440f406c394688d3666084a3a7c3ade2`
 
 [原始碼提交](https://github.com/SugarSaiyajin/ARISE/commit/6d420cf)
+
+公開APK、七張代表畫面、影片與秋季提案均已完整重新下載，HTTP200且SHA256一致。[下載校驗紀錄](docs/delivery-http-verification-0.28.json)。
