@@ -1,0 +1,168 @@
+{
+	"animals": {
+		"bee": {
+			"cash_net_per_adult_fed_day": 29.0,
+			"habitat_cash": 90,
+			"maturity_fed_days": 2,
+			"production_interval": 2,
+			"purchase": 100
+		},
+		"carp": {
+			"cash_net_per_adult_fed_day": 30.0,
+			"habitat_cash": 140,
+			"maturity_fed_days": 3,
+			"production_interval": 3,
+			"purchase": 180
+		},
+		"deer": {
+			"cash_net_per_adult_fed_day": 29.4285714285714,
+			"habitat_cash": 140,
+			"maturity_fed_days": 4,
+			"production_interval": 7,
+			"purchase": 220
+		},
+		"duck": {
+			"cash_net_per_adult_fed_day": 28.0,
+			"habitat_cash": 100,
+			"maturity_fed_days": 2,
+			"production_interval": 1,
+			"purchase": 70
+		},
+		"hen": {
+			"cash_net_per_adult_fed_day": 24.0,
+			"habitat_cash": 100,
+			"maturity_fed_days": 0,
+			"production_interval": 1,
+			"purchase": 80
+		},
+		"rabbit": {
+			"cash_net_per_adult_fed_day": 27.0,
+			"habitat_cash": 70,
+			"maturity_fed_days": 2,
+			"production_interval": 2,
+			"purchase": 90
+		},
+		"sheep": {
+			"cash_net_per_adult_fed_day": 28.0,
+			"habitat_cash": 70,
+			"maturity_fed_days": 3,
+			"production_interval": 3,
+			"purchase": 160
+		},
+		"worm": {
+			"cash_net_per_adult_fed_day": 30.0,
+			"habitat_cash": 90,
+			"maturity_fed_days": 2,
+			"production_interval": 2,
+			"purchase": 100
+		}
+	},
+	"crafts": {
+		"honey_tea": {
+			"fee": 8,
+			"ready_after_sleeps": 1,
+			"sell": 195,
+			"spring_net_over_raw_sale": 29,
+			"summer_net_over_raw_sale": 10
+		},
+		"jade_charm": {
+			"fee": 12,
+			"ready_after_sleeps": 1,
+			"sell": 290,
+			"spring_net_over_raw_sale": 58,
+			"summer_net_over_raw_sale": 58
+		},
+		"moon_cloth": {
+			"fee": 8,
+			"ready_after_sleeps": 1,
+			"sell": 175,
+			"spring_net_over_raw_sale": 45,
+			"summer_net_over_raw_sale": 45
+		},
+		"star_lantern": {
+			"fee": 10,
+			"ready_after_sleeps": 1,
+			"sell": 220,
+			"spring_net_over_raw_sale": 56,
+			"summer_net_over_raw_sale": 56
+		},
+		"wool_blanket": {
+			"fee": 10,
+			"ready_after_sleeps": 1,
+			"sell": 240,
+			"spring_net_over_raw_sale": 50,
+			"summer_net_over_raw_sale": 50
+		}
+	},
+	"crops": {
+		"berry": {
+			"seed": 14,
+			"spring_net_per_watered_day": 8.5,
+			"spring_sell": 48,
+			"summer_net_per_watered_day": 10.75,
+			"summer_sell": 57,
+			"watered_days": 4
+		},
+		"cabbage": {
+			"seed": 22,
+			"spring_net_per_watered_day": 9.6,
+			"spring_sell": 70,
+			"summer_net_per_watered_day": 9.6,
+			"summer_sell": 70,
+			"watered_days": 5
+		},
+		"carrot": {
+			"seed": 12,
+			"spring_net_per_watered_day": 8.0,
+			"spring_sell": 36,
+			"summer_net_per_watered_day": 8.0,
+			"summer_sell": 36,
+			"watered_days": 3
+		},
+		"pea": {
+			"seed": 16,
+			"spring_net_per_watered_day": 9.66666666666667,
+			"spring_sell": 45,
+			"summer_net_per_watered_day": 9.66666666666667,
+			"summer_sell": 45,
+			"watered_days": 3
+		},
+		"potato": {
+			"seed": 18,
+			"spring_net_per_watered_day": 9.5,
+			"spring_sell": 56,
+			"summer_net_per_watered_day": 12.25,
+			"summer_sell": 67,
+			"watered_days": 4
+		},
+		"tea": {
+			"seed": 28,
+			"spring_net_per_watered_day": 11.3333333333333,
+			"spring_sell": 96,
+			"summer_net_per_watered_day": 14.5,
+			"summer_sell": 115,
+			"watered_days": 6
+		},
+		"turnip": {
+			"seed": 6,
+			"spring_net_per_watered_day": 6.0,
+			"spring_sell": 18,
+			"summer_net_per_watered_day": 6.0,
+			"summer_sell": 18,
+			"watered_days": 2
+		},
+		"wheat": {
+			"seed": 10,
+			"spring_net_per_watered_day": 7.33333333333333,
+			"spring_sell": 32,
+			"summer_net_per_watered_day": 7.33333333333333,
+			"summer_sell": 32,
+			"watered_days": 3
+		}
+	},
+	"notes": [
+		"Crop daily margins use listed watered days; summer bonus growth is not included.",
+		"Animal estimates use purchased feed at 2 silver per ration; wood/stone gathering and player stamina are separate costs.",
+		"Craft margins deduct sale value of raw products and listed cash fee; unshippable wood/stone have no cash quote."
+	]
+}

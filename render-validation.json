@@ -1,0 +1,92 @@
+{
+  "renderer": "Godot 4.6.3, desktop X11 llvmpipe, mobile UI mode",
+  "physical_android": false,
+  "video": {
+    "file": "journey-0.24.mp4",
+    "frames": 509,
+    "fps": 30,
+    "seconds": 16.966666666666665,
+    "width": 1280,
+    "height": 720,
+    "codec": "h264"
+  },
+  "screenshots": {
+    "journey-0.24-animals.png": {
+      "bytes": 719237,
+      "sha256": "49c7a313f7f248872b9d16c17d8bf7617e79e1905b3bed04521597781bf38de2"
+    },
+    "journey-0.24-calendar.png": {
+      "bytes": 519971,
+      "sha256": "449c85b3a07edd77b65daa831b246f8be73f41ac9826f3e6e3c3dec97f40de47"
+    },
+    "journey-0.24-controls.png": {
+      "bytes": 544095,
+      "sha256": "38e93da2b0e4bd18fa93108e137be84b17d54147aa9128b812a3b58e2571853a"
+    },
+    "journey-0.24-culture.png": {
+      "bytes": 645455,
+      "sha256": "aacb3ad85338717a90435c5d8125ac39b5e0da7ca533ae37f49cfbbb5d5ed910"
+    },
+    "journey-0.24-farm.png": {
+      "bytes": 838066,
+      "sha256": "bd4d4dbba4742c0484a08434ca11f7accc0a973600a863c0764e8da8e287056a"
+    },
+    "journey-0.24-female-blink.png": {
+      "bytes": 460249,
+      "sha256": "86f45824e25a6a52aabbfcf3af7a245ae578404998c11b355be5fa1c5f54a9a2"
+    },
+    "journey-0.24-female-open.png": {
+      "bytes": 460335,
+      "sha256": "5694de7b5950f5eac6ca1c01e68870a19d7ee3ac533d21317ecf5dde5a7641a3"
+    },
+    "journey-0.24-festival.png": {
+      "bytes": 445637,
+      "sha256": "4a3a951410a3b2dd0f06266c5fa8d3d6ce2de89684e94c7b13898a48468d969c"
+    },
+    "journey-0.24-gift.png": {
+      "bytes": 416521,
+      "sha256": "1e60844447f96ea4eb02ac97f81928950ece9c2b88ee7497b744fe426a386008"
+    },
+    "journey-0.24-idle-blink.png": {
+      "bytes": 457219,
+      "sha256": "508d11f48c54254ae1adcba9a8a3e9b55509ef57a47d4709e195c5a53be9c587"
+    },
+    "journey-0.24-idle-open.png": {
+      "bytes": 457462,
+      "sha256": "85b2a22ac167f3bf9662fd1aaacefb03dcf5467dc700a895bbd06eca71f201bd"
+    },
+    "journey-0.24-idle-stretch.png": {
+      "bytes": 457417,
+      "sha256": "a230ca976b1daeaa0624ead61e7bca0a3624a3fa16396f9de3ad306a93ce7dd2"
+    },
+    "journey-0.24-memory.png": {
+      "bytes": 416447,
+      "sha256": "caf79a111cc1fb5660b0d2709e26d5f244e8663cfa46a9af8186d6f29b875954"
+    },
+    "journey-0.24-plan.png": {
+      "bytes": 725681,
+      "sha256": "35eaeeee4ef7a269bc9013f8416bb322ce7e139115c7521ba4f13af973d3f013"
+    },
+    "journey-0.24-quest.png": {
+      "bytes": 372306,
+      "sha256": "d55d6f1a4050bff93893ffbc9f718ba43c8ffdd914798585581918078dbc2b83"
+    },
+    "journey-0.24-relationship.png": {
+      "bytes": 449048,
+      "sha256": "04ea6a8de3a96f9b06f1209de765b36602ee7d02c4d53f3695bd373042dea4c1"
+    },
+    "journey-0.24-summer.png": {
+      "bytes": 825141,
+      "sha256": "51d3847f4855c54ae83eb75943a4511f880a80fd7c17b6ec18425ad35db18c89"
+    },
+    "journey-0.24-tutorial.png": {
+      "bytes": 544242,
+      "sha256": "13d70962c85204a9793656a033307d3aabf6c11b77d6392da7818e45ab86060f"
+    },
+    "journey-0.24-upgrade.png": {
+      "bytes": 537310,
+      "sha256": "470b597eb478fc63586623a616b2a3fa682e9d6c3eb42ff9b38deb447633825f"
+    }
+  },
+  "assets": "Previously approved atlases reused; no source artwork PNG pixels changed. Idle eyes and gait are runtime drawing."
+}

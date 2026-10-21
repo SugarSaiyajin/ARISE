@@ -1,0 +1,51 @@
+{
+  "suite_maxima": {
+    "TESTING PANELS": 14,
+    "JOURNEY TESTS": 438,
+    "JOURNEY SCENE TESTS": 301,
+    "ARCHIVES": 260,
+    "FARM TESTS": 121,
+    "PRESENTATION TESTS": 42,
+    "AREA TESTS": 143,
+    "FORAGE TESTS": 62,
+    "PROCESSING TESTS": 239,
+    "REQUEST TESTS": 53,
+    "LIVESTOCK TESTS": 65,
+    "EXPLORATION TESTS": 45,
+    "FISHING TESTS": 64,
+    "COOKING TESTS": 49,
+    "ACTION TESTS": 66,
+    "EIGHT DIRECTION TESTS": 114,
+    "CHARACTER PREVIEW TESTS": 113,
+    "LIFE TESTS": 209,
+    "LIFE SCENE TESTS": 94,
+    "RANCH TESTS": 476,
+    "RANCH SCENE TESTS": 208,
+    "SPRING TESTS": 834
+  },
+  "assertions_without_platform_rerun": 4010,
+  "desktop_and_mobile_smoke": "passed",
+  "audio_files": 12,
+  "physical_android_tested": false,
+  "state_soak_days": 120,
+  "scene_soak": {
+    "desktop": {
+      "map_transitions": 104,
+      "nodes_after": 43,
+      "nodes_before": 43,
+      "physical_android_tested": false,
+      "static_memory_after": 171535952.0,
+      "static_memory_before": 171535952.0,
+      "type": "desktop headless scene lifecycle, not mobile FPS or battery"
+    },
+    "mobile": {
+      "map_transitions": 104,
+      "nodes_after": 42,
+      "nodes_before": 42,
+      "physical_android_tested": false,
+      "static_memory_after": 172402732.0,
+      "static_memory_before": 172402732.0,
+      "type": "desktop headless scene lifecycle, not mobile FPS or battery"
+    }
+  }
+}
