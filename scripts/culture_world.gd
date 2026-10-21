@@ -73,7 +73,7 @@ func _draw() -> void:
 	for item in layers:
 		if item["id"]=="hero": person(actor)
 		else:
-			ApprovedArt.resident(self,item["p"],RESIDENTS.RESIDENTS[item["id"]]["sprite"],30,elapsed,elapsed if people_moving and not state.is_raining() else -1)
+			ApprovedArt.resident(self,item["p"],RESIDENTS.RESIDENTS[item["id"]]["sprite"],30,elapsed,elapsed if people_moving and not state.is_raining() else -1,RESIDENTS.visitor_direction(item["id"],area_id,state.minute,state.is_raining()))
 			label_at(item["p"]-Vector2(0,34),RESIDENTS.RESIDENTS[item["id"]]["name"])
 	for i in range(3):
 		var point: Vector2=state.JOURNEY.CLUES[i]

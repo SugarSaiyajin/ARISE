@@ -51,8 +51,9 @@ func _initialize() -> void:
 	check(not s.recover_relic()["ok"] and s.to_data() == before, "full seed stock preserves unrecovered relic")
 	s.seeds = seed_before.duplicate()
 	check(s.recover_relic()["ok"] and s.relic_recovered and s.money == 120, "relic discovery reward")
-	for crop in State.CROP_ORDER:
-		check(s.seeds[crop] == seed_before[crop] + 3, "three seeds per crop")
+	for crop in State.CROP_DATA.SPRING:
+		check(s.seeds[crop] == seed_before[crop] + 3, "three seeds per spring crop")
+	check(s.seeds["tomato"]==0 and s.seeds["eggplant"]==0 and s.seeds["lotus"]==0,"relic retains original eight-crop reward")
 	check(s.requests_completed == 2 and s.harvested == 0 and s.total_earned == 0, "discovery does not count as crops, commissions or shipping")
 	before = s.to_data()
 	check(not s.recover_relic()["ok"] and s.to_data() == before, "reward only once")

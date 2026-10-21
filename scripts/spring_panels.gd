@@ -82,7 +82,8 @@ func festival() -> void:
 func donation_page(page: int = 0) -> void:
 	var s: RefCounted = game.state
 	var order: Array = s.CROP_ORDER
-	page = posmod(page,3)
+	var pages: int = game.inventory_panels.pages(order)
+	page = posmod(page,pages)
 	var card: Panel = game._open_modal("準備春宴收成","每種只提供一次；確認按下即放上長桌並保存。",410)
 	for n in range(3):
 		var i := page*3+n
@@ -90,7 +91,7 @@ func donation_page(page: int = 0) -> void:
 		var crop: String = order[i]
 		var button: Button = game._button(card,"%s · 持有 %d" % [s.CROPS[crop]["name"],s.produce.get(crop,0)],Rect2(28,100+n*56,424,46),donate.bind(crop))
 		button.disabled = s.produce.get(crop,0)<1 or (s.spring_progress["offering_year"]==s.SPRING.year(s.day) and crop in s.spring_progress["offerings"])
-	game.inventory_panels.pagination(card,page,3,donation_page)
+	game.inventory_panels.pagination(card,page,pages,donation_page)
 	game._button(card,"回到市集",Rect2(28,344,424,46),festival)
 
 func donate(crop: String) -> void:

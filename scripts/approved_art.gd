@@ -60,7 +60,10 @@ static func hero(canvas: CanvasItem, feet: Vector2, style: String, row: int, fra
 static func animal(canvas: CanvasItem, feet: Vector2, index: int, frame: int, height: float = 22) -> void:
 	sprite(canvas,ANIMALS,A.FRAMES[index][frame],feet,height)
 
-static func resident(canvas: CanvasItem, feet: Vector2, index: int, height: float = 30, idle_seconds: float = -1, walk_seconds: float = -1) -> void:
+static func resident(canvas: CanvasItem, feet: Vector2, index: int, height: float = 30, idle_seconds: float = -1, walk_seconds: float = -1, direction: Vector2 = Vector2.DOWN) -> void:
+	if index in [3,7]:
+		preload("res://scripts/summer_art.gd").resident(canvas,feet,index,height,idle_seconds,walk_seconds,direction)
+		return
 	var origin := feet
 	if idle_seconds>=0:
 		canvas.draw_set_transform(feet,0,idle_scale(idle_seconds+index*0.6))

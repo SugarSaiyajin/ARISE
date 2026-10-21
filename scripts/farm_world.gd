@@ -64,13 +64,15 @@ func _ready() -> void:
 		add_child(terrain_layer)
 
 func interactions() -> Dictionary:
-	var result: Dictionary=MAP.anchors.duplicate()
+	var result: Dictionary={"lotus_tub":State.SUMMER_GARDEN.ANCHOR}
+	result.merge(MAP.anchors)
 	if state!=null:
 		for site in range(3):
 			if state.estate["fixtures"][site]>0: result["facility:%d" % site]=state.ESTATE.ANCHORS[site]
 	return result
 
 func interaction_hitbox(id: String) -> Rect2:
+	if id=="lotus_tub": return Rect2(299,76,26,26)
 	return MAP.hitboxes.get(id, Rect2(interactions()[id] - Vector2(15,32), Vector2(30,42)))
 
 func entry_spawn(from_area: String = "") -> Vector2:
@@ -226,6 +228,7 @@ func _depth_layer() -> void:
 		{"y": actor.y, "kind": "hero"},
 		{"y": 183.0, "kind": "dryer"},
 	]
+	objects.append({"y":97.0,"kind":"lotus_tub"})
 	for site in range(3):
 		if state.estate["fixtures"][site]>0: objects.append({"y":state.ESTATE.SITES[site].y,"kind":"facility","site":site})
 	for i in range(state.chickens):
@@ -239,6 +242,9 @@ func _depth_layer() -> void:
 	objects.sort_custom(func(a: Dictionary, b: Dictionary): return a["y"] < b["y"])
 	for item in objects:
 		match item["kind"]:
+			"lotus_tub":
+				State.SUMMER_GARDEN.draw(self,state.summer_garden)
+				label_at(Vector2(313,72),"蓮藕水槽")
 			"facility": preload("res://scripts/estate_art.gd").facility(self,item["site"],state.estate["fixtures"][item["site"]])
 			"coop":
 				ApprovedArt.building(self,5,Rect2(315,141,56,48))

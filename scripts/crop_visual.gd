@@ -4,6 +4,9 @@ static func block(node: Node2D, center: Vector2, x: float, y: float, w: float, h
 	node.draw_rect(Rect2((center + Vector2(x,y)).floor(),Vector2(w,h)),Color(color))
 
 static func draw(node: Node2D, crop: String, center: Vector2, stage: int) -> void:
+	if crop in ["tomato","eggplant","lotus"]:
+		preload("res://scripts/summer_art.gd").crop(node,crop,center,stage)
+		return
 	block(node,center,-7,0,14,2,"364e3c66")
 	if stage == 0:
 		block(node,center,-1,-4,2,5,"597849")

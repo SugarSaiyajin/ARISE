@@ -1,0 +1,61 @@
+{
+  "capture": "desktop Godot 4.6.3 GLES3, mobile UI, independent demo save",
+  "physical_device_tested": false,
+  "screenshots": {
+    "summer-0.26-edric.png": {
+      "sha256": "94dc1a507438f88de3c497451a9e4fc0b87d2a28a6dde8e110aa5f7605883f90",
+      "size_bytes": 745482,
+      "decoded": true
+    },
+    "summer-0.26-facilities.png": {
+      "sha256": "e950df23073f33cf7a9dff7da2fdfa886a8bad29c5317ceabe24cb1aee8b962d",
+      "size_bytes": 707698,
+      "decoded": true
+    },
+    "summer-0.26-farm.png": {
+      "sha256": "4c5db53cc509d0ee2d889db5d68544d3496ce3f163a0daad514ed1c1e22ce37d",
+      "size_bytes": 888529,
+      "decoded": true
+    },
+    "summer-0.26-harvest.png": {
+      "sha256": "2d7c63a1d215b036ca59d52e18b6252ed1385d326360b0c88869c520b7b83f35",
+      "size_bytes": 522848,
+      "decoded": true
+    },
+    "summer-0.26-items.png": {
+      "sha256": "507b27b5468432e2af2c710079109bbfde4cf79111e73c2ff5ba5e867dd2af69",
+      "size_bytes": 511081,
+      "decoded": true
+    },
+    "summer-0.26-lotus.png": {
+      "sha256": "8f0ef287ba1721ce8a0c5b0778ccf38ad5a12ada602dd13d564ea8779d33392f",
+      "size_bytes": 514979,
+      "decoded": true
+    },
+    "summer-0.26-residents.png": {
+      "sha256": "8f651b05627d24595f73173ca8e0fc62fe4b205ee9e2b3b5c8f64b7a3ba81af2",
+      "size_bytes": 508570,
+      "decoded": true
+    },
+    "summer-0.26-seeds.png": {
+      "sha256": "7c2bda789bf46d877087a32abe73c00d7b89799b71e279e332d3388188423d6a",
+      "size_bytes": 507270,
+      "decoded": true
+    },
+    "summer-0.26-suyue.png": {
+      "sha256": "94dc1a507438f88de3c497451a9e4fc0b87d2a28a6dde8e110aa5f7605883f90",
+      "size_bytes": 745482,
+      "decoded": true
+    },
+    "summer-0.26-gameplay.mp4": {
+      "sha256": "d9c193ff1c2a4ac39a2eb0a9f22d59ecc558487ef942363298ae40e23c46fcad",
+      "size_bytes": 2289857,
+      "frames": 486,
+      "fps": 30,
+      "duration_seconds": 16.2,
+      "width": 1280,
+      "height": 720,
+      "codec": "H264"
+    }
+  }
+}

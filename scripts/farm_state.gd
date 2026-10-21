@@ -1,6 +1,9 @@
 class_name FarmState
 extends RefCounted
 
+const SUMMER_GARDEN = preload("res://scripts/summer_garden.gd")
+var summer_garden: Dictionary = SUMMER_GARDEN.empty()
+
 const ESTATE = preload("res://scripts/estate_rules.gd")
 var estate: Dictionary = ESTATE.empty()
 
@@ -104,6 +107,10 @@ func work(index: int, tool: String, crop: String = "turnip") -> Dictionary:
 		"seed":
 			if not CROPS.has(crop):
 				return {"ok": false, "text": "未知的種子。"}
+			if crop=="lotus":
+				return {"ok":false,"text":"蓮藕要種在池邊專用水槽，不能種旱田。"}
+			if crop in CROP_DATA.SUMMER and JOURNEY.season(day)!="夏":
+				return {"ok":false,"text":"夏季作物僅夏季播種；已種植的作物跨季保留。"}
 			if not p["tilled"] or p["crop"] != "":
 				return {"ok": false, "text": "先開墾一塊空田，再播種。"}
 			if seeds[crop] <= 0:
@@ -139,6 +146,8 @@ func work(index: int, tool: String, crop: String = "turnip") -> Dictionary:
 func buy(crop: String, amount: int = 1) -> Dictionary:
 	if not CROPS.has(crop) or amount <= 0 or amount > 99:
 		return {"ok": false, "text": "無效的購買數量。"}
+	if crop in CROP_DATA.SUMMER and JOURNEY.season(day)!="夏":
+		return {"ok":false,"text":"夏季種苗僅夏季販售；現有種苗會保留。"}
 	var cost: int = CROPS[crop]["seed_cost"] * amount
 	if seeds.get(crop,0) > 100000000-amount:
 		return {"ok":false,"text":"種子已放滿，先播種一些吧。"}
@@ -435,10 +444,10 @@ func restore_route() -> Dictionary:
 func recover_relic() -> Dictionary:
 	if area_id != "ruins" or not route_restored or relic_recovered:
 		return {"ok": false, "text": "請先重開驛路，再到舊驛站查看石台；殘片只能收藏一次。"}
-	for crop in CROP_ORDER:
+	for crop in CROP_DATA.SPRING:
 		if seeds[crop] > 100000000 - EXPLORATION.RELIC_SEEDS:
 			return {"ok": false, "text": "種子已放滿，整理行囊後再來收好這份發現。"}
-	for crop in CROP_ORDER:
+	for crop in CROP_DATA.SPRING:
 		seeds[crop] += EXPLORATION.RELIC_SEEDS
 	money += EXPLORATION.RELIC_MONEY
 	relic_recovered = true
@@ -488,6 +497,7 @@ func finish_fishing(caught: bool) -> Dictionary:
 	return {"ok": true, "text": "釣到了%s！可出貨 %d 銀，今日魚獲 %d / 3。" % [FISHING.FISH[species]["name"], FISHING.FISH[species]["price"], fish_caught_today]}
 
 func sleep() -> void:
+	SUMMER_GARDEN.advance(self)
 	JOURNEY.mark(self,"rest")
 	if life["irrigator"]:
 		for i in range(6 if ESTATE.has_facility(self,1) else 2):
@@ -514,6 +524,7 @@ func sleep() -> void:
 
 func to_data() -> Dictionary:
 	return {
+		"summer_garden": summer_garden.duplicate(true),
 		"estate": estate.duplicate(true),
 		"journey": journey.duplicate(true),
 		"life": life.duplicate(true), "ranch": ranch.duplicate(true), "hero_style":hero_style,
@@ -599,12 +610,13 @@ func _valid_data(data: Variant) -> bool:
 		return false
 	if not ESTATE.valid(data.get("estate",ESTATE.empty()),data):
 		return false
+	if not SUMMER_GARDEN.valid(data.get("summer_garden",SUMMER_GARDEN.empty())): return false
 	if not data.get("plots") is Array or data["plots"].size() != COLS * ROWS:
 		return false
 	for p in data["plots"]:
 		if not p is Dictionary or not p.get("tilled") is bool or not p.get("watered") is bool:
 			return false
-		if not p.get("crop") is String or (p["crop"] != "" and not CROPS.has(p["crop"])):
+		if not p.get("crop") is String or (p["crop"] != "" and p["crop"] not in CROP_DATA.FIELD):
 			return false
 		var growth: Variant = p.get("growth")
 		if not (growth is float or growth is int) or not is_finite(float(growth)) or growth != int(growth) or growth < 0 or growth > 6:
@@ -690,6 +702,8 @@ func _valid_processing(data: Dictionary) -> bool:
 	return true
 
 func _apply_data(data: Dictionary) -> void:
+	summer_garden=data.get("summer_garden",SUMMER_GARDEN.empty()).duplicate(true)
+	summer_garden["growth"]=int(summer_garden["growth"])
 	day = int(data["day"])
 	minute = float(data["minute"])
 	money = int(data["money"])

@@ -206,8 +206,9 @@ func calendar() -> void:
 	game._button(card,"回手札",Rect2(28,414,424,36),hub)
 
 func summer(page: int = 0) -> void:
-	page=posmod(page,3)
 	var s: RefCounted=game.state
+	var pages: int = game.inventory_panels.pages(s.CROP_ORDER)
+	page=posmod(page,pages)
 	var card: Panel=game._open_modal("夏夜星燈會","夏14至28日於雲橋鎮；三種收成，每種一份。",460)
 	var offered: Array=s.journey["summer_offered"] if s.journey["summer_cycle"]==RULES.year(s.day) else []
 	game._label(card,"已提供%d /3 · %s" % [offered.size(),"本年已完成" if s.journey["summer_done"]==RULES.year(s.day) else "謝禮150銀"],Rect2(28,98,424,26),16)
@@ -217,7 +218,7 @@ func summer(page: int = 0) -> void:
 		var id: String=s.CROP_ORDER[i]
 		var button: Button=game._button(card,s.CROPS[id]["name"]+" ×%d" % s.produce[id],Rect2(28,136+n*45,424,40),summer_give.bind(id,page))
 		button.disabled=not RULES.summer_open(s) or id in offered or offered.size()>=3 or s.produce[id]<1
-	game.inventory_panels.pagination(card,page,3,summer)
+	game.inventory_panels.pagination(card,page,pages,summer)
 	game._button(card,"共赴星燈夜",Rect2(28,337,424,44),summer_story.bind(0),true).disabled=not RULES.summer_open(s) or offered.size()!=3
 	game._button(card,"重讀星燈夜",Rect2(28,392,204,44),summer_story.bind(0,true)).disabled=s.journey["summer_done"]==0
 	game._button(card,"回日曆",Rect2(248,392,204,44),calendar)

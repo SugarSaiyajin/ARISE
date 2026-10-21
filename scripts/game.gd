@@ -389,6 +389,7 @@ func _update_ui() -> void:
 	if object.begins_with("gather:"):
 		action = "明日再來" if state.gathered.has(object.trim_prefix("gather:")) else "採集"
 	if object.begins_with("facility:"): action="設施"
+	if object=="lotus_tub": action="水槽"
 	action_button.text = action + (("\n互動" if object != "" else "\n按住") if touch_mode else "\nE")
 	if tool_action.active:
 		action_button.text = "作業中\n" + TOOL_NAMES[tool_action.tool]
@@ -400,7 +401,7 @@ func _hide_tool_palette() -> void:
 	if is_instance_valid(tool_palette): tool_palette.hide()
 
 func _show_seed_list() -> void:
-	inventory_panels.seeds(maxi(0,State.CROP_ORDER.find(selected_crop))/3)
+	inventory_panels.seeds(maxi(0,State.CROP_DATA.FIELD.find(selected_crop))/3)
 
 func _select_tool(index: int) -> void:
 	clear_field_batch()
@@ -412,8 +413,8 @@ func _select_tool(index: int) -> void:
 	_update_ui()
 
 func _cycle_crop() -> void:
-	var index := State.CROP_ORDER.find(selected_crop)
-	selected_crop = State.CROP_ORDER[(index + 1) % State.CROP_ORDER.size()]
+	var index := State.CROP_DATA.FIELD.find(selected_crop)
+	selected_crop = State.CROP_DATA.FIELD[(index + 1) % State.CROP_DATA.FIELD.size()]
 	selected_tool = 1
 	_update_ui()
 	toast("已選擇%s種子 · 成長需 %d 個澆水日" % [State.CROPS[selected_crop]["name"], State.CROPS[selected_crop]["days"]])
@@ -708,6 +709,9 @@ func _find_resident(id: String) -> void:
 	_walk_to(world.interactions()[id],{"object":id})
 
 func _interact(object: String) -> void:
+	if object=="lotus_tub":
+		estate_panels.water_garden()
+		return
 	if object.begins_with("facility:"):
 		estate_panels.hub()
 		return
@@ -1976,7 +1980,7 @@ func _smoke_exploration() -> void:
 		_smoke_request_layout()
 	_recover_relic()
 	assert(state.relic_recovered and state.money == 160)
-	for crop in State.CROP_ORDER:
+	for crop in State.CROP_DATA.SPRING:
 		assert(state.seeds[crop] == seeds_before[crop] + 3)
 	var reward_money: int = state.money
 	_smoke_walk(RuinsWorld.RELIC)

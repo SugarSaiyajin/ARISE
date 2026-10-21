@@ -16,7 +16,8 @@ func field() -> void:
 	game._paragraph(card,"已種植 %d 格 · 空田 %d 格\n待澆水 %d 格 · 可採收 %d 格\n\n只處理目前符合條件的田格。\n資源逐格扣除，中止後保留已完成成果。\n不會自動播種或出售。" % [status["planted"],status["empty"],status["dry"],status["mature"]],Rect2(28,98,424,181)).add_theme_font_size_override("font_size",15)
 	game._button(card,"批量澆水",Rect2(28,290,204,44),field_confirm.bind("water"),true)
 	game._button(card,"批量採收",Rect2(248,290,204,44),field_confirm.bind("harvest"))
-	game._button(card,"回經營總覽",Rect2(28,354,424,44),hub)
+	game._button(card,"蓮藕水槽",Rect2(28,354,204,44),water_garden)
+	game._button(card,"回經營總覽",Rect2(248,354,204,44),hub)
 func field_confirm(tool: String) -> void:
 	var plan: Dictionary=game.field_batch_plan(tool)
 	var card: Panel=game._open_modal("確認田間作業","只會依序處理預覽列出的田格，沒有額外收成。")
@@ -79,7 +80,7 @@ func confirm_shipping() -> void:
 	game._update_ui()
 	game.toast(result["text"])
 func construction() -> void:
-	var card: Panel=game._open_modal("設施施工位置","沿用已通過素材；新增建築美術會另送審。",410)
+	var card: Panel=game._open_modal("設施施工位置","木構、青瓷與藍瓦 · 先預覽，再安排施工。",410)
 	for site in range(3):
 		game._button(card,"%s · %s" % [RULES.SITE_NAMES[site],RULES.FACILITIES[game.state.estate["fixtures"][site]]],Rect2(28,98+site*56,424,46),facility.bind(site,1))
 	game._label(card,"同類設施一座；施工前檢查占位與素材，拆除不退費。",Rect2(28,290,424,24),13)
@@ -159,5 +160,25 @@ func claim(index: int) -> void:
 	var result := RULES.claim_goal(game.state,index)
 	if result["ok"]: game._save(false)
 	goals(index/3)
+	game._update_ui()
+	game.toast(result["text"])
+
+func water_garden() -> void:
+	var s: RefCounted=game.state
+	var g: Dictionary=s.summer_garden
+	var card: Panel=game._open_modal("池邊蓮藕水槽","獨立水培，無須每日澆水；先走近莊園池邊。",410)
+	var status: String="尚未建造 · 木材6、石料4、90銀"
+	if g["built"]: status="水槽已蓄水 · 可於夏季栽種"
+	if g["planted"]: status="成長 %d / 7 日 · %s" % [g["growth"],"可以採收" if g["growth"]>=7 else "休息到明天繼續成長"]
+	game._paragraph(card,status+"\n\n種苗 %d 包 · 蓮藕 %d 份\n種苗28銀；收成110銀。\n栽種、採收各消耗1體力。\n跨季保留已栽種蓮藕。" % [s.seeds.get("lotus",0),s.produce.get("lotus",0)],Rect2(28,98,424,170)).add_theme_font_size_override("font_size",15)
+	var action: String="build" if not g["built"] else "harvest" if g["planted"] else "plant"
+	var reason: String=s.SUMMER_GARDEN.reason(s,action)
+	game._button(card,{"build":"確認建造","plant":"栽種蓮藕","harvest":"採收蓮藕"}[action],Rect2(28,280,424,44),water_garden_apply.bind(action),true).disabled=reason!=""
+	game._label(card,reason,Rect2(28,326,424,24),12)
+	game._button(card,"回到田間照料",Rect2(28,360,424,40),field)
+func water_garden_apply(action: String) -> void:
+	var result: Dictionary=game.state.SUMMER_GARDEN.apply(game.state,action)
+	if result["ok"]: game._save(false)
+	water_garden()
 	game._update_ui()
 	game.toast(result["text"])

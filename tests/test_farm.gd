@@ -74,7 +74,7 @@ func _test_growth_and_weather() -> void:
 	check(s.plots[20]["watered"], "rain also waters newly prepared soil")
 	s.sleep()
 	check(s.is_mature(s.plots[1]), "rain contributes a growth day")
-	for crop in State.CROP_ORDER:
+	for crop in State.CROP_DATA.SPRING:
 		var farm = State.new()
 		farm.work(3, "hoe")
 		farm.work(3, "seed", crop)

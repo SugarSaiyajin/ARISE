@@ -38,3 +38,9 @@ static func visitor_position(id: String, area: String, minute: float, rain: bool
 	var index := maxi(0,present.find(id))
 	var x := 110.0+index*110.0
 	return Vector2(x+(0 if rain else sin((minute-420)/35.0+index)*7),190)
+
+static func visitor_direction(id: String, area: String, minute: float, rain: bool) -> Vector2:
+	if rain: return Vector2.DOWN
+	# Never derive motion across a schedule transition to another map.
+	if visitor_area(id,minute+0.1,rain)!=area: return Vector2.DOWN
+	return (visitor_position(id,area,minute+0.1,rain)-visitor_position(id,area,minute,rain)).normalized()
