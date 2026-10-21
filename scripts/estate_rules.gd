@@ -202,7 +202,7 @@ static func daily_line(s: RefCounted, id: String) -> String:
 	if memories>0 and s.day%3==0: return ACTIVITY_LINES[index][memories-1]+" 這段相處，我還記得。"
 	var points := JOURNEY.friendship(s,id)
 	var level := 3 if points>=25 else 2 if points>=10 else 1 if points>=3 else 0
-	return ("夏日也記得歇一歇。" if JOURNEY.season(s.day)=="夏" else "春風又把新芽吹開了。")+"\n"+DAILY_STAGES[index][level]+"\n"+DAILY_TOPICS[index][(s.day+index)%3]
+	return ("夏日也記得歇一歇。" if s.season()=="夏" else "秋收時，也留點暖意給自己。" if s.season()=="秋" else "春風又把新芽吹開了。")+"\n"+DAILY_STAGES[index][level]+"\n"+DAILY_TOPICS[index][(s.day+index)%3]
 
 static func activity(s: RefCounted, id: String, choice: int) -> Dictionary:
 	if id not in JOURNEY.PEOPLE or choice not in [1,2] or not JOURNEY.near(s,id) or JOURNEY.friendship(s,id)<3: return JOURNEY.result(false,"請走近熟識的居民，再約一起活動。")
@@ -219,7 +219,7 @@ static func activity(s: RefCounted, id: String, choice: int) -> Dictionary:
 	return JOURNEY.result(true,"一起度過半小時，好感+2；這次相處會留在日常對話裡。")
 
 static func summer_job(s: RefCounted, index: int) -> Dictionary:
-	if index<0 or index>3 or JOURNEY.season(s.day)!="夏" or s.area_id!=LIFE.AREAS[index]: return JOURNEY.result(false,"夏季到對應聚落參加週活動。")
+	if index<0 or index>3 or s.season()!="夏" or s.area_id!=LIFE.AREAS[index]: return JOURNEY.result(false,"夏季到對應聚落參加週活動。")
 	var previous: int=s.estate["summer_jobs"][s.area_id]
 	if previous>0 and (previous-1)/7==(s.day-1)/7: return JOURNEY.result(false,"本聚落這週已完成，下週再來。")
 	if s.energy<4 or JOURNEY.count(s,SUMMER_NEEDS[index])<SUMMER_AMOUNTS[index] or s.money>1000000000000-SUMMER_REWARDS[index] or s.estate["summer_completed"]>=100000000: return JOURNEY.result(false,"體力、物資不足，或帳簿已滿。")
@@ -254,7 +254,7 @@ static func valid(v: Variant, data: Dictionary) -> bool:
 	for id in JOURNEY.PEOPLE:
 		if (v["activities"][id]==0)!=(v["choices"][id]==0): return false
 	for day in v["summer_jobs"].values():
-		if day>0 and JOURNEY.season(int(day))!="夏": return false
+		if day>0 and JOURNEY.season_at(data,int(day))!="夏": return false
 	if v["milestones"][1]:
 		var owned: int=1 if data.get("chickens",0)>0 else 0
 		for animal in data.get("ranch",{}).get("animals",{}).values():

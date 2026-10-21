@@ -112,8 +112,8 @@ func _initialize() -> void:
 		s.money+=1
 		check(s.LIFE.craft(s,recipe)["ok"] and s.money==0,"workshop consumes exact listed fee")
 	for day in range(1,113):
-		check(Rules.season(day)==("春" if ((day-1)/28)%2==0 else "夏"),"two years have correct spring/summer sequence")
-		check(Rules.rain(day)==(day%4==0 if Rules.season(day)=="春" else (day-29)%5 in [1,2]),"calendar forecasts match weather rules")
+		check(Rules.season(day)==["春","夏","秋"][((day-1)/28)%3],"three-season calendar sequence")
+		check(Rules.rain(day)==((day-57)%7==3 if Rules.season(day)=="秋" else day%4==0 if Rules.season(day)=="春" else (day-29)%5 in [1,2]),"calendar forecasts match weather rules")
 	s=State.new()
 	s.day=28
 	s.plots[0]["watered"]=true

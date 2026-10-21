@@ -18,7 +18,7 @@ func pagination(card: Panel, page: int, count: int, callback: Callable) -> void:
 func bag(page: int = 0) -> void:
 	var order: Array = game.State.CROP_ORDER
 	page = posmod(page, pages(order))
-	var card: Panel = game._open_modal("行囊與收成", "十一種作物 · 原料先留好，再到出貨箱出售。", 410)
+	var card: Panel = game._open_modal("行囊與收成", "十四種作物 · 原料先留好，再到出貨箱出售。", 410)
 	for n in range(PAGE_SIZE):
 		var i := page * PAGE_SIZE + n
 		if i >= order.size(): break
@@ -26,7 +26,9 @@ func bag(page: int = 0) -> void:
 		var data: Dictionary = game.State.CROPS[crop]
 		if crop in game.State.CROP_DATA.SUMMER:
 			preload("res://scripts/summer_art.gd").icon(card,crop,Rect2(28,96+n*44,28,28))
-		game._label(card, data["name"], Rect2(64 if crop in game.State.CROP_DATA.SUMMER else 28, 97 + n*44, 144, 26), 17)
+		if crop in game.State.CROP_DATA.AUTUMN:
+			preload("res://scripts/autumn_art.gd").icon(card,crop,Rect2(28,96+n*44,28,28))
+		game._label(card, data["name"], Rect2(64 if crop in game.State.CROP_DATA.SUMMER+game.State.CROP_DATA.AUTUMN else 28, 97 + n*44, 144, 26), 17)
 		game._label(card, "種子 %d · 收成 %d · %d 銀" % [game.state.seeds.get(crop,0), game.state.produce.get(crop,0), game.state.JOURNEY.crop_price(game.state,crop)], Rect2(210, 100+n*44, 242, 24), 13)
 	game._button(card, "採集素材", Rect2(28, 230, 100, 44), game._show_materials)
 	game._button(card, "成品雞蛋", Rect2(136, 230, 100, 44), game._show_goods)
@@ -44,10 +46,10 @@ func shop(page: int = 0) -> void:
 		if i >= order.size(): break
 		var crop: String = order[i]
 		var data: Dictionary = game.State.CROPS[crop]
-		game._label(card, data["name"]+(" · 夏季水培" if crop=="lotus" else " · 夏季" if crop in game.State.CROP_DATA.SUMMER else ""), Rect2(28, 98+n*56, 260, 24), 17)
+		game._label(card, data["name"]+(" · 夏季水培" if crop=="lotus" else " · 夏季" if crop in game.State.CROP_DATA.SUMMER else " · 秋季" if crop in game.State.CROP_DATA.AUTUMN else ""), Rect2(28, 98+n*56, 260, 24), 17)
 		game._label(card, "%d 日成熟 · 售 %d 銀 · 種子 %d" % [data["days"], game.state.JOURNEY.crop_price(game.state,crop), game.state.seeds.get(crop,0)], Rect2(28, 124+n*56, 260, 20), 12)
 		var buy: Button = game._button(card, "3 包 / %d 銀" % (data["seed_cost"]*3), Rect2(306, 101+n*56, 146, 44), game._buy.bind(crop), true)
-		buy.disabled = game.state.money < data["seed_cost"]*3 or (crop in game.State.CROP_DATA.SUMMER and game.state.JOURNEY.season(game.state.day)!="夏")
+		buy.disabled = game.state.money < data["seed_cost"]*3 or (crop in game.State.CROP_DATA.SUMMER and game.state.season()!="夏") or (crop in game.State.CROP_DATA.AUTUMN and game.state.season()!="秋")
 	pagination(card, page, pages(order), shop)
 	game._button(card, "下次再來", Rect2(28, 344, 424, 46), game._close_modal)
 

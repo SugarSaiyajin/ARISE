@@ -41,6 +41,11 @@ const SPRING = preload("res://scripts/spring_rules.gd")
 const RESIDENTS = preload("res://scripts/resident_data.gd")
 const CROPS = CROP_DATA.CROPS
 const CROP_ORDER = CROP_DATA.ORDER
+const AUTUMN=preload("res://scripts/autumn_rules.gd")
+var autumn: Dictionary=AUTUMN.empty()
+# Added calendar days affect display only, never absolute timestamps.
+var calendar_since: int = 0
+var calendar_offset: int = 0
 var day: int = 1
 var minute: float = 420.0
 var money: int = 120
@@ -93,8 +98,17 @@ func _init() -> void:
 		plots[i] = {"tilled": true, "crop": "turnip", "growth": 1, "watered": false}
 	plots[2]["tilled"] = true
 
+func season() -> String:
+	return JOURNEY.season(day,calendar_offset)
+
+func calendar_year() -> int:
+	return JOURNEY.year(day,calendar_offset)
+
+func weather(ahead: int = 0) -> String:
+	return JOURNEY.weather(day+ahead,calendar_offset)
+
 func is_raining() -> bool:
-	return JOURNEY.rain(day)
+	return JOURNEY.rain(day,calendar_offset)
 
 func is_mature(plot: Dictionary) -> bool:
 	return plot["crop"] != "" and plot["growth"] >= CROPS[plot["crop"]]["days"]
@@ -119,8 +133,10 @@ func work(index: int, tool: String, crop: String = "turnip") -> Dictionary:
 				return {"ok": false, "text": "未知的種子。"}
 			if crop=="lotus":
 				return {"ok":false,"text":"蓮藕要種在池邊專用水槽，不能種旱田。"}
-			if crop in CROP_DATA.SUMMER and JOURNEY.season(day)!="夏":
+			if crop in CROP_DATA.SUMMER and season()!="夏":
 				return {"ok":false,"text":"夏季作物僅夏季播種；已種植的作物跨季保留。"}
+			if crop in CROP_DATA.AUTUMN and season()!="秋":
+				return {"ok":false,"text":"秋季作物僅秋季播種；跨季保留並繼續成長。"}
 			if not p["tilled"] or p["crop"] != "":
 				return {"ok": false, "text": "先開墾一塊空田，再播種。"}
 			if seeds[crop] <= 0:
@@ -156,8 +172,10 @@ func work(index: int, tool: String, crop: String = "turnip") -> Dictionary:
 func buy(crop: String, amount: int = 1) -> Dictionary:
 	if not CROPS.has(crop) or amount <= 0 or amount > 99:
 		return {"ok": false, "text": "無效的購買數量。"}
-	if crop in CROP_DATA.SUMMER and JOURNEY.season(day)!="夏":
+	if crop in CROP_DATA.SUMMER and season()!="夏":
 		return {"ok":false,"text":"夏季種苗僅夏季販售；現有種苗會保留。"}
+	if crop in CROP_DATA.AUTUMN and season()!="秋":
+		return {"ok":false,"text":"秋季種苗僅秋季販售；現有種苗會保留。"}
 	var cost: int = CROPS[crop]["seed_cost"] * amount
 	if seeds.get(crop,0) > 100000000-amount:
 		return {"ok":false,"text":"種子已放滿，先播種一些吧。"}
@@ -262,8 +280,9 @@ func ingredient_count(ingredient: Dictionary) -> int:
 	return int(get(ingredient["stock"]).get(ingredient["item"], 0))
 
 func can_cook(recipe: String) -> bool:
-	if area_id != "house" or not COOKING.RECIPES.has(recipe) or meals.get(recipe, 0) >= COOKING.MAX_STOCK:
+	if (area_id != "house" and not (recipe in AUTUMN.RECIPES and AUTUMN.on_site(self))) or not COOKING.RECIPES.has(recipe) or meals.get(recipe, 0) >= COOKING.MAX_STOCK:
 		return false
+	if recipe in AUTUMN.RECIPES and not autumn["learned"]: return false
 	for ingredient in COOKING.RECIPES[recipe]["ingredients"]:
 		if ingredient_count(ingredient) < ingredient["amount"]:
 			return false
@@ -334,7 +353,7 @@ func collect_processing() -> Dictionary:
 	return {"ok": true, "text": "領取了 %d 份%s，可到出貨箱出售。" % [amount, PROCESSING.RECIPES[recipe]["name"]]}
 
 func daily_request_id() -> String:
-	var order: Array=REQUESTS.SUMMER if JOURNEY.season(day)=="夏" else REQUESTS.ORDER
+	var order: Array=REQUESTS.SUMMER if season()=="夏" else REQUESTS.ORDER
 	return order[(day - 1) % order.size()]
 
 func accept_request() -> Dictionary:
@@ -520,7 +539,7 @@ func sleep() -> void:
 	fed_chickens = 0
 	for p in plots:
 		if p["crop"] != "" and p["watered"]:
-			p["growth"] = mini(p["growth"] + (2 if JOURNEY.season(day)=="夏" and day%3==0 and p["crop"] in ["berry","potato","tea"] else 1), CROPS[p["crop"]]["days"])
+			p["growth"] = mini(p["growth"] + (2 if season()=="夏" and day%3==0 and p["crop"] in ["berry","potato","tea"] else 1), CROPS[p["crop"]]["days"])
 	gathered.clear()
 	day += 1
 	if day >= 29:
@@ -535,6 +554,7 @@ func sleep() -> void:
 
 func to_data() -> Dictionary:
 	return {
+		"calendar_since":calendar_since,"calendar_offset":calendar_offset,"autumn":autumn.duplicate(true),
 		"interior":interior.duplicate(true), "chapter":chapter.duplicate(true), "growth":growth.duplicate(true),
 		"home": home.duplicate(true),
 		"summer_garden": summer_garden.duplicate(true),
@@ -617,6 +637,11 @@ func _valid_data(data: Variant) -> bool:
 	for key in ["seeds", "produce"]:
 		if not STOCKS.valid(data.get(key), CROP_ORDER, CROP_DATA.LEGACY):
 			return false
+	if data.has("calendar_offset")!=data.has("calendar_since"): return false
+	if not JOURNEY.number(data.get("calendar_since",0),int(data["day"])): return false
+	if not JOURNEY.number(data.get("calendar_offset",0),500000) or int(data.get("calendar_offset",0))%28!=0: return false
+	if data.has("calendar_offset") and int(data["calendar_offset"])!=(JOURNEY.legacy_offset(int(data["calendar_since"])) if data["calendar_since"]>0 else 0): return false
+	if not AUTUMN.valid(data.get("autumn",AUTUMN.empty()),data): return false
 	if not SPRING.valid(data.get("spring_progress", SPRING.empty_progress()), data):
 		return false
 	if not JOURNEY.valid(data.get("journey",JOURNEY.empty()),data):
@@ -636,7 +661,7 @@ func _valid_data(data: Variant) -> bool:
 		if not p.get("crop") is String or (p["crop"] != "" and p["crop"] not in CROP_DATA.FIELD):
 			return false
 		var growth: Variant = p.get("growth")
-		if not (growth is float or growth is int) or not is_finite(float(growth)) or growth != int(growth) or growth < 0 or growth > 6:
+		if not (growth is float or growth is int) or not is_finite(float(growth)) or growth != int(growth) or growth < 0 or growth > 9:
 			return false
 		if p["crop"] != "" and (not p["tilled"] or growth > CROPS[p["crop"]]["days"]):
 			return false
@@ -719,6 +744,9 @@ func _valid_processing(data: Dictionary) -> bool:
 	return true
 
 func _apply_data(data: Dictionary) -> void:
+	calendar_since=int(data.get("calendar_since",data["day"]))
+	calendar_offset=int(data.get("calendar_offset",JOURNEY.legacy_offset(int(data["day"]))))
+	autumn=AUTUMN.normalized(data.get("autumn",AUTUMN.empty()))
 	interior=data.get("interior",INTERIOR.defaults()).duplicate(true)
 	for entry in interior:
 		for index in range(3): entry[index]=int(entry[index])

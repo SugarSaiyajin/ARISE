@@ -35,7 +35,7 @@ static func year(day: int) -> int:
 	return (day - 1) / LENGTH + 1
 
 static func festival_open(s: RefCounted) -> bool:
-	return s.JOURNEY.season(s.day)=="春" and season_day(s.day) >= FESTIVAL_DAY
+	return s.season()=="春" and season_day(s.day) >= FESTIVAL_DAY
 
 static func talk(s: RefCounted, id: String) -> String:
 	if id not in ["shop", "smith"] or s.area_id != "town":

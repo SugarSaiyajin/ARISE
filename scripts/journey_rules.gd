@@ -46,22 +46,32 @@ static func empty() -> Dictionary:
 		v["events"][id]=0
 	return v
 
-static func season(day: int) -> String:
-	return "春" if ((day-1)/28)%2==0 else "夏"
+static func season(day: int, offset: int = 0) -> String:
+	return ["春","夏","秋"][((day+offset-1)/28)%3]
 
-static func year(day: int) -> int:
-	return (day-1)/56+1
+static func year(day: int, offset: int = 0) -> int:
+	return (day+offset-1)/84+1
 
-static func rain(day: int) -> bool:
-	return day%4==0 if season(day)=="春" else ((day-29)%5==1 or (day-29)%5==2)
+static func legacy_offset(day: int) -> int:
+	return ((day-1)/56)*28
 
-static func weather(day: int) -> String:
-	if rain(day): return "細雨" if season(day)=="春" else "夏雨"
-	return "暑晴" if season(day)=="夏" else "晴朗"
+static func season_at(data: Dictionary, day: int) -> String:
+	if not data.has("calendar_offset") or day<int(data.get("calendar_since",0)):
+		return "春" if ((day-1)/28)%2==0 else "夏"
+	return season(day,int(data["calendar_offset"]))
+
+static func rain(day: int, offset: int = 0) -> bool:
+	if season(day,offset)=="秋": return (day+offset-57)%7==3
+	return day%4==0 if season(day,offset)=="春" else ((day-29)%5==1 or (day-29)%5==2)
+
+static func weather(day: int, offset: int = 0) -> String:
+	if season(day,offset)=="秋": return "秋雨" if rain(day,offset) else "秋晴"
+	if rain(day,offset): return "細雨" if season(day,offset)=="春" else "夏雨"
+	return "暑晴" if season(day,offset)=="夏" else "晴朗"
 
 static func crop_price(s: RefCounted, id: String) -> int:
 	var price: int=CROPS.CROPS[id]["price"]
-	return price*6/5 if season(s.day)=="夏" and id in ["berry","potato","tea"] else price
+	return price*6/5 if s.season()=="夏" and id in ["berry","potato","tea"] else price
 
 static func mark(s: RefCounted, id: String) -> void:
 	if id in TASKS: s.journey["tutorial"][id]=true
@@ -167,23 +177,23 @@ static func quest(s: RefCounted, index: int) -> Dictionary:
 	return result(true,"聚落委託完成，收到 %d 銀與當地謝禮。" % reward)
 
 static func summer_open(s: RefCounted) -> bool:
-	return season(s.day)=="夏" and (s.day-1)%28+1>=14 and s.area_id=="town" and s.journey["summer_done"]!=year(s.day)
+	return s.season()=="夏" and (s.day-1)%28+1>=14 and s.area_id=="town" and s.journey["summer_done"]!=s.calendar_year()
 
 static func summer_donate(s: RefCounted, crop: String) -> Dictionary:
 	if not summer_open(s) or crop not in CROPS.ORDER or s.produce[crop]<1: return result(false,"夏14至28日到鎮上，備妥三種不同作物參加星燈夜。")
-	var current: bool=s.journey["summer_cycle"]==year(s.day)
+	var current: bool=s.journey["summer_cycle"]==s.calendar_year()
 	var offered: Array=s.journey["summer_offered"] if current else []
 	if crop in offered or offered.size()>=3: return result(false,"這種作物已放上長桌，請準備其他種類。")
 	if not current:
-		s.journey["summer_cycle"]=year(s.day)
+		s.journey["summer_cycle"]=s.calendar_year()
 		s.journey["summer_offered"]=[]
 	s.produce[crop]-=1
 	s.journey["summer_offered"].append(crop)
 	return result(true,"將%s放上夏夜長桌。" % CROPS.CROPS[crop]["name"])
 
 static func summer_finish(s: RefCounted) -> Dictionary:
-	if not summer_open(s) or s.journey["summer_cycle"]!=year(s.day) or s.journey["summer_offered"].size()!=3 or s.money>999999999850: return result(false,"請先在夏夜市集備齊三種收成。")
-	s.journey["summer_done"]=year(s.day)
+	if not summer_open(s) or s.journey["summer_cycle"]!=s.calendar_year() or s.journey["summer_offered"].size()!=3 or s.money>999999999850: return result(false,"請先在夏夜市集備齊三種收成。")
+	s.journey["summer_done"]=s.calendar_year()
 	s.money+=150
 	return result(true,"星燈夜記入手札，收到 150 銀。兩地的燈影，在同一條河上相逢。")
 
@@ -206,15 +216,15 @@ static func valid(v: Variant, data: Dictionary) -> bool:
 	for i in range(4):
 		if not number(v["clues"][i],7) or not v["quests"][i] is bool or (v["quests"][i] and v["clues"][i]!=7): return false
 	for key in ["summer_cycle","summer_done"]:
-		if not number(v[key],year(int(data["day"]))): return false
+		if not number(v[key],year(int(data["day"]),int(data.get("calendar_offset",legacy_offset(int(data["day"])))))): return false
 	if not v["summer_offered"] is Array or v["summer_offered"].size()>3: return false
 	var seen := {}
 	for id in v["summer_offered"]:
 		if id not in CROPS.ORDER or seen.has(id): return false
 		seen[id]=true
 	if not seen.is_empty() and v["summer_cycle"]==0: return false
-	if (v["summer_cycle"]==year(int(data["day"])) and not seen.is_empty()) or v["summer_done"]==year(int(data["day"])):
-		if (int(data["day"])-1)%56+1<42: return false
+	if (v["summer_cycle"]==year(int(data["day"]),int(data.get("calendar_offset",legacy_offset(int(data["day"]))))) and not seen.is_empty()) or v["summer_done"]==year(int(data["day"]),int(data.get("calendar_offset",legacy_offset(int(data["day"]))))):
+		if (int(data["day"])+int(data.get("calendar_offset",legacy_offset(int(data["day"]))))-1)%84+1<42: return false
 	if v["summer_done"]>v["summer_cycle"] or (v["summer_done"]>0 and v["summer_done"]==v["summer_cycle"] and seen.size()!=3): return false
 	return true
 

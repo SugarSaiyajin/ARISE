@@ -59,6 +59,7 @@ func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	if area_id in ["farm","town"] or area_id.begins_with("culture_") or area_id.begins_with("ranch_"):
 		terrain_layer=preload("res://scripts/terrain_layer.gd").new()
+		terrain_layer.autumn=state!=null and state.season()=="秋"
 		terrain_layer.area=area_id
 		terrain_layer.layout=state.journey["layout"] if state!=null else 0
 		add_child(terrain_layer)
@@ -181,6 +182,9 @@ func prop(pos: Vector2, source: Rect2) -> void:
 		draw_texture_rect_region(PROPS, Rect2(pos.floor(), source.size), source)
 
 func tree(pos: Vector2, autumn: bool = false) -> void:
+	if state!=null and state.season()=="秋":
+		preload("res://scripts/autumn_art.gd").object(self,4 if int(pos.x)%2==1 else 5,pos+Vector2(0,4),56)
+		return
 	ApprovedArt.building(self,11 if autumn else 10,Rect2((pos-Vector2(24,52)).floor(),Vector2(48,56)))
 
 func person(p: Vector2, npc: bool = false, sprite: Texture2D = null) -> void:
@@ -350,7 +354,7 @@ func _draw() -> void:
 			var p := action_target - Vector2(8, 14 + sin(progress * PI) * 12)
 			CropVisual.draw(self,action_crop,p+Vector2(8,12),3)
 			label_at(p-Vector2(-8,4),"+1")
-	if state.JOURNEY.season(state.day)=="夏" and not state.is_raining():
+	if state.season()=="夏" and not state.is_raining():
 		draw_rect(Rect2(0,40,480,180),Color("f4dc7420"))
 	if state.is_raining():
 		draw_rect(Rect2(0, 40, 480, 185), Color("425b7b20"))

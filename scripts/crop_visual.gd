@@ -4,6 +4,9 @@ static func block(node: Node2D, center: Vector2, x: float, y: float, w: float, h
 	node.draw_rect(Rect2((center + Vector2(x,y)).floor(),Vector2(w,h)),Color(color))
 
 static func draw(node: Node2D, crop: String, center: Vector2, stage: int) -> void:
+	if crop in ["pumpkin","sweet_potato","grape"]:
+		preload("res://scripts/autumn_art.gd").crop(node,crop,center,stage)
+		return
 	if crop in ["tomato","eggplant","lotus"]:
 		preload("res://scripts/summer_art.gd").crop(node,crop,center,stage)
 		return

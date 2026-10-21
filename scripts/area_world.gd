@@ -41,11 +41,13 @@ func interactions() -> Dictionary:
 	if area_id == "house":
 		return Furniture.anchors(room_layout())
 	var result: Dictionary = TOWN_DEF.anchors.duplicate()
+	if state!=null and (state.season()=="秋" or state.autumn["learned"]): result["harvest_table"]=Vector2(210,185)
 	for id in Residents.ORDER:
 		result[id] = resident_anchor(id)
 	return result
 
 func interaction_hitbox(id: String) -> Rect2:
+	if id=="harvest_table": return Rect2(181,151,60,30)
 	if area_id == "house":
 		if id=="farm": return HOUSE_DEF.hitboxes["farm"]
 		if room_layout()==Furniture.defaults(): return HOUSE_DEF.hitboxes.get(id,Rect2())
@@ -142,9 +144,18 @@ func _draw() -> void:
 	]
 	for p in [Vector2(25, 92), Vector2(445, 84), Vector2(465, 180), Vector2(60, 207)]:
 		layers.append({"y": p.y, "kind": "tree", "p": p})
+	if state.season()=="秋" or state.autumn["learned"]:
+		layers.append({"y":174.0,"kind":"harvest"})
 	layers.sort_custom(func(a: Dictionary, b: Dictionary): return a["y"] < b["y"])
 	for item in layers:
 		match item["kind"]:
+			"harvest":
+				var art=preload("res://scripts/autumn_art.gd")
+				art.object(self,6,Vector2(210,174),28)
+				art.object(self,0,Vector2(184,169),36)
+				art.object(self,1,Vector2(187,180),13)
+				art.object(self,2,Vector2(211,163),10)
+				art.object(self,3,Vector2(235,174),20)
 			"tea": ApprovedArt.building(self,2,Rect2(52,44,116,83))
 			"market": ApprovedArt.building(self,1,Rect2(330,76,80,61))
 			"smithy": ApprovedArt.building(self,3,Rect2(342,144,80,65))
@@ -154,6 +165,7 @@ func _draw() -> void:
 			"smith": draw_resident("smith", smith)
 			"hero": person(actor)
 			"tree": tree(item["p"])
+	if state.season()=="秋" or state.autumn["learned"]: label_at(Vector2(211,142),"共收長桌")
 	label_at(Vector2(108, 72), "青禾茶館")
 	label_at(Vector2(371, 93), "行旅種子鋪")
 	label_at(Vector2(216, 80), "公告牌")

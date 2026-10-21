@@ -5,7 +5,7 @@ var game: Node
 func _init(controller: Node) -> void: game=controller
 
 func hub() -> void:
-	var card: Panel=game._open_modal("莊園生活手札","%s季 · 第%d年 · %s" % [RULES.season(game.state.day),RULES.year(game.state.day),RULES.weather(game.state.day)],460)
+	var card: Panel=game._open_modal("莊園生活手札","%s季 · 第%d年 · %s" % [game.state.season(),game.state.calendar_year(),game.state.weather()],460)
 	var entries := [["新手與今日任務",tutorial],["農場配置與裝飾",farm],["居民關係與禮物",people],["收益與保留出貨",economy],["聚落探索委託",quests],["季節日曆與節慶",calendar]]
 	for i in range(entries.size()):
 		game._button(card,entries[i][0],Rect2(28,98+i*48,424,44),entries[i][1],i==0)
@@ -196,16 +196,17 @@ func clue(index: int) -> void:
 
 func calendar() -> void:
 	var s: RefCounted=game.state
-	var card: Panel=game._open_modal("春夏日曆","春28日 → 夏28日 → 下一年春季；跨季作物不枯死。",460)
+	var card: Panel=game._open_modal("春夏秋日曆","每季28日：春 → 夏 → 秋 → 下一年春；跨季作物保留。",460)
 	var first: int=((s.day-1)/28)*28+1
 	for i in range(28):
 		var x := 28+(i%7)*61
 		var y := 98+(i/7)*40
 		game._panel(card,Rect2(x,y,56,36),"60764c" if first+i==s.day else "2c493c")
-		game._label(card,"%02d%s" % [i+1,"雨" if RULES.rain(first+i) else ""],Rect2(x+4,y+6,50,24),13)
-	var text := "春季每四日細雨；春14至28日收成共宴。" if RULES.season(s.day)=="春" else "夏季有連續夏雨；夏14至28日星燈夜。\n莓果、馬鈴薯、茶售價+20%，每逢第3日多長1格。"
-	game._paragraph(card,text+"\n今天："+RULES.weather(s.day)+"；明天："+RULES.weather(s.day+1),Rect2(28,270,424,96)).add_theme_font_size_override("font_size",14)
-	game._button(card,"當季節慶",Rect2(28,368,424,40),summer if RULES.season(s.day)=="夏" else game.spring_panels.festival,true)
+		game._label(card,"%02d%s" % [i+1,"雨" if RULES.rain(first+i,s.calendar_offset) else ""],Rect2(x+4,y+6,50,24),13)
+	var text := "春季每四日細雨；春14至28日收成共宴。" if s.season()=="春" else "夏季有連續夏雨；夏14至28日星燈夜。\n莓果、馬鈴薯、茶售價+20%，每逢第3日多長1格。"
+	if s.season()=="秋": text="秋季每七日一場秋雨；秋14至28日共收月會。\n三種秋收入籃，分享兩道食譜與月燈回憶。"
+	game._paragraph(card,text+"\n今天："+s.weather()+"；明天："+s.weather(1),Rect2(28,270,424,96)).add_theme_font_size_override("font_size",14)
+	game._button(card,"當季節慶",Rect2(28,368,424,40),game.autumn_panels.hub if s.season()=="秋" else summer if s.season()=="夏" else game.spring_panels.festival,true)
 	game._button(card,"回手札",Rect2(28,414,424,36),hub)
 
 func summer(page: int = 0) -> void:
@@ -213,8 +214,8 @@ func summer(page: int = 0) -> void:
 	var pages: int = game.inventory_panels.pages(s.CROP_ORDER)
 	page=posmod(page,pages)
 	var card: Panel=game._open_modal("夏夜星燈會","夏14至28日於雲橋鎮；三種收成，每種一份。",460)
-	var offered: Array=s.journey["summer_offered"] if s.journey["summer_cycle"]==RULES.year(s.day) else []
-	game._label(card,"已提供%d /3 · %s" % [offered.size(),"本年已完成" if s.journey["summer_done"]==RULES.year(s.day) else "謝禮150銀"],Rect2(28,98,424,26),16)
+	var offered: Array=s.journey["summer_offered"] if s.journey["summer_cycle"]==s.calendar_year() else []
+	game._label(card,"已提供%d /3 · %s" % [offered.size(),"本年已完成" if s.journey["summer_done"]==s.calendar_year() else "謝禮150銀"],Rect2(28,98,424,26),16)
 	for n in range(3):
 		var i := page*3+n
 		if i>=s.CROP_ORDER.size(): break

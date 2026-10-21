@@ -8,6 +8,7 @@ var batch_running := false
 var batch_tool := 2
 
 const JourneyPanels = preload("res://scripts/journey_panels.gd")
+var autumn_panels=preload("res://scripts/autumn_panels.gd").new(self)
 var journey_panels: RefCounted
 var mobile_preferences := preload("res://scripts/mobile_preferences.gd").new()
 var application_paused := false
@@ -355,8 +356,8 @@ func _update_ui() -> void:
 	if is_instance_valid(stop_button): stop_button.visible = touch_mode and (batch_running or not path.is_empty() or stick.finger>=0 or stick.mouse_down or stick.direction.length_squared()>0.01)
 	var hour := int(state.minute) / 60
 	var mins := int(state.minute) % 60
-	clock_label.text = "%s %02d /28  %02d:%02d" % [state.JOURNEY.season(state.day),state.SPRING.season_day(state.day), hour, mins]
-	weather_label.text = "第%d年 · " % state.JOURNEY.year(state.day) + world.display_name() + (" · 室內" if state.area_id == "house" else " · "+state.JOURNEY.weather(state.day))
+	clock_label.text = "%s %02d /28  %02d:%02d" % [state.season(),state.SPRING.season_day(state.day), hour, mins]
+	weather_label.text = "第%d年 · " % state.calendar_year() + world.display_name() + (" · 室內" if state.area_id == "house" else " · "+state.weather())
 	money_label.text = "%d  銀" % state.money
 	energy_label.text = "體力   %d / 100" % state.energy
 	energy_bar.value = state.energy
@@ -393,6 +394,7 @@ func _update_ui() -> void:
 	if object.begins_with("gather:"):
 		action = "明日再來" if state.gathered.has(object.trim_prefix("gather:")) else "採集"
 	if object.begins_with("facility:"): action="設施"
+	if object=="harvest_table": action="共收長桌"
 	if object=="lotus_tub": action="水槽"
 	if object=="home_storage": action="收納"
 	if object=="home_chair": action="小歇"
@@ -715,6 +717,9 @@ func _find_resident(id: String) -> void:
 	_walk_to(world.interactions()[id],{"object":id})
 
 func _interact(object: String) -> void:
+	if object=="harvest_table":
+		autumn_panels.hub()
+		return
 	if object=="home_storage":
 		home_panels.storage()
 		return
@@ -1037,7 +1042,7 @@ func _show_cookbook(index: int = 0) -> void:
 	index = posmod(index, State.COOKING.ORDER.size())
 	var recipe: String = State.COOKING.ORDER[index]
 	var data: Dictionary = State.COOKING.RECIPES[recipe]
-	var card := _open_modal("爐灶食譜 %d / %d" % [index + 1, State.COOKING.ORDER.size()], "每次製作一份 · 不耗體力 · 成品放入料理背包")
+	var card := _open_modal("爐灶食譜 %d / %d" % [index + 1, State.COOKING.ORDER.size()], "參加共收月會後學會 · 目前未解鎖" if recipe in state.AUTUMN.RECIPES and not state.autumn["learned"] else "每次製作一份 · 不耗體力 · 成品放入料理背包")
 	_meal_icon(card, index % 3, Vector2(28, 101))
 	_label(card, "%s · 恢復 %d 體力" % [data["name"], data["energy"]], Rect2(76, 100, 376, 30), 19)
 	var text := ""
@@ -1350,7 +1355,7 @@ func _paragraph(parent: Node, text: String, rect: Rect2) -> Label:
 	return label
 
 func _show_intro() -> void:
-	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  旅章與共生 0.28")
+	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  共收月會 0.29")
 	_paragraph(card, "一座舊莊園，一片等待照料的田地。\n\n① 澆水：照料左上角四株蕪菁。\n② 休息：進農舍，點床鋪睡到明天。\n③ 採收：成熟後採收，送往出貨箱。\n④ 探索：採集木石，建烘乾架加工收成。", Rect2(28, 98, 424, 175))
 	_button(card, "跟著入門任務", Rect2(28, 282, 204, 46), journey_panels.tutorial)
 	_button(card, "開始田園生活", Rect2(248, 282, 204, 46), _start_play, true)
@@ -1463,7 +1468,7 @@ func _show_sleep() -> void:
 			planted += 1
 			if plot["watered"]:
 				wet += 1
-	_paragraph(card, "今天已照料 %d / %d 格作物。\n\n沒有澆水的作物會暫停生長，不會枯死。\n明天的天氣：%s\n\n休息後會自動儲存進度。" % [wet, planted, state.JOURNEY.weather(state.day+1)], Rect2(28, 100, 424, 170))
+	_paragraph(card, "今天已照料 %d / %d 格作物。\n\n沒有澆水的作物會暫停生長，不會枯死。\n明天的天氣：%s\n\n休息後會自動儲存進度。" % [wet, planted, state.weather(1)], Rect2(28, 100, 424, 170))
 	_button(card, "再忙一會", Rect2(28, 282, 204, 46), _close_modal)
 	_button(card, "睡到明天", Rect2(248, 282, 204, 46), _sleep, true)
 
@@ -1481,7 +1486,7 @@ func _sleep() -> void:
 	world.actor = state.player_position
 	_save(false)
 	_update_ui()
-	toast("%s %d 日的早晨。%s" % [state.JOURNEY.season(state.day),state.SPRING.season_day(state.day), "雨水已替田地澆好水。" if state.is_raining() else "體力恢復了，去看看田地吧。"])
+	toast("%s %d 日的早晨。%s" % [state.season(),state.SPRING.season_day(state.day), "雨水已替田地澆好水。" if state.is_raining() else "體力恢復了，去看看田地吧。"])
 	if finished_spring:
 		_show_reading("換季小結","新季節已到來，莊園進度繼續保留。", "累計收成 %d 份，出貨收入 %d 銀。\n完成居民委託 %d 件，青禾好感 %d。\n\n第一章：%s\n\n新的季節從今天開始，作物、物品與相識都會留下。" % [state.harvested,state.total_earned,state.requests_completed,state.friendship,"已完成" if state.spring_progress["chapter_done"] else "仍在旅途中"])
 

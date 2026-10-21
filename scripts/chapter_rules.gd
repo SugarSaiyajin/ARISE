@@ -44,9 +44,11 @@ static func journey(s: RefCounted, index: int) -> Dictionary:
 	if stage==2: s.money+=definition[6]
 	return reply(true,"記下這一步。" if stage<2 else "完成旅章，獲得%d銀；這份謝禮只領一次。" % definition[6])
 static func order(s: RefCounted, index: int) -> Dictionary:
-	var summer: bool=s.JOURNEY.season(s.day)=="夏"
+	var summer: bool=s.season()=="夏"
 	match index:
-		0: return {"title":"共食長桌的時蔬","needs":[["produce","tomato",2],["produce","eggplant",1]] if summer else [["produce","turnip",4],["produce","wheat",4]],"reward":270 if summer else 230}
+		0:
+			if s.season()=="秋": return {"title":"月會長桌的秋收","needs":[["produce","pumpkin",1],["produce","sweet_potato",2]],"reward":390}
+			return {"title":"共食長桌的時蔬","needs":[["produce","tomato",2],["produce","eggplant",1]] if summer else [["produce","turnip",4],["produce","wheat",4]],"reward":270 if summer else 230}
 		1: return {"title":"商隊的加工補給","needs":[["goods","dried_berry",2]] if week(s)%2==0 else [["goods","dried_wheat",3]],"reward":180 if week(s)%2==0 else 165}
 		2: return {"title":"棲地的日常交換","needs":[["ranch","duck",2],["ranch","rabbit",1]],"reward":145}
 	return {}

@@ -90,7 +90,7 @@ func _initialize() -> void:
 			check(loaded.load_game(save) and loaded.to_data()==s.to_data(),"campaign daily restart preserves all business state")
 			s=loaded
 			s.sleep()
-		check(s.day==57 and s.JOURNEY.season(s.day)=="春" and s.money>120 and s.harvested>50,"both campaigns finish a profitable spring-summer cycle without grants")
+		check(s.day==57 and s.season()=="秋" and s.money>120 and s.harvested>50,"both campaigns finish a profitable spring-summer campaign entering autumn without grants")
 		check(s.money==120+s.total_earned-spending,"year budget conserves all starting cash, sale income and recorded expenses")
 		reports["mixed_farm" if diversified else "crop_farm"]={"daily":rows,"ending_cash":s.money,"shipping_income":s.total_earned,"cash_spent":spending,"harvested":s.harvested,"care_total":s.estate["care_total"],"craft_total":s.estate["craft_total"],"water_tool":s.journey["tool_level"],"storage":s.ESTATE.has_facility(s,3)}
 	var file := FileAccess.open("res://docs/campaign-balance-0.25.json",FileAccess.WRITE)

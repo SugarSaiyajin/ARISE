@@ -28,6 +28,8 @@ commands = [
     (["--script", "res://tests/test_journey.gd"], "passed, 0 failed"),
     (["--script", "res://tests/test_journey_scene.gd"], "passed, 0 failed"),
     (["--script", "res://tests/test_journey_scene.gd", "--", "--mobile-ui"], "passed, 0 failed"),
+    (["--script", "res://tests/test_autumn.gd"], "passed, 0 failed"),
+    (["--script", "res://tests/test_autumn.gd", "--", "--mobile-ui"], "passed, 0 failed"),
     (["--script", "res://tests/test_chapters.gd"], "passed, 0 failed"),
     (["--script", "res://tests/test_chapters.gd", "--", "--mobile-ui"], "passed, 0 failed"),
     (["--script", "res://tests/test_living.gd"], "passed, 0 failed"),

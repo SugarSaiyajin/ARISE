@@ -14,7 +14,7 @@ import os
 
 def main():
     project = Path(__file__).resolve().parents[1]
-    version = "0.28.0"  # Last completed build; do not label unfinished work as released.
+    version = "0.29.0"  # Last completed build; do not label unfinished work as released.
     source = project / "build/android" / f"arise-prototype-{version}.apk"
     if source.stat().st_size >= 100 * 1024 * 1024:
         raise RuntimeError("APK exceeds the public GitHub single-file download limit")
@@ -30,9 +30,9 @@ def main():
     destination = project / "build/delivery" / f"arise-{version}"
     destination.mkdir(parents=True, exist_ok=True)
     files = [(source, f"arise-{version}.apk"),
-             (project / "docs/chapter-0.28-room.png", "room.png"),
-             (project / "docs/chapter-0.28-rotation.png", "furniture.png"),
-             (project / "docs/chapter-0.28-hub.png", "hub.png")]
+             (project / "docs/autumn-0.29-farm.png", "farm.png"),
+             (project / "docs/autumn-0.29-town.png", "town.png"),
+             (project / "docs/autumn-0.29-workshop.png", "workshop.png")]
     for original, name in files:
         if original.suffix == ".png":
             with Image.open(original) as picture:
@@ -43,12 +43,12 @@ def main():
                   delivery_url_verified=False)
     (destination / "validation.json").write_text(json.dumps(report, indent=2) + "\n")
     (destination / "README.txt").write_text(
-        "異鄉田園 Android 試玩版 0.28.0\n\n"
-        "解壓後將 arise-0.28.0.apk 傳到 Android 手機並安裝。\n"
+        "異鄉田園 Android 試玩版 0.29.0\n\n"
+        "解壓後將 arise-0.29.0.apk 傳到 Android 手機並安裝。\n"
         "需求：Android 7.0+、ARM64、OpenGL ES 3.0；不適用 iPhone。\n"
         "更新請覆蓋安裝，先勿解除安裝，以免刪除存檔。\n"
-        "room.png / furniture.png / hub.png 為獨立展示存檔的實際遊戲畫面。\n"
-        "右上手札 → 經營總覽，手札→經營總覽→長期發展，查看事件、成長、旅章、訂單、家具及目標。\n"
+        "farm.png / town.png / workshop.png 為獨立展示存檔的實際遊戲畫面。\n"
+        "手札→季節日曆與節慶→當季節慶；秋14至28日帶三種秋收到鎮中央長桌。\n"
         "本包已檢查簽章與完整性，尚未於實體手機安裝驗證。\n"
         "工作區路徑不是公開網址；本工具只打包，不宣稱已發布下載連結。\n",
         encoding="utf-8")

@@ -19,7 +19,7 @@ static func reason(s: RefCounted, action: String) -> String:
 			if s.money<COST["money"] or s.materials["wood"]<COST["wood"] or s.materials["stone"]<COST["stone"]: return "需木材6、石料4與90銀。"
 		"plant":
 			if not g["built"] or g["planted"]: return "先建好空水槽再栽種。"
-			if s.JOURNEY.season(s.day)!="夏": return "蓮藕僅夏季開始栽種；跨季保留並繼續成長。"
+			if s.season()!="夏": return "蓮藕僅夏季開始栽種；跨季保留並繼續成長。"
 			if s.seeds.get("lotus",0)<1: return "需要一包蓮藕種苗，夏季可到種子鋪購買。"
 			if s.energy<1: return "先休息恢復體力再栽種。"
 		"harvest":

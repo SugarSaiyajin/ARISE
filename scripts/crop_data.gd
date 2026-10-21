@@ -3,9 +3,13 @@ extends RefCounted
 const LEGACY := ["turnip", "wheat", "berry"]
 const SPRING := ["turnip", "wheat", "berry", "carrot", "cabbage", "potato", "pea", "tea"]
 const SUMMER := ["tomato", "eggplant", "lotus"]
-const FIELD := ["turnip", "wheat", "berry", "carrot", "cabbage", "potato", "pea", "tea", "tomato", "eggplant"]
-const ORDER := ["turnip", "wheat", "berry", "carrot", "cabbage", "potato", "pea", "tea", "tomato", "eggplant", "lotus"]
+const AUTUMN := ["pumpkin", "sweet_potato", "grape"]
+const FIELD := ["turnip", "wheat", "berry", "carrot", "cabbage", "potato", "pea", "tea", "tomato", "eggplant", "pumpkin", "sweet_potato", "grape"]
+const ORDER := ["turnip", "wheat", "berry", "carrot", "cabbage", "potato", "pea", "tea", "tomato", "eggplant", "lotus", "pumpkin", "sweet_potato", "grape"]
 const CROPS := {
+	"pumpkin":{"name":"金栗南瓜","days":8,"seed_cost":40,"price":140},
+	"sweet_potato":{"name":"紅心甘薯","days":6,"seed_cost":26,"price":90},
+	"grape":{"name":"紫露葡萄","days":9,"seed_cost":45,"price":160},
 	"turnip": {"name": "白玉蕪菁", "days": 2, "seed_cost": 6, "price": 18},
 	"wheat": {"name": "金穗小麥", "days": 3, "seed_cost": 10, "price": 32},
 	"berry": {"name": "燈籠莓", "days": 4, "seed_cost": 14, "price": 48},
@@ -20,4 +24,4 @@ const CROPS := {
 }
 
 static func initial_seeds() -> Dictionary:
-	return {"turnip": 8, "wheat": 5, "berry": 3, "carrot": 1, "cabbage": 1, "potato": 1, "pea": 1, "tea": 1, "tomato":0, "eggplant":0, "lotus":0}
+	return {"turnip": 8, "wheat": 5, "berry": 3, "carrot": 1, "cabbage": 1, "potato": 1, "pea": 1, "tea": 1, "tomato":0, "eggplant":0, "lotus":0, "pumpkin":0, "sweet_potato":0, "grape":0}

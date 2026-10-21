@@ -2,8 +2,10 @@ extends RefCounted
 
 const MAX_STOCK := 100000000
 const LEGACY := ["turnip_soup", "egg_flatbread", "herb_fish"]
-const ORDER := ["turnip_soup", "egg_flatbread", "herb_fish", "garden_stew", "pea_scone", "spring_tea", "honey_cake", "duck_pudding", "star_tea", "summer_stew", "eggplant_bake", "lotus_tea"]
+const ORDER := ["turnip_soup", "egg_flatbread", "herb_fish", "garden_stew", "pea_scone", "spring_tea", "honey_cake", "duck_pudding", "star_tea", "summer_stew", "eggplant_bake", "lotus_tea", "harvest_soup", "grape_juice"]
 const RECIPES := {
+	"harvest_soup":{"name":"共收暖湯","energy":65,"ingredients":[{"stock":"produce","item":"pumpkin","amount":1,"name":"金栗南瓜"},{"stock":"produce","item":"sweet_potato","amount":1,"name":"紅心甘薯"}]},
+	"grape_juice":{"name":"紫露葡萄汁","energy":45,"ingredients":[{"stock":"produce","item":"grape","amount":2,"name":"紫露葡萄"}]},
 	"summer_stew":{"name":"番茄燉蔬","energy":50,"ingredients":[{"stock":"produce","item":"tomato","amount":1,"name":"朱果番茄"},{"stock":"produce","item":"potato","amount":1,"name":"奶油馬鈴薯"}]},
 	"eggplant_bake":{"name":"茄子麥餅","energy":60,"ingredients":[{"stock":"produce","item":"eggplant","amount":1,"name":"紫玉茄子"},{"stock":"produce","item":"wheat","amount":1,"name":"金穗小麥"}]},
 	"lotus_tea":{"name":"蓮藕香茶","energy":55,"ingredients":[{"stock":"produce","item":"lotus","amount":1,"name":"清池蓮藕"},{"stock":"materials","item":"herb","amount":1,"name":"霧香草"}]},

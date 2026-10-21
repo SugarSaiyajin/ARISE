@@ -6,7 +6,7 @@ func _init(controller: Node) -> void:
 	game = controller
 
 func hub() -> void:
-	var card: Panel = game._open_modal("春日手札","第 %d 年 · %s %d / 28 日" % [game.state.JOURNEY.year(game.state.day),game.state.JOURNEY.season(game.state.day),game.state.SPRING.season_day(game.state.day)],410)
+	var card: Panel = game._open_modal("春日手札","第 %d 年 · %s %d / 28 日" % [game.state.calendar_year(),game.state.season(),game.state.SPRING.season_day(game.state.day)],410)
 	for entry in [["當季日曆與今日安排",calendar],["第一章 · 雲橋初晴",chapter],["居民行蹤與相識",residents],["重讀春日回憶",memories]]:
 		var i: int = [calendar,chapter,residents,memories].find(entry[1])
 		game._button(card,entry[0],Rect2(28,98+i*56,424,46),entry[1],i==1)
@@ -15,7 +15,7 @@ func hub() -> void:
 func board() -> void:
 	var card: Panel = game._open_modal("雲橋公告牌","委託、春宴與驛站故事，都從這裡相遇。",410)
 	game._button(card,"今日居民委託",Rect2(28,100,424,46),game._show_requests,true)
-	game._button(card,"春日市集 · 收成共宴" if game.state.JOURNEY.season(game.state.day)=="春" else "夏夜星燈會",Rect2(28,156,424,46),festival if game.state.JOURNEY.season(game.state.day)=="春" else game.journey_panels.summer)
+	game._button(card,"共收月會" if game.state.season()=="秋" else "春日市集 · 收成共宴" if game.state.season()=="春" else "夏夜星燈會",Rect2(28,156,424,46),game.autumn_panels.hub if game.state.season()=="秋" else festival if game.state.season()=="春" else game.journey_panels.summer)
 	game._button(card,"第一章 · 驛站名冊",Rect2(28,212,424,46),chapter)
 	game._button(card,"居民行蹤",Rect2(28,268,424,46),residents)
 	game._button(card,"回到街道",Rect2(28,344,424,46),game._close_modal)

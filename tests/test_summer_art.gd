@@ -121,11 +121,11 @@ func run() -> void:
 	var icons := 0
 	for child in game.modal.get_child(1).get_children():
 		if child is TextureRect: icons+=1
-	check(icons==2 and layout(game),"eggplant and lotus harvest icons visible in real bag")
+	check(icons==3 and layout(game),"eggplant, lotus and pumpkin harvest icons visible in real bag")
 	game.inventory_panels.shop(3)
-	check(is_instance_valid(game.modal) and layout(game) and game.inventory_panels.pages(State.CROP_ORDER)==4,"fourth shop page accessible for all summer crops")
+	check(is_instance_valid(game.modal) and layout(game) and game.inventory_panels.pages(State.CROP_ORDER)==5,"fourth shop page accessible for all summer crops")
 	game.inventory_panels.seeds(3)
-	check(is_instance_valid(game.modal) and layout(game) and game.inventory_panels.pages(State.CROP_DATA.FIELD)==4,"field seed menu has ten dry-field species")
+	check(is_instance_valid(game.modal) and layout(game) and game.inventory_panels.pages(State.CROP_DATA.FIELD)==5,"field seed menu includes thirteen dry-field species")
 	game.state.area_id="town"
 	game.state.day=42
 	game.journey_panels.summer(3)
