@@ -1,0 +1,152 @@
+{
+  "version": "0.29.0",
+  "verified_utc": "2026-10-21T12:53:37Z",
+  "files": [
+    {
+      "file": "arise-0.29.0.apk",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/arise-0.29.0.apk",
+      "http_status": 200,
+      "downloaded_bytes": 104388633,
+      "sha256": "b1a2da6fecffe7450153e054c34fbdff385eb182ea042997821bd2d174a8cbe8",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "README.md",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/README.md",
+      "http_status": 200,
+      "downloaded_bytes": 2270,
+      "sha256": "162f8e71df2b9327c2df0ae710dc6bf61bfb7a9728fc5ab6426d1a66a318a4ac",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "validation.json",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/validation.json",
+      "http_status": 200,
+      "downloaded_bytes": 1413,
+      "sha256": "9a655280c3f2303f42fa71bbdec8748ea3e016aa081eda00578080628c6a4468",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-calendar.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-calendar.png",
+      "http_status": 200,
+      "downloaded_bytes": 504829,
+      "sha256": "9dfbd66892b19a732bf2fbd02c50e23eb125a7edefb535465670e834417b2291",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-choice.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-choice.png",
+      "http_status": 200,
+      "downloaded_bytes": 431396,
+      "sha256": "b40a206b4f562f299826d62d20094406a16b5f899100896798e7cd40c8c595bd",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-crops.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-crops.png",
+      "http_status": 200,
+      "downloaded_bytes": 497316,
+      "sha256": "7f72c4a072b920e0cde69ad1139b40a6d4e84708f7609c548b0017bd7bb12cec",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-evening.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-evening.png",
+      "http_status": 200,
+      "downloaded_bytes": 844726,
+      "sha256": "20eb4d5e7a0c962f354d1aef7eff065e558bc0f4aa1868aa906ab210c7fd7339",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-fair.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-fair.png",
+      "http_status": 200,
+      "downloaded_bytes": 435669,
+      "sha256": "9265d122a759f1622d591c0f274620440b5d6526f4e8e1c8e98258a1dbcc2b0c",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-farm.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-farm.png",
+      "http_status": 200,
+      "downloaded_bytes": 846226,
+      "sha256": "8c283f7fc13fc488df4792261edebe44cf236519c9a9ffb6b340c43312698b36",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-juice.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-juice.png",
+      "http_status": 200,
+      "downloaded_bytes": 456688,
+      "sha256": "e7f4ab207286822eaee11f60cd687b811582242f974f039f6fda45a0ffc7932a",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-memory.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-memory.png",
+      "http_status": 200,
+      "downloaded_bytes": 431232,
+      "sha256": "911d873cd1dfb4f5f97f31edc20f3143b970f6de025c40c85a9e208c9f21d08c",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-recipe.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-recipe.png",
+      "http_status": 200,
+      "downloaded_bytes": 128260,
+      "sha256": "e22182bbb1658c479d9250007e58118e9576e7eada9aeded351f014de292f14d",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-seeds.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-seeds.png",
+      "http_status": 200,
+      "downloaded_bytes": 491658,
+      "sha256": "8b2fd47a92cb4e5039a6d073fc8c6a5a2debc954223ca127b977c463aae65497",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-town.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-town.png",
+      "http_status": 200,
+      "downloaded_bytes": 840562,
+      "sha256": "b459324f854c7165abc12d4ee37b3434eb0d993658c87a6c50bc882773bd4f1a",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-workshop.png",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-workshop.png",
+      "http_status": 200,
+      "downloaded_bytes": 457692,
+      "sha256": "6da7e3979408a620c62bebe06bf183e7420cc8ec80c69b7582791b22fefb8a2e",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    },
+    {
+      "file": "docs/autumn-0.29-gameplay.mp4",
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.29.0/docs/autumn-0.29-gameplay.mp4",
+      "http_status": 200,
+      "downloaded_bytes": 1749951,
+      "sha256": "ee20532b7a1b03731429f902f906482f8f28c39f45ec9a80c6bde7694be30258",
+      "matches_local": true,
+      "method": "full remote HTTP GET, not HEAD"
+    }
+  ],
+  "all_full_downloads_match": true,
+  "physical_device_tested": false
+}
