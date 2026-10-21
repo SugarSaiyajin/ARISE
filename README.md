@@ -28,11 +28,11 @@ Android 7.0+、ARM64、OpenGL ES 3.0。與0.24同一套件／簽章，請覆蓋�
 
 ## 驗證與操作
 
-[完整規則與限制](GUIDE.md) · [6808項檢查報告](test-summary.json) · [春夏經營報告](campaign-balance-0.25.json) · [APK驗證](validation.json) · [更新相容檢查](update-compatibility.json)
+[完整規則與限制](GUIDE.md) · [6809項檢查報告](test-summary.json) · [春夏經營報告](campaign-balance-0.25.json) · [APK驗證](validation.json) · [更新相容檢查](update-compatibility.json)
 
-6808項不重複檢查通過，另重跑桌面／觸控場景、完整遊戲流程與12個音訊檔。兩種56天策略沒有額外貨幣／素材，逐日存檔重載，現金收入與支出相符；此為資料層模擬，沒有模擬行走耗時，也不代表實機效能驗收。
+6809項不重複檢查通過，另重跑桌面／觸控場景、完整遊戲流程與12個音訊檔。兩種56天策略沒有額外貨幣／素材，逐日存檔重載，現金收入與支出相符；此為資料層模擬，沒有模擬行走耗時，也不代表實機效能驗收。
 
-原始碼分支 feature/estate-living-0.25，實作提交 a1969a1。以下為獨立展示進度的Godot桌面觸控模式實際渲染。
+原始碼分支 feature/estate-living-0.25，實作提交 87b7ca5。以下為獨立展示進度的Godot桌面觸控模式實際渲染。
 
 ![經營總覽](hub.png)
 ![合法施工預覽](build-legal.png)
