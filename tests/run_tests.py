@@ -23,6 +23,9 @@ for name, folder in (
 
 commands = [
     (["--editor", "--import", "--quit"], None),
+    (["--script", "res://tests/test_testing_panels.gd"], "passed, 0 failed"),
+    (["--script", "res://tests/test_testing_panels.gd", "--", "--mobile-ui"], "passed, 0 failed"),
+    (["--script", "res://tests/test_archives.gd"], "passed, 0 failed"),
     (["--script", "res://tests/test_farm.gd"], "passed, 0 failed"),
     (["--script", "res://tests/test_presentation.gd"], "passed, 0 failed"),
     (["--script", "res://tests/test_areas.gd"], "passed, 0 failed"),

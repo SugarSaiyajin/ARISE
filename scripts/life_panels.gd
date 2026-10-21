@@ -84,7 +84,7 @@ func collect() -> void:
 
 func goods(page: int = 0) -> void:
 	page=posmod(page,2)
-	var card: Panel = game._open_modal("工藝行囊","保留作為禮物，或與其他產物在莊園一起出貨。",410)
+	var card: Panel = game._open_modal("工藝行囊","工藝品可保留收藏，或在莊園出貨箱出售。",410)
 	for n in range(3):
 		var index := page*3+n
 		if index>=5: break

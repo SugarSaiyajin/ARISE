@@ -1,5 +1,8 @@
 extends Node2D
 
+const TestingPanels = preload("res://scripts/testing_panels.gd")
+var testing_panels: RefCounted
+
 const State = preload("res://scripts/farm_state.gd")
 const World = preload("res://scripts/farm_world.gd")
 const AreaWorld = preload("res://scripts/area_world.gd")
@@ -84,6 +87,13 @@ var preview_mode_button: Button
 var preview_buttons: Array[Button] = []
 
 func _ready() -> void:
+	testing_panels = TestingPanels.new(self)
+	var display_config := ConfigFile.new()
+	if display_config.load("user://display_preferences.cfg") == OK:
+		var fps: Variant = display_config.get_value("display", "fps", 60)
+		Engine.max_fps = fps if fps in [30, 60] else 60
+	else:
+		Engine.max_fps = 60
 	inventory_panels = InventoryPanels.new(self)
 	ranch_panels = RanchPanels.new(self)
 	life_panels = LifePanels.new(self)
@@ -1274,7 +1284,7 @@ func _paragraph(parent: Node, text: String, rect: Rect2) -> Label:
 	return label
 
 func _show_intro() -> void:
-	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  雲橋共作 0.22")
+	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  旅人手札 0.23")
 	_paragraph(card, "一座舊莊園，一片等待照料的田地。\n\n① 澆水：照料左上角四株蕪菁。\n② 休息：進農舍，點床鋪睡到明天。\n③ 採收：成熟後採收，送往出貨箱。\n④ 探索：採集木石，建烘乾架加工收成。", Rect2(28, 98, 424, 175))
 	_button(card, "開始我的田園生活", Rect2(28, 282, 424, 46), _start_play, true)
 
@@ -1286,7 +1296,7 @@ func _show_menu() -> void:
 	var card := _open_modal("莊園手札", "遊戲已暫停 · 關閉視窗或切到背景時會存檔")
 	_button(card, "背包與收成", Rect2(28, 99, 204, 48), _show_bag)
 	_button(card, "春日手札", Rect2(248, 99, 204, 48), spring_panels.hub)
-	_button(card, "儲存進度", Rect2(28, 161, 204, 48), func(): _save(true); _close_modal())
+	_button(card, "存檔與試玩設定", Rect2(28, 161, 204, 48), testing_panels.hub)
 	_button(card, "繼續遊玩", Rect2(248, 161, 204, 48), _close_modal, true)
 	_button(card, "音樂與音效", Rect2(28, 220, 204, 46), _show_audio_settings)
 	_button(card, "角色外觀", Rect2(248, 220, 204, 46), _show_character)

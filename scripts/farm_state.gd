@@ -740,7 +740,10 @@ func save_game(path: String = "user://farm_save.json") -> Error:
 		return FileAccess.get_open_error()
 	file.store_string(JSON.stringify(to_data(), "\t"))
 	file.flush()
+	var write_error := file.get_error()
 	file.close()
+	if write_error != OK:
+		return write_error
 	# Preserve the previous valid save before atomically replacing the primary.
 	if FileAccess.file_exists(path):
 		var old_data: Variant = _read_json(path)
