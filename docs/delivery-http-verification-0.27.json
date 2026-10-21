@@ -1,0 +1,69 @@
+{
+  "method": "independent HTTPS GET of public delivery branch; all bytes hashed",
+  "files": {
+    "arise-0.27.0.apk": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/arise-0.27.0.apk",
+      "http_status": 200,
+      "downloaded_bytes": 104158080,
+      "sha256": "4450365742f84f5fcd9d6076f60bdbd4466d6b6e1ce7ffc340b159e482f72f34",
+      "matches_local": true
+    },
+    "docs/living-0.27-town.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/docs/living-0.27-town.png",
+      "http_status": 200,
+      "downloaded_bytes": 819666,
+      "sha256": "c3afe525ac51a808d6d1c72fee6161005cbc18560444b2ce8281697f2ec6014f",
+      "matches_local": true
+    },
+    "docs/living-0.27-house.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/docs/living-0.27-house.png",
+      "http_status": 200,
+      "downloaded_bytes": 288760,
+      "sha256": "9dc43b98adb99ed2825059b8b774dfff4942df4e58f4140f274473546f784d89",
+      "matches_local": true
+    },
+    "docs/living-0.27-stored.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/docs/living-0.27-stored.png",
+      "http_status": 200,
+      "downloaded_bytes": 125074,
+      "sha256": "3b1700f7ad760ccde1212591a0c6348afca9848ce835e1f887e3fa0cea97ed23",
+      "matches_local": true
+    },
+    "docs/living-0.27-residents-1.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/docs/living-0.27-residents-1.png",
+      "http_status": 200,
+      "downloaded_bytes": 492383,
+      "sha256": "0309681468ad67e1a097f290820df1a464495ad64fe0886e324ae2b604aa8a6a",
+      "matches_local": true
+    },
+    "docs/living-0.27-residents-3.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/docs/living-0.27-residents-3.png",
+      "http_status": 200,
+      "downloaded_bytes": 514454,
+      "sha256": "3ae60b9e322216a32c2ea496b0fe33d85e1e1a623db200c3b5fd5c138f93a42e",
+      "matches_local": true
+    },
+    "docs/living-0.27-recipe.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/docs/living-0.27-recipe.png",
+      "http_status": 200,
+      "downloaded_bytes": 130193,
+      "sha256": "6143e58e4c3f2f0deb523c7e7d61236909e667c8aabae2b688fcf48806f563ca",
+      "matches_local": true
+    },
+    "docs/living-0.27-animals.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/docs/living-0.27-animals.png",
+      "http_status": 200,
+      "downloaded_bytes": 679184,
+      "sha256": "4fe12221676f007034b8428a1dfdda8dc5b8f9aa94cade3ea40588e79c0e4c8f",
+      "matches_local": true
+    },
+    "docs/living-0.27-gameplay.mp4": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/docs/living-0.27-gameplay.mp4",
+      "http_status": 200,
+      "downloaded_bytes": 2832614,
+      "sha256": "ee0e7d9b4bd795a25e7545f496b04a4baa44e04d3c397c39779c7eed051677d2",
+      "matches_local": true
+    }
+  },
+  "physical_android_tested": false
+}
