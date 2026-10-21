@@ -19,3 +19,5 @@
 SHA256：`af36648fe6c9bcf837d0c3e32490858f150bc354fd4c2417b5b582ed0123e54a`
 
 [原始碼提交](https://github.com/SugarSaiyajin/ARISE/commit/0944c86)
+
+公開APK、莊園圖、居民步態圖、收成圖與影片均已經獨立HTTPS完整下載，HTTP200且SHA256相符。[下載校驗紀錄](docs/delivery-http-verification-0.26.json)。
