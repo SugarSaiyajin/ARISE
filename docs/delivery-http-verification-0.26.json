@@ -1,0 +1,41 @@
+{
+  "method": "independent HTTPS GET of public GitHub delivery branch; all bytes hashed",
+  "files": {
+    "arise-0.26.0.apk": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.26.0/arise-0.26.0.apk",
+      "http_status": 200,
+      "downloaded_bytes": 102074083,
+      "sha256": "af36648fe6c9bcf837d0c3e32490858f150bc354fd4c2417b5b582ed0123e54a",
+      "matches_local": true
+    },
+    "docs/summer-0.26-farm.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.26.0/docs/summer-0.26-farm.png",
+      "http_status": 200,
+      "downloaded_bytes": 888529,
+      "sha256": "4c5db53cc509d0ee2d889db5d68544d3496ce3f163a0daad514ed1c1e22ce37d",
+      "matches_local": true
+    },
+    "docs/summer-0.26-residents.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.26.0/docs/summer-0.26-residents.png",
+      "http_status": 200,
+      "downloaded_bytes": 508570,
+      "sha256": "8f651b05627d24595f73173ca8e0fc62fe4b205ee9e2b3b5c8f64b7a3ba81af2",
+      "matches_local": true
+    },
+    "docs/summer-0.26-gameplay.mp4": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.26.0/docs/summer-0.26-gameplay.mp4",
+      "http_status": 200,
+      "downloaded_bytes": 2289857,
+      "sha256": "d9c193ff1c2a4ac39a2eb0a9f22d59ecc558487ef942363298ae40e23c46fcad",
+      "matches_local": true
+    },
+    "docs/summer-0.26-items.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.26.0/docs/summer-0.26-items.png",
+      "http_status": 200,
+      "downloaded_bytes": 511081,
+      "sha256": "507b27b5468432e2af2c710079109bbfde4cf79111e73c2ff5ba5e867dd2af69",
+      "matches_local": true
+    }
+  },
+  "physical_phone_tested": false
+}
