@@ -24,11 +24,12 @@ static func result(ok: bool, text: String) -> Dictionary:
 static func build(s: RefCounted, home: int) -> Dictionary:
 	if home < 0 or home >= 4 or s.area_id not in ["farm", DATA.AREAS[home]] or home_open(s,home):
 		return result(false,"棲地已開放，或請先回莊園安排建造。")
-	if s.money < 40 or s.materials["wood"] < 4 or s.materials["stone"] < 2:
-		return result(false,"建造需要木材 4、石料 2、40 銀。")
-	s.money -= 40
-	s.materials["wood"] -= 4
-	s.materials["stone"] -= 2
+	var cost: Dictionary = DATA.HOME_COST[home]
+	if s.money < cost["money"] or s.materials["wood"] < cost["wood"] or s.materials["stone"] < cost["stone"]:
+		return result(false,"建造需要木材 %d、石料 %d、%d 銀。" % [cost["wood"],cost["stone"],cost["money"]])
+	s.money -= cost["money"]
+	s.materials["wood"] -= cost["wood"]
+	s.materials["stone"] -= cost["stone"]
 	s.ranch["homes"][home] = true
 	if home == 0:
 		s.coop_built = true
@@ -59,6 +60,9 @@ static func buy_feed(s: RefCounted) -> Dictionary:
 	s.ranch["feed"] += 10
 	return result(true,"購入十份照料飼料，使用時配成穀草、花料、桑葉或魚食。")
 
+static func feed_cost(s: RefCounted, id: String) -> int:
+	return 0 if id in DATA.EXTRA and s.ranch["animals"][id]["bond"]>=20 and s.day%4==0 else 1
+
 static func feed(s: RefCounted, id: String) -> Dictionary:
 	if not on_site(s,id):
 		return result(false,"請走到對應棲地。")
@@ -69,11 +73,12 @@ static func feed(s: RefCounted, id: String) -> Dictionary:
 		s.area_id = origin
 		return answer
 	var animal: Dictionary = s.ranch["animals"][id]
-	if not animal["owned"] or animal["fed"] or s.ranch["feed"] < 1:
+	var cost := feed_cost(s,id)
+	if not animal["owned"] or animal["fed"] or s.ranch["feed"] < cost:
 		return result(false,"尚未領養、今日已餵，或照料飼料不足。")
 	if animal["ready"] >= 24:
 		return result(false,"產物箱已滿，請先領取。")
-	s.ranch["feed"] -= 1
+	s.ranch["feed"] -= cost
 	animal["fed"] = true
 	return result(true,"已備好今天的食物；休息後結算成長與產物。")
 
@@ -129,7 +134,7 @@ static func advance(s: RefCounted) -> void:
 		a["cared"] = false
 
 static func talk(s: RefCounted, id: String) -> Dictionary:
-	if not DATA.RESIDENTS.has(id) or s.area_id != DATA.AREAS[DATA.RESIDENTS[id]["home"]]:
+	if not DATA.RESIDENTS.has(id) or s.area_id != DATA.visitor_area(id,s.minute,s.is_raining()):
 		return result(false,"居民目前不在這裡。")
 	if s.ranch["talked"][id] != s.day:
 		s.ranch["talked"][id] = s.day

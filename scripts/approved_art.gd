@@ -12,6 +12,11 @@ const RESIDENTS = preload("res://assets/pixel/residents_approved.png")
 const R = preload("res://scripts/residents_frames.gd")
 const BUILDINGS = preload("res://assets/pixel/buildings_approved.png")
 const B = preload("res://scripts/building_frames.gd")
+const CULTURE = preload("res://assets/pixel/culture_buildings.png")
+const CULTURE_FRAMES = preload("res://scripts/culture_frames.gd")
+const CALM = preload("res://assets/pixel/calm_ground.png")
+const FURNITURE = preload("res://assets/pixel/furniture_approved.png")
+const FURNITURE_FRAMES = preload("res://scripts/furniture_frames.gd")
 const TERRAIN = preload("res://assets/pixel/terrain_approved.png")
 const ITEMS = preload("res://assets/pixel/items_approved.png")
 const I = preload("res://scripts/item_frames.gd")
@@ -31,20 +36,30 @@ static func sprite(canvas: CanvasItem, texture: Texture2D, data: Array, feet: Ve
 	var pivot: Vector2 = Vector2(data[4],data[5])*factor
 	canvas.draw_texture_rect_region(texture,Rect2((feet-pivot).floor(),source.size*factor),source)
 
-static func hero(canvas: CanvasItem, feet: Vector2, style: String, row: int, frame: int, height: float = 30) -> void:
+static func hero(canvas: CanvasItem, feet: Vector2, style: String, row: int, frame: int, height: float = 30, idle_seconds: float = -1) -> void:
 	# One fixed scale per character keeps walk/tool poses from breathing in size.
 	var layout: GDScript = F if style == "female" else M
 	var data := hero_frame(style,row,frame)
 	var factor: float = N.PIXEL_SCALE if row == 7 else layout.PIXEL_SCALE
 	factor *= height/30.0
 	var source := region(data)
-	canvas.draw_texture_rect_region(hero_texture(style,row),Rect2((feet-Vector2(data[4],data[5])*factor).floor(),source.size*factor),source)
+	var origin := feet
+	if idle_seconds >= 0:
+		canvas.draw_set_transform(feet,sin(idle_seconds*TAU/7)*0.008,idle_scale(idle_seconds))
+		origin = Vector2.ZERO
+	canvas.draw_texture_rect_region(hero_texture(style,row),Rect2((origin-Vector2(data[4],data[5])*factor).floor(),source.size*factor),source)
+	if idle_seconds >= 0: canvas.draw_set_transform(Vector2.ZERO)
 
 static func animal(canvas: CanvasItem, feet: Vector2, index: int, frame: int, height: float = 22) -> void:
 	sprite(canvas,ANIMALS,A.FRAMES[index][frame],feet,height)
 
-static func resident(canvas: CanvasItem, feet: Vector2, index: int, height: float = 30) -> void:
-	sprite(canvas,RESIDENTS,R.FRAMES[index/3][index%3],feet,height*(0.8 if index==5 else 1.0))
+static func resident(canvas: CanvasItem, feet: Vector2, index: int, height: float = 30, idle_seconds: float = -1) -> void:
+	var origin := feet
+	if idle_seconds>=0:
+		canvas.draw_set_transform(feet,0,idle_scale(idle_seconds+index*0.6))
+		origin=Vector2.ZERO
+	sprite(canvas,RESIDENTS,R.FRAMES[index/3][index%3],origin,height*(0.8 if index==5 else 1.0))
+	if idle_seconds>=0: canvas.draw_set_transform(Vector2.ZERO)
 
 static func building(canvas: CanvasItem, index: int, rectangle: Rect2) -> void:
 	var source := region(B.FRAMES[index/4][index%4])
@@ -73,15 +88,38 @@ static func tile(canvas: CanvasItem, index: int, rect: Rect2) -> void:
 			var target := Rect2(x,y,minf(16,rect.end.x-x),minf(16,rect.end.y-y))
 			canvas.draw_texture_rect_region(TERRAIN,target,Rect2(source.position,source.size*target.size/16.0))
 
+static func idle_scale(seconds: float) -> Vector2:
+	var phase := sin(seconds*TAU/3.4)
+	return Vector2(1+phase*0.006,1+phase*0.018)
+
+static func calm_tile(canvas: CanvasItem, index: int, rect: Rect2) -> void:
+	var source := Rect2(index*CALM.get_width()/4.0,0,CALM.get_width()/4.0,CALM.get_height())
+	for y in range(int(rect.position.y),int(rect.end.y),24):
+		for x in range(int(rect.position.x),int(rect.end.x),24):
+			var target := Rect2(x,y,minf(24,rect.end.x-x),minf(24,rect.end.y-y))
+			canvas.draw_texture_rect_region(CALM,target,Rect2(source.position,source.size*target.size/24.0))
+
+static func furniture(canvas: CanvasItem, index: int, rect: Rect2) -> void:
+	canvas.draw_texture_rect_region(FURNITURE,rect,region(FURNITURE_FRAMES.FRAMES[index/4][index%4]))
+
 static func ground(canvas: CanvasItem, town: bool = false) -> void:
-	tile(canvas,2 if town else 0,Rect2(0,0,480,270))
+	calm_tile(canvas,0,Rect2(0,0,480,270))
 	if town:
+		# Plazas sit on quiet warm limestone, with planted edges and one clear bridge.
+		calm_tile(canvas,1,Rect2(34,123,412,41))
+		calm_tile(canvas,1,Rect2(178,104,66,99))
+		calm_tile(canvas,1,Rect2(292,132,148,80))
 		tile(canvas,3,Rect2(247,42,37,190))
-		tile(canvas,7,Rect2(247,138,37,18))
+		calm_tile(canvas,1,Rect2(247,138,37,18))
 	else:
-		tile(canvas,1,Rect2(45,191,394,21))
-		tile(canvas,1,Rect2(274,107,24,105))
-		tile(canvas,1,Rect2(68,113,76,18))
-		tile(canvas,1,Rect2(296,114,166,17))
+		# House -> field edge -> work yard -> east town gate; no paths through plots.
+		calm_tile(canvas,3,Rect2(28,192,427,24))
+		calm_tile(canvas,3,Rect2(132,115,15,86))
+		calm_tile(canvas,3,Rect2(72,118,73,24))
+		calm_tile(canvas,3,Rect2(280,111,27,102))
+		calm_tile(canvas,3,Rect2(304,114,160,24))
 		tile(canvas,3,Rect2(249,64,77,41))
-		tile(canvas,4,Rect2(30,67,110,14))
+		calm_tile(canvas,3,Rect2(86,181,47,26))
+
+static func culture_building(canvas: CanvasItem, index: int, rect: Rect2) -> void:
+	canvas.draw_texture_rect_region(CULTURE,rect,region(CULTURE_FRAMES.FRAMES[index/2][index%2]))

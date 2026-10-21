@@ -24,3 +24,17 @@ const RESIDENTS := {
 	"suyue": {"name":"素月", "role":"狐靈藥師", "home":0, "sprite":7, "line":"鴨棚要乾爽，清水要勤換。藥草照料人，細心照料小生靈。"},
 	"qinglin": {"name":"青麟", "role":"山林守靈", "home":3, "sprite":8, "line":"等玉角自然落下再拾起吧。靈鹿願意靠近，是比產物更好的禮物。"},
 }
+
+const HOME_COST := [{"wood":8,"stone":6,"money":100},{"wood":6,"stone":3,"money":70},{"wood":6,"stone":4,"money":90},{"wood":8,"stone":6,"money":140}]
+const CULTURES := {"edric":"culture_market","lyria":"culture_grove","borin":"culture_ember","yunji":"culture_sanctuary","suyue":"culture_sanctuary","qinglin":"culture_grove"}
+
+static func visitor_area(id: String, minute: float, rain: bool) -> String:
+	return CULTURES[id] if not rain and minute>=660 and minute<1080 else AREAS[RESIDENTS[id]["home"]]
+
+static func visitor_position(id: String, area: String, minute: float, rain: bool) -> Vector2:
+	var present: Array = []
+	for key in VISITORS:
+		if visitor_area(key,minute,rain)==area: present.append(key)
+	var index := maxi(0,present.find(id))
+	var x := 110.0+index*110.0
+	return Vector2(x+(0 if rain else sin((minute-420)/35.0+index)*7),190)

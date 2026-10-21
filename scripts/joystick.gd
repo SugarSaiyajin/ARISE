@@ -1,6 +1,7 @@
 extends Control
 
 signal engaged
+signal released
 
 var direction := Vector2.ZERO
 var finger := -1
@@ -8,18 +9,25 @@ var mouse_down := false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	get_viewport().mouse_exited.connect(_mouse_left)
+
+func _mouse_left() -> void:
+	if mouse_down: release_pointer()
 
 func update_pointer(p: Vector2) -> void:
 	direction = (p - size / 2.0) / maxf(1.0, size.x * 0.34)
 	if direction.length() > 1:
 		direction = direction.normalized()
-	if direction.length() < 0.20:
+	var amount := direction.length()
+	if amount < 0.25:
 		direction = Vector2.ZERO
+	else:
+		direction = direction.normalized()*clampf((amount-0.25)/0.75,0,1)
 	queue_redraw()
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
-		if event.pressed and finger < 0:
+		if event.pressed and not event.canceled and finger < 0:
 			finger = event.index
 			engaged.emit()
 			update_pointer(event.position)
@@ -45,7 +53,9 @@ func _gui_input(event: InputEvent) -> void:
 
 func _input(event: InputEvent) -> void:
 	# GUI capture may lose a release after dragging outside the control or under a modal.
-	if event is InputEventScreenTouch and not event.pressed and event.index == finger:
+	if event is InputEventScreenDrag and event.index == finger:
+		update_pointer(get_global_transform_with_canvas().affine_inverse()*event.position)
+	elif event is InputEventScreenTouch and (not event.pressed or event.canceled) and event.index == finger:
 		release_pointer()
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed and mouse_down:
 		release_pointer()
@@ -57,9 +67,11 @@ func _notification(what: int) -> void:
 		release_pointer()
 
 func release_pointer() -> void:
+	var had_control := finger >= 0 or mouse_down
 	direction = Vector2.ZERO
 	finger = -1
 	mouse_down = false
+	if had_control: released.emit()
 	queue_redraw()
 
 func _draw() -> void:

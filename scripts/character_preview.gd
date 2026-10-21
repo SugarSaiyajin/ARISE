@@ -25,8 +25,7 @@ func _process(delta: float) -> void:
 	if not pause_reasons.is_empty() or not is_finite(delta) or delta <= 0:
 		return
 	elapsed = fmod(elapsed + delta, 90.0)
-	if motion != 0:
-		queue_redraw()
+	queue_redraw()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_PAUSED:
@@ -43,7 +42,7 @@ func _draw() -> void:
 	var feet := Vector2(size.x / 2.0, size.y - 14)
 	draw_ellipse_shadow(feet)
 	var frame := frame_index()
-	preload("res://scripts/approved_art.gd").hero(self,feet,style,row,frame,120)
+	preload("res://scripts/approved_art.gd").hero(self,feet,style,row,frame,120,elapsed if motion==0 else -1)
 
 func draw_ellipse_shadow(feet: Vector2) -> void:
 	draw_set_transform(feet, 0, Vector2(1, 0.25))

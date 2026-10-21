@@ -17,6 +17,20 @@ static func draw(node: Node2D, crop: String, center: Vector2, stage: int) -> voi
 		block(node,center,side*3-1,-height+2,3,2,"99b871")
 	if stage < 2: return
 	match crop:
+		"turnip":
+			block(node,center,-6,-5,12,6,"d4cfaa")
+			block(node,center,-4,-6,8,6,"f1e8cc")
+			if stage==3: block(node,center,-1,1,2,3,"d4cfaa")
+		"wheat":
+			for x in [-5,0,5]:
+				block(node,center,x,-17,1,18,"a48c47")
+				block(node,center,x-2,-17,5,8,"d3ba6f")
+				block(node,center,x,-17,2,7,"f1daa0")
+		"berry":
+			block(node,center,-7,-12,14,12,"507252")
+			for p in [Vector2(-5,-10),Vector2(2,-7),Vector2(-2,-3)]:
+				block(node,center,p.x,p.y,4,4,"b96d50")
+				block(node,center,p.x,p.y,2,1,"e3ac6c")
 		"carrot":
 			block(node,center,-4,-5,8,6,"79513c")
 			block(node,center,-3,-5,6,5,"d9924e")

@@ -47,6 +47,9 @@ func _run() -> void:
 	press.position = game.stick.size/2
 	game.stick._gui_input(press)
 	check(game.path.is_empty() and game.pending.is_empty() and game.queued_click==null,"even center touch cancels old navigation and queued actions")
+	if game.touch_mode:
+		game._click_world(game.world.plot_center(0))
+		check(game.path.is_empty() and game.queued_click==null,"right finger cannot steal movement while left thumb rests at stick center")
 	var drag := InputEventScreenDrag.new()
 	drag.index = 4
 	drag.position = Vector2(500,-200)

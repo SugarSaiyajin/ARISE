@@ -14,7 +14,7 @@ func hub() -> void:
 		var opened := RULES.home_open(game.state,i)
 		game._label(card,DATA.HOMES[i]+(" · 已建好" if opened else " · 未建造"),Rect2(28,100+i*52,266,25),18)
 		game._button(card,"前往照料",Rect2(310,97+i*52,142,44),visit.bind(i),true)
-	game._label(card,"飼料 %d 份 · 建造：木材4／石料2／40銀" % game.state.ranch["feed"],Rect2(28,310,424,22),13)
+	game._label(card,"飼料 %d 份 · 各棲地建材與費用見手冊" % game.state.ranch["feed"],Rect2(28,310,424,22),13)
 	game._button(card,"採買飼料 10份／20銀",Rect2(28,341,204,46),supplies)
 	game._button(card,"養殖產物行囊",Rect2(248,341,204,46),products)
 
@@ -40,7 +40,7 @@ func home(home_id: int) -> void:
 		ART.icon(card,ART.ANIMALS,ART.A.FRAMES[index][0],Rect2(28,100+i*94,72,75))
 		game._button(card,DATA.SPECIES[id]["name"]+" · 查看",Rect2(120,107+i*94,332,58),animal.bind(id),true)
 	var opened := RULES.home_open(game.state,home_id)
-	var button: Button = game._button(card,"棲地已建好" if opened else "建造 木4／石2／40銀",Rect2(28,299,424,44),build.bind(home_id),true)
+	var button: Button = game._button(card,"棲地已建好" if opened else "建造 木%d／石%d／%d銀" % [DATA.HOME_COST[home_id]["wood"],DATA.HOME_COST[home_id]["stone"],DATA.HOME_COST[home_id]["money"]],Rect2(28,299,424,44),build.bind(home_id),true)
 	button.disabled = opened
 	game._button(card,"牧場總覽",Rect2(28,357,424,44),hub)
 
@@ -68,7 +68,7 @@ func animal(id: String) -> void:
 			text = "%s · %s\n成長 %d /%d · 好感 %d /100\n今日餵養：%s · 照料：%s\n待領 %s ×%d\n成年產物進度 %d /%d" % [a["name"],"幼體" if baby else "成年",a["age"],definition["days"],a["bond"],"已餵" if a["fed"] else "未餵","完成" if a["cared"] else "未做",definition["product"],a["ready"],a["cycle"],definition["interval"]]
 	game._paragraph(card,text,Rect2(142,100,310,145)).add_theme_font_size_override("font_size",14)
 	var local := RULES.on_site(s,id)
-	var feed: Button = game._button(card,"餵收成小麥" if id=="hen" else "餵養 1份飼料",Rect2(28,250,204,44),action.bind(id,"feed"),true)
+	var feed: Button = game._button(card,"餵收成小麥" if id=="hen" else ("好友回饋 · 今日免飼料" if RULES.feed_cost(s,id)==0 else "餵養 1份飼料"),Rect2(28,250,204,44),action.bind(id,"feed"),true)
 	feed.disabled = not owned or not local
 	var care: Button = game._button(card,"照料／觀察",Rect2(248,250,204,44),action.bind(id,"care"))
 	care.disabled = not owned or not local or id=="hen"
@@ -88,6 +88,7 @@ func action(id: String, kind: String) -> void:
 		"care": answer = RULES.care(game.state,id)
 		_: answer = RULES.collect(game.state,id)
 	if answer["ok"]:
+		if game.world.has_method("animate_animal"): game.world.animate_animal(id,kind)
 		game._save(false)
 		game.audio_system.play_effect("harvest" if kind=="collect" else "seed")
 	animal(id)
@@ -125,11 +126,14 @@ func products(page: int = 0) -> void:
 
 func visitor(id: String) -> void:
 	var answer := RULES.talk(game.state,id)
-	if not answer["ok"]: return
+	if not answer["ok"]:
+		game.toast(answer["text"])
+		return
 	var d: Dictionary = DATA.RESIDENTS[id]
 	var card: Panel = game._open_modal(d["name"]+" · "+d["role"],"好感 %d · 每日初次交談增加一次" % game.state.ranch["friends"][id])
 	ART.icon(card,ART.RESIDENTS,ART.R.FRAMES[d["sprite"]/3][d["sprite"]%3],Rect2(28,100,92,155))
 	game._paragraph(card,answer["text"]+("\n\n雨天路滑，走動時記得小心。" if game.state.is_raining() else ""),Rect2(137,100,315,155)).add_theme_font_size_override("font_size",15)
-	game._button(card,"改天再聊",Rect2(28,282,424,46),game._close_modal,true)
+	game._button(card,"故事與委託",Rect2(28,282,204,46),game.life_panels.resident.bind(id),true)
+	game._button(card,"改天再聊",Rect2(248,282,204,46),game._close_modal)
 	game._save(false)
 	game.audio_system.play_effect("talk")

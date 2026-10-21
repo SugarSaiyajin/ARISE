@@ -5,6 +5,9 @@ const World = preload("res://scripts/farm_world.gd")
 const AreaWorld = preload("res://scripts/area_world.gd")
 const ForestWorld = preload("res://scripts/forest_world.gd")
 const RuinsWorld = preload("res://scripts/ruins_world.gd")
+const CultureWorld = preload("res://scripts/culture_world.gd")
+const LifePanels = preload("res://scripts/life_panels.gd")
+var life_panels: RefCounted
 const RanchWorld = preload("res://scripts/ranch_world.gd")
 const RanchPanels = preload("res://scripts/ranch_panels.gd")
 var ranch_panels: RefCounted
@@ -55,6 +58,7 @@ var money_label: Label
 var energy_bar: ProgressBar
 var energy_label: Label
 var seed_button: Button
+var stop_button: Button
 var action_button: Button
 var quest_label: Label
 var toast_label: Label
@@ -82,6 +86,7 @@ var preview_buttons: Array[Button] = []
 func _ready() -> void:
 	inventory_panels = InventoryPanels.new(self)
 	ranch_panels = RanchPanels.new(self)
+	life_panels = LifePanels.new(self)
 	spring_panels = SpringPanels.new(self)
 	resident_panels = ResidentPanels.new(self)
 	touch_mode = touch_mode or "--mobile-ui" in OS.get_cmdline_user_args()
@@ -125,6 +130,7 @@ func _mount_area(from_area: String = "", restore_position: bool = true) -> void:
 		"forest": world = ForestWorld.new()
 		"ruins": world = RuinsWorld.new()
 		"ranch_poultry", "ranch_meadow", "ranch_silk", "ranch_spring": world = RanchWorld.new()
+		"culture_grove", "culture_ember", "culture_sanctuary", "culture_market": world = CultureWorld.new()
 		_: world = AreaWorld.new()
 	world.area_id = state.area_id
 	world.action_managed = state.area_id == "farm"
@@ -148,7 +154,7 @@ func _mount_area(from_area: String = "", restore_position: bool = true) -> void:
 		audio_system.set_interior(state.area_id == "house")
 
 func _change_area(destination: String) -> void:
-	if destination not in ["farm", "house", "town", "forest", "ruins", "ranch_poultry", "ranch_meadow", "ranch_silk", "ranch_spring"]:
+	if destination not in ["farm", "house", "town", "forest", "ruins", "ranch_poultry", "ranch_meadow", "ranch_silk", "ranch_spring", "culture_grove", "culture_ember", "culture_sanctuary", "culture_market"]:
 		return
 	if destination == "ruins" and not state.route_restored:
 		_show_route()
@@ -255,6 +261,7 @@ func _build_ui() -> void:
 	quest_label = _label(ui, "", Rect2(305, 85, 354, 23), 12, "f3e1b2")
 	_button(ui,"手札",Rect2(680,80,70,44),spring_panels.hub)
 	_button(ui,"牧場",Rect2(764,80,70,44),ranch_panels.hub)
+	_button(ui,"行旅",Rect2(848,80,78,44),life_panels.hub)
 	if touch_mode:
 		var bar := _panel(ui,Rect2(160,448,342,82),"203a30eb","8e9a75")
 		bar.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -280,10 +287,13 @@ func _build_ui() -> void:
 	stick.position = Vector2(8, 382)
 	stick.size = Vector2(148, 148)
 	stick.engaged.connect(_manual_control_started)
+	stick.released.connect(_manual_control_started)
 	ui.add_child(stick)
+	stop_button = _button(ui,"停止移動",Rect2(14,326,140,44),_stop_moving)
+	stop_button.hide()
 	action_button = _button(ui, "使用\nE", Rect2(826, 430, 104, 91), _act, true)
 	action_button.action_mode = BaseButton.ACTION_MODE_BUTTON_PRESS
-	_label(ui, "方向", Rect2(60, 360, 60, 20), 11, "f0e3bc")
+	if not touch_mode: _label(ui,"方向",Rect2(60,360,60,20),11,"f0e3bc")
 	toast_panel = _panel(ui, Rect2(208, 389, 544, 44), "1e372ff2", "9eac7d")
 	toast_label = _label(toast_panel, "", Rect2(12, 4, 520, 36), 12)
 	toast_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -309,6 +319,7 @@ func _viewport_to_world(point: Vector2) -> Vector2:
 	return world.get_global_transform().affine_inverse() * point
 
 func _update_ui() -> void:
+	if is_instance_valid(stop_button): stop_button.visible = touch_mode and (not path.is_empty() or stick.finger>=0 or stick.mouse_down or stick.direction.length_squared()>0.01)
 	var hour := int(state.minute) / 60
 	var mins := int(state.minute) % 60
 	clock_label.text = "春 %02d /28  %02d:%02d" % [state.SPRING.season_day(state.day), hour, mins]
@@ -388,6 +399,14 @@ func _process(delta: float) -> void:
 		var goal: Vector2 = world.interactions()[pending["object"]]
 		if goal.distance_to(pending.get("goal",goal)) > 8:
 			_walk_to(goal,pending.duplicate())
+	if pending.get("object","").begins_with("visitor:") and not path.is_empty():
+		var target: String = pending["object"]
+		var current: Dictionary = world.interactions()
+		if not current.has(target):
+			_manual_control_started()
+			toast("居民已前往下一個地方，可在行旅手冊查看時段。")
+		elif (current[target] as Vector2).distance_to(pending.get("goal",current[target]))>5:
+			_walk_to(current[target],pending.duplicate())
 	var position_before: Vector2 = state.player_position
 	var was_working: bool = tool_action.active
 	tool_action.advance(delta)
@@ -409,7 +428,7 @@ func _process(delta: float) -> void:
 			path.clear()
 			pending = {}
 			direction = direction.limit_length()
-		elif not path.is_empty():
+		elif not path.is_empty() and stick.finger < 0 and not stick.mouse_down:
 			var diff: Vector2 = path[0] - state.player_position
 			if diff.length() <= SPEED * delta + 0.8:
 				state.player_position = path[0]
@@ -455,6 +474,13 @@ func _process(delta: float) -> void:
 		queued_click = null
 		_click_world(next_click)
 
+func _stop_moving() -> void:
+	_manual_control_started()
+	stick.release_pointer()
+	action_button.cancel_touch()
+	world.walking = false
+	_update_ui()
+
 func _manual_control_started() -> void:
 	path.clear()
 	pending = {}
@@ -498,6 +524,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _click_world(point: Vector2) -> void:
+	if touch_mode and (stick.finger >= 0 or stick.mouse_down):
+		return
 	_hide_tool_palette()
 	if travel_lock > 0:
 		return
@@ -624,6 +652,15 @@ func _find_resident(id: String) -> void:
 	_walk_to(world.interactions()[id],{"object":id})
 
 func _interact(object: String) -> void:
+	if object=="culture_craft":
+		life_panels.workshop()
+		return
+	if object=="culture_gather":
+		var result: Dictionary = state.LIFE.gather(state)
+		if result["ok"]: _save(false)
+		_update_ui()
+		toast(result["text"])
+		return
 	if object.begins_with("animal:"):
 		ranch_panels.animal(object.trim_prefix("animal:"))
 		return
@@ -1237,7 +1274,7 @@ func _paragraph(parent: Node, text: String, rect: Rect2) -> Label:
 	return label
 
 func _show_intro() -> void:
-	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  雲橋靈牧 0.21")
+	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  雲橋共作 0.22")
 	_paragraph(card, "一座舊莊園，一片等待照料的田地。\n\n① 澆水：照料左上角四株蕪菁。\n② 休息：進農舍，點床鋪睡到明天。\n③ 採收：成熟後採收，送往出貨箱。\n④ 探索：採集木石，建烘乾架加工收成。", Rect2(28, 98, 424, 175))
 	_button(card, "開始我的田園生活", Rect2(28, 282, 424, 46), _start_play, true)
 

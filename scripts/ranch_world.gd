@@ -2,6 +2,7 @@ extends "res://scripts/farm_world.gd"
 
 const DATA = preload("res://scripts/ranch_data.gd")
 const ART = preload("res://scripts/approved_art.gd")
+var animal_effects: Dictionary = {}
 const PENS := [Vector2(173,151),Vector2(336,153)]
 
 func home_index() -> int:
@@ -23,11 +24,9 @@ func interactions() -> Dictionary:
 	var result := {"farm":Vector2(240,205),"ranch_board":Vector2(70,181)}
 	for i in range(2):
 		result["animal:"+DATA.ORDER[home_index()*2+i]] = PENS[i]+Vector2(0,24)
-	var n := 0
 	for id in DATA.VISITORS:
-		if DATA.RESIDENTS[id]["home"] == home_index():
-			result["visitor:"+id] = Vector2(110+n*110,193)
-			n += 1
+		if DATA.visitor_area(id,state.minute,state.is_raining())==area_id:
+			result["visitor:"+id] = DATA.visitor_position(id,area_id,state.minute,state.is_raining())
 	return result
 
 func interaction_hitbox(id: String) -> Rect2:
@@ -46,7 +45,7 @@ func blocked(p: Vector2) -> bool:
 func _draw() -> void:
 	if state == null: return
 	var home := home_index()
-	ART.tile(self,0,Rect2(0,0,480,270))
+	ART.calm_tile(self,0,Rect2(0,0,480,270))
 	ART.tile(self,4,Rect2(22,77,24,99))
 	ART.tile(self,4,Rect2(422,92,34,84))
 	ART.tile(self,1,Rect2(18,176,444,28))
@@ -73,15 +72,31 @@ func _draw() -> void:
 		var owned: bool = state.chickens>0 if id=="hen" else state.ranch["animals"][id]["owned"]
 		if owned:
 			var baby: bool = false if id=="hen" else state.ranch["animals"][id]["age"]<DATA.SPECIES[id]["days"]
-			var frame := 3 if baby else int(elapsed*1.4)%3
-			var point: Vector2 = PENS[i]+Vector2(sin(elapsed*0.8+i)*6,0)
+			var resting: bool = state.minute>=1140
+			var phase := fmod(elapsed+i,8.0)
+			var roaming: bool = not resting and phase<4
+			var frame := 3 if baby else (0 if not roaming else (2 if cos(phase*TAU/4)>0 else 1))
+			var point: Vector2 = PENS[i]+Vector2(sin(phase*TAU/4)*7 if roaming else 0,0)
+			var effect: String = animal_effects.get(id,{}).get("kind","")
+			if effect=="feed": point.y+=sin(elapsed*8)*1.5
+			if effect=="care":
+				r(point.x-3,point.y-31,3,3,"e7a4a1")
+				r(point.x+1,point.y-31,3,3,"e7a4a1")
+				r(point.x-2,point.y-28,5,3,"d18c94")
 			var heights := [14.0,14.0,16.0,22.0,9.0,8.0,27.0,15.0]
-			ART.animal(self,point,home*2+i,frame,heights[home*2+i]*(0.65 if baby else 1.0))
+			ART.animal(self,point,home*2+i,frame,heights[home*2+i]*(0.65 if baby else (0.90 if resting else 1.0)))
 			if id=="hen":
 				for n in range(1,state.chickens): ART.animal(self,point+Vector2(22*n,8),0,int(elapsed)%3,20)
 		else:
 			r(PENS[i].x-6,PENS[i].y-2,12,3,"b29b71")
-		label_at(PENS[i]+Vector2(0,12),DATA.SPECIES[id]["name"]+(" · 未入住" if not owned else ""))
+		var status := "未入住"
+		if owned:
+			if state.minute>=1140: status="休息"
+			elif id=="hen": status="有蛋" if state.nest_eggs>0 else ("已餵" if state.fed_chickens>0 else "未餵")
+			else:
+				var animal: Dictionary = state.ranch["animals"][id]
+				status="待領%d" % animal["ready"] if animal["ready"]>0 else ("幼體" if animal["age"]<DATA.SPECIES[id]["days"] else ("已餵" if animal["fed"] else "未餵"))
+		label_at(PENS[i]+Vector2(0,12),DATA.SPECIES[id]["name"]+" · "+status)
 	var layers: Array = [{"y":actor.y,"id":"hero","point":actor}]
 	for key in interactions():
 		if key.begins_with("visitor:"):
@@ -91,7 +106,7 @@ func _draw() -> void:
 	for item in layers:
 		if item["id"]=="hero": person(actor)
 		else:
-			ART.resident(self,item["point"],DATA.RESIDENTS[item["id"]]["sprite"])
+			ART.resident(self,item["point"],DATA.RESIDENTS[item["id"]]["sprite"],30,elapsed)
 			label_at(item["point"]-Vector2(0,34),DATA.RESIDENTS[item["id"]]["name"])
 	ART.building(self,10,Rect2(4,55,57,73))
 	ART.building(self,11,Rect2(416,70,60,76))
@@ -103,3 +118,12 @@ func _draw() -> void:
 		for i in range(45):
 			var p := Vector2(fmod(i*37,480),45+fmod(i*23+elapsed*70,172))
 			draw_line(p,p+Vector2(-2,5),Color("d6e4d488"),1)
+
+func animate_animal(id: String, kind: String) -> void:
+	animal_effects[id]={"kind":kind,"time":2.0}
+
+func _process(delta: float) -> void:
+	super._process(delta)
+	for id in animal_effects.keys():
+		animal_effects[id]["time"]-=delta
+		if animal_effects[id]["time"]<=0: animal_effects.erase(id)

@@ -1,6 +1,8 @@
 class_name FarmState
 extends RefCounted
 
+const LIFE = preload("res://scripts/life_rules.gd")
+const LIFE_DATA = preload("res://scripts/life_data.gd")
 const RANCH = preload("res://scripts/ranch_rules.gd")
 const RANCH_DATA = preload("res://scripts/ranch_data.gd")
 const SAVE_VERSION := 1
@@ -56,6 +58,7 @@ var fishing_rod := false
 var fish := {"silver_carp": 0, "mist_trout": 0, "star_perch": 0}
 var fish_caught_today := 0
 var meals: Dictionary = STOCKS.normalized({}, COOKING.ORDER)
+var life: Dictionary = LIFE.empty()
 var ranch: Dictionary = RANCH.empty()
 var hero_style := "male"
 var spring_progress: Dictionary = SPRING.empty_progress()
@@ -146,6 +149,8 @@ func sell_all() -> Dictionary:
 		earnings += goods.get(recipe, 0) * PROCESSING.RECIPES[recipe]["price"]
 	for id in RANCH_DATA.EXTRA:
 		earnings += ranch["stock"][id] * RANCH_DATA.SPECIES[id]["sell"]
+	for id in LIFE_DATA.GOODS:
+		earnings += life["stock"][id] * LIFE_DATA.PRODUCTS[id]["price"]
 	earnings += eggs * LIVESTOCK.EGG_PRICE
 	for species in FISHING.ORDER:
 		earnings += fish[species] * FISHING.FISH[species]["price"]
@@ -158,6 +163,7 @@ func sell_all() -> Dictionary:
 	for recipe in PROCESSING.ORDER:
 		goods[recipe] = 0
 	eggs = 0
+	for id in LIFE_DATA.GOODS: life["stock"][id] = 0
 	for id in RANCH_DATA.EXTRA:
 		ranch["stock"][id] = 0
 	for species in FISHING.ORDER:
@@ -222,6 +228,7 @@ func brew_tea() -> Dictionary:
 	return {"ok": true, "text": "一杯溫熱的草茶，恢復 %d 體力。" % restored}
 
 func ingredient_count(ingredient: Dictionary) -> int:
+	if ingredient["stock"]=="ranch": return int(ranch["stock"].get(ingredient["item"],0))
 	if ingredient["stock"] == "eggs":
 		return eggs
 	return int(get(ingredient["stock"]).get(ingredient["item"], 0))
@@ -240,6 +247,8 @@ func cook(recipe: String) -> Dictionary:
 	for ingredient in COOKING.RECIPES[recipe]["ingredients"]:
 		if ingredient["stock"] == "eggs":
 			eggs -= ingredient["amount"]
+		elif ingredient["stock"]=="ranch":
+			ranch["stock"][ingredient["item"]] -= ingredient["amount"]
 		else:
 			var stock: Dictionary = get(ingredient["stock"])
 			stock[ingredient["item"]] -= ingredient["amount"]
@@ -470,6 +479,9 @@ func finish_fishing(caught: bool) -> Dictionary:
 	return {"ok": true, "text": "釣到了%s！可出貨 %d 銀，今日魚獲 %d / 3。" % [FISHING.FISH[species]["name"], FISHING.FISH[species]["price"], fish_caught_today]}
 
 func sleep() -> void:
+	if life["irrigator"]:
+		for i in range(2):
+			if plots[i]["crop"]!="": plots[i]["watered"] = true
 	RANCH.advance(self)
 	cancel_fishing()
 	fish_caught_today = 0
@@ -492,7 +504,7 @@ func sleep() -> void:
 
 func to_data() -> Dictionary:
 	return {
-		"ranch": ranch.duplicate(true), "hero_style":hero_style,
+		"life": life.duplicate(true), "ranch": ranch.duplicate(true), "hero_style":hero_style,
 		"version": SAVE_VERSION, "day": day, "minute": minute, "money": money,
 		"energy": energy, "seeds": STOCKS.normalized(seeds, CROP_ORDER), "produce": STOCKS.normalized(produce, CROP_ORDER),
 		"plots": plots.duplicate(true), "harvested": harvested, "total_earned": total_earned,
@@ -513,7 +525,7 @@ func to_data() -> Dictionary:
 func _valid_data(data: Variant) -> bool:
 	if not data is Dictionary or data.get("version") != SAVE_VERSION:
 		return false
-	if not data.get("area", "farm") is String or data.get("area", "farm") not in ["farm", "house", "town", "forest", "ruins", "ranch_poultry", "ranch_meadow", "ranch_silk", "ranch_spring"]:
+	if not data.get("area", "farm") is String or data.get("area", "farm") not in ["farm", "house", "town", "forest", "ruins", "ranch_poultry", "ranch_meadow", "ranch_silk", "ranch_spring", "culture_grove", "culture_ember", "culture_sanctuary", "culture_market"]:
 		return false
 	if not data.get("fence_repaired", false) is bool:
 		return false
@@ -550,6 +562,11 @@ func _valid_data(data: Variant) -> bool:
 		return false
 	if data.get("hero_style","male") not in ["male","female"] or not RANCH.valid(data.get("ranch",RANCH.empty()),int(data["day"]),data.get("coop_built",false)):
 		return false
+	if not LIFE.valid(data.get("life",LIFE.empty()),int(data["day"])):
+		return false
+	for resident in RANCH_DATA.VISITORS:
+		if data.get("life",LIFE.empty())["events"][resident] and data.get("ranch",RANCH.empty())["friends"][resident]<3:
+			return false
 	if not _valid_meals(data) or not _valid_fishing(data):
 		return false
 	if not _valid_livestock(data):
@@ -700,6 +717,7 @@ func _apply_data(data: Dictionary) -> void:
 		fish[species] = int(fish[species])
 	fish_caught_today = int(data.get("fish_caught_today", 0))
 	meals = STOCKS.normalized(data.get("meals", {}), COOKING.ORDER)
+	life = LIFE.normalized(data.get("life",LIFE.empty()))
 	ranch = RANCH.normalized(data.get("ranch",RANCH.empty()))
 	hero_style = data.get("hero_style","male")
 	spring_progress = SPRING.normalized(data.get("spring_progress", SPRING.empty_progress()))

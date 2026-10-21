@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-21",
+  "purpose": "User-requested interior style, world palette and approved cultural village implementation",
+  "files": [
+    {
+      "file": "furniture_approved.png",
+      "sha256": "269492580649fdb420b76d85a77c3253c9ffc30da13913de62ba60665efc580d",
+      "method": "Original image generation using approved world art as reference; PNG copied unchanged; runtime regions only"
+    },
+    {
+      "file": "calm_ground.png",
+      "sha256": "20d9c38e803e17d20bbcc83b92f19286e36771ca50379d7d5f80bc87500fce35",
+      "method": "Original image generation using approved world art as reference; PNG copied unchanged; runtime regions only"
+    },
+    {
+      "file": "culture_buildings.png",
+      "sha256": "5cbfc67ee73da7b2c6f63f8c548fb82aeda80ba22edb4abb50112f1806d2c3ea",
+      "method": "Original image generation using approved world art as reference; PNG copied unchanged; runtime regions only"
+    }
+  ],
+  "idle_animation": "Runtime transform anchored at sprite feet; no logical displacement, no source pixel edits"
+}

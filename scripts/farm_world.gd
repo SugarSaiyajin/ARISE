@@ -19,8 +19,8 @@ const COOP_SPRITES = preload("res://assets/pixel/chicken_coop.png")
 const HEN = preload("res://assets/pixel/hen.png")
 const DRYER := Vector2(105, 198)
 const DRYER_SPRITES = preload("res://assets/pixel/drying_rack.png")
-const OBSTACLES := [Rect2(39, 72, 74, 44), Rect2(249, 64, 77, 41), Rect2(353, 85, 61, 38), Rect2(376, 159, 42, 28), Rect2(298, 120, 16, 20), Rect2(87, 170, 36, 14), Rect2(321, 160, 43, 24)]
-const TREE_POINTS := [Vector2(12, 80), Vector2(159, 79), Vector2(189, 73), Vector2(217, 80), Vector2(445, 83), Vector2(470, 102), Vector2(15, 171), Vector2(34, 203), Vector2(451, 194)]
+const OBSTACLES := [Rect2(39, 72, 74, 44), Rect2(249, 64, 77, 41), Rect2(353, 85, 61, 38), Rect2(376, 159, 42, 28), Rect2(218, 95, 12, 12), Rect2(87, 170, 36, 14), Rect2(321, 160, 43, 24)]
+const TREE_POINTS := [Vector2(18,80),Vector2(20,174),Vector2(451,80),Vector2(463,173)]
 const GROUND = preload("res://assets/pixel/ground.png")
 const SOIL = preload("res://assets/pixel/soil.png")
 const HERO = preload("res://assets/pixel/hero_eight.png")
@@ -146,6 +146,9 @@ func label_at(p: Vector2, text: String) -> void:
 	draw_rect(Rect2(p.x - width / 2 - 4, p.y - 9, width + 8, 13), Color("233e36e8"))
 	draw_string(font, Vector2(p.x - width / 2, p.y), text, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color("f5e7c3"))
 
+func hint_at(p: Vector2, text: String) -> void:
+	if actor.distance_to(p)<88: label_at(p,text)
+
 func prop(pos: Vector2, source: Rect2) -> void:
 	var index := -1
 	if source.position == Vector2(0,0): index = 4
@@ -171,7 +174,7 @@ func person(p: Vector2, npc: bool = false, sprite: Texture2D = null) -> void:
 	if not npc and action_age < ACTION_DURATION:
 		frame = 4 + mini(3, int(action_age / ACTION_DURATION * 4))
 	if texture == HERO:
-		ApprovedArt.hero(self,p,state.hero_style if state != null else "male",row,frame)
+		ApprovedArt.hero(self,p,state.hero_style if state != null else "male",row,frame,30,elapsed if not walking and action_age >= ACTION_DURATION else -1)
 	else:
 		draw_texture_rect_region(texture,
 			Rect2((p - Vector2(16, 30)).floor(), Vector2(32, 32)),
@@ -190,11 +193,7 @@ func crop_at(index: int, p: Dictionary) -> void:
 	var center := plot_center(index)
 	var row := State.CROP_ORDER.find(p["crop"])
 	var stage: int = 3 if state.is_mature(p) else mini(int(p["growth"] * 3.0 / State.CROPS[p["crop"]]["days"]), 2)
-	if row >= 3:
-		CropVisual.draw(self, p["crop"], center, stage)
-		return
-	draw_texture_rect_region(CROPS, Rect2(center - Vector2(12, 16), Vector2(24, 24)),
-		Rect2(stage * 24, row * 24, 24, 24))
+	CropVisual.draw(self,p["crop"],center,stage)
 	if state.is_mature(p) and int(elapsed * 2 + index) % 4 == 0:
 		r(center.x + 5, center.y - 15, 1, 3, "fff0b7")
 		r(center.x + 4, center.y - 14, 3, 1, "fff0b7")
@@ -206,7 +205,6 @@ func _depth_layer() -> void:
 		{"y": 189.0, "kind": "tea"}, {"y": 187.0, "kind": "coop"},
 		{"y": actor.y, "kind": "hero"},
 		{"y": 183.0, "kind": "dryer"},
-		{"y": 145.0, "kind": "autumn"},
 	]
 	for i in range(state.chickens):
 		var point := Vector2(333 + (i % 2) * 16, 187 + (i / 2) * 10) + Vector2(sin(elapsed * 1.5 + i * 2) * 2, 0)
@@ -231,12 +229,12 @@ func _depth_layer() -> void:
 				draw_texture_rect_region(ApprovedArt.ITEMS,Rect2(81,145,48,40),ApprovedArt.region(ApprovedArt.I.FRAMES[0][5]))
 			"tree": tree(item["p"])
 			"autumn": tree(Vector2(429, 145), true)
-			"house": ApprovedArt.building(self,0,Rect2(23,41,116,82))
-			"market": ApprovedArt.building(self,1,Rect2(344,72,80,60))
-			"well": prop(Vector2(290, 103), Rect2(24, 0, 32, 40))
+			"house": ApprovedArt.building(self,0,Rect2(36,49,96,74))
+			"market": ApprovedArt.building(self,1,Rect2(354,65,80,62))
+			"well": prop(Vector2(213, 78), Rect2(24, 0, 23, 34))
 			"crate": prop(Vector2(111, 123), Rect2(0, 0, 24, 24))
 			"cart": prop(Vector2(308, 183), Rect2(56, 0, 40, 24))
-			"tea": ApprovedArt.building(self,2,Rect2(365,132,64,59))
+			"tea": ApprovedArt.building(self,2,Rect2(377,146,52,42))
 			"npc": person(NEIGHBOR, true)
 			"hero": person(actor)
 			"crop": crop_at(item["index"], state.plots[item["index"]])
@@ -269,6 +267,12 @@ func _draw() -> void:
 			r(x + 2, 202, 3, 6, "7f7155")
 	label_at(Vector2(330, 213), "圍欄已修復" if state.fence_repaired else "待修圍欄")
 	_depth_layer()
+	if state.life["irrigator"]:
+		r(138,104,11,4,"9b774f")
+		r(141,96,5,10,"719c96")
+		r(142,94,3,7,"badfd0")
+		r(137,100,13,2,"c9a66f")
+		hint_at(Vector2(143,92),"符玉灌溉器")
 	# Actual water ripples, smoke and fireflies are the animated layer over the atlas.
 	for i in range(8):
 		var x := 262 + (i * 11) % 48
@@ -277,18 +281,18 @@ func _draw() -> void:
 	for i in range(3):
 		var phase := fmod(elapsed * 5 + i * 8, 25)
 		r(109 + sin(phase / 6) * 2, 51 - phase, 3 + phase / 10, 2, "ecdfbf55")
-	label_at(Vector2(280, 62), "池塘釣點")
-	label_at(Vector2(80, 72), "雲棲莊園")
-	label_at(Vector2(382, 88), "行旅種子鋪")
-	label_at(Vector2(123, 119), "出貨")
-	label_at(Vector2(343, 140), ("雞舍 · 有蛋" if state.nest_eggs > 0 else "雞舍") if state.coop_built else "建造雞舍")
-	label_at(Vector2(105, 143), "烘乾架" if state.rack_built else "建造烘乾架")
-	label_at(Vector2(397, 161), "歇腳茶亭")
+	hint_at(Vector2(280, 62), "池塘釣點")
+	hint_at(Vector2(80, 72), "雲棲莊園")
+	hint_at(Vector2(382, 88), "行旅種子鋪")
+	hint_at(Vector2(123, 119), "出貨")
+	hint_at(Vector2(343, 140), ("雞舍 · 有蛋" if state.nest_eggs > 0 else "雞舍") if state.coop_built else "建造雞舍")
+	hint_at(Vector2(105, 143), "烘乾架" if state.rack_built else "建造烘乾架")
+	hint_at(Vector2(397, 161), "歇腳茶亭")
 	r(446, 117, 2, 11, "846743")
 	r(438, 117, 23, 7, "b28b58")
 	label_at(Vector2(440, 109), "雲橋鎮 →")
-	for i in range(16):
-		tree(Vector2(i * 33, 268 + i % 3 * 5))
+	for x in [15,463]:
+		tree(Vector2(x,254))
 	for particle in particles:
 		draw_rect(Rect2(particle["p"].floor(), Vector2(2, 2)), particle["color"])
 	if action_age < ACTION_DURATION:

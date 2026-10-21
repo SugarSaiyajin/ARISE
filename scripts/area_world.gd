@@ -2,8 +2,6 @@ extends "res://scripts/farm_world.gd"
 
 const HOUSE_DEF = preload("res://data/maps/house.tres")
 const TOWN_DEF = preload("res://data/maps/town.tres")
-const RESIDENT_TEXTURES := {"npc": preload("res://assets/pixel/qinghe_eight.png"), "shop": preload("res://assets/pixel/merchant_eight.png"), "smith": preload("res://assets/pixel/smith_eight.png")}
-const RESIDENT_FRAMES := {"npc": preload("res://scripts/qinghe_frames.gd"), "shop": preload("res://scripts/merchant_frames.gd"), "smith": preload("res://scripts/smith_frames.gd")}
 const Residents = preload("res://scripts/resident_data.gd")
 const INTERIOR = preload("res://assets/pixel/house_interior.png")
 const TOWN_GROUND = preload("res://assets/pixel/town_ground.png")
@@ -89,13 +87,33 @@ func blocked(p: Vector2) -> bool:
 	return false
 
 func draw_resident(id: String, p: Vector2) -> void:
-	ApprovedArt.resident(self,p,{"npc":0,"shop":1,"smith":2}[id])
+	ApprovedArt.resident(self,p,{"npc":0,"shop":1,"smith":2}[id],30,elapsed)
+
+func draw_interior() -> void:
+	draw_rect(Rect2(0,0,480,270),Color("263b35"))
+	draw_rect(Rect2(100,51,280,164),Color("795b40"))
+	ApprovedArt.calm_tile(self,2,Rect2(108,79,264,132))
+	draw_rect(Rect2(106,53,268,26),Color("e2d2ad"))
+	for x in [108,196,284,370]: draw_rect(Rect2(x,53,4,28),Color("74543c"))
+	for x in [136,266]:
+		draw_rect(Rect2(x,58,28,16),Color("749d9b"))
+		draw_rect(Rect2(x+2,60,24,12),Color("c0d6c0"))
+		draw_rect(Rect2(x+13,58,2,16),Color("8a7350"))
+	ApprovedArt.furniture(self,7,Rect2(197,127,66,43))
+	ApprovedArt.furniture(self,0,Rect2(302,76,50,38))
+	ApprovedArt.furniture(self,1,Rect2(146,82,49,30))
+	ApprovedArt.furniture(self,2,Rect2(109,133,29,38))
+	ApprovedArt.furniture(self,3,Rect2(216,130,35,25))
+	ApprovedArt.furniture(self,4,Rect2(334,139,33,40))
+	ApprovedArt.furniture(self,5,Rect2(275,82,22,35))
+	ApprovedArt.furniture(self,6,Rect2(154,162,26,19))
+	draw_rect(Rect2(224,209,32,7),Color("d8c39b"))
 
 func _draw() -> void:
 	if state == null:
 		return
 	if area_id == "house":
-		draw_texture(INTERIOR, Vector2.ZERO)
+		draw_interior()
 		person(actor)
 		label_at(Vector2(329, 75), "床鋪")
 		label_at(Vector2(170, 78), "莊園手札")
