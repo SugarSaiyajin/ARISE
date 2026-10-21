@@ -1,0 +1,77 @@
+{
+  "method": "independent HTTPS GET of public delivery branch; all bytes downloaded and hashed",
+  "files": {
+    "arise-0.28.0.apk": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/arise-0.28.0.apk",
+      "http_status": 200,
+      "downloaded_bytes": 104307407,
+      "sha256": "8b818f0b7f0bb4fd3b5abf3cad029d7a440f406c394688d3666084a3a7c3ade2",
+      "matches_local": true
+    },
+    "docs/chapter-0.28-story.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/docs/chapter-0.28-story.png",
+      "http_status": 200,
+      "downloaded_bytes": 467192,
+      "sha256": "269af98a792e522daf12459ee7337ecad72732747569c39fed51e3c063f4d020",
+      "matches_local": true
+    },
+    "docs/chapter-0.28-rotation.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/docs/chapter-0.28-rotation.png",
+      "http_status": 200,
+      "downloaded_bytes": 176757,
+      "sha256": "5e17d271fee0742445d7fd42df3851164ec2def6195329f2607272a67f3a5edd",
+      "matches_local": true
+    },
+    "docs/chapter-0.28-blocked.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/docs/chapter-0.28-blocked.png",
+      "http_status": 200,
+      "downloaded_bytes": 168873,
+      "sha256": "373b5e190aa568f5a54361254ed45a2e1088907c4369c9bfb1b123efd2a578e1",
+      "matches_local": true
+    },
+    "docs/chapter-0.28-growth.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/docs/chapter-0.28-growth.png",
+      "http_status": 200,
+      "downloaded_bytes": 397646,
+      "sha256": "e54777f15994ce6ef4bffca66376150ce9fffda175031df3fed1749fcf52164f",
+      "matches_local": true
+    },
+    "docs/chapter-0.28-order.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/docs/chapter-0.28-order.png",
+      "http_status": 200,
+      "downloaded_bytes": 496746,
+      "sha256": "cece1916ea16fcf5e4c037f51bfce40d4274036668e7cfac5616f64b7c29139e",
+      "matches_local": true
+    },
+    "docs/chapter-0.28-craft-delivery.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/docs/chapter-0.28-craft-delivery.png",
+      "http_status": 200,
+      "downloaded_bytes": 390270,
+      "sha256": "b6b24c973d5f60e9d9e14bcc97c913f4c64023c2324248001cb1f7ddf6bb668d",
+      "matches_local": true
+    },
+    "docs/chapter-0.28-room.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/docs/chapter-0.28-room.png",
+      "http_status": 200,
+      "downloaded_bytes": 275118,
+      "sha256": "7092de2ef1d3a764f5cb296886fbcdb4312f11561e26f0688784d61387b42e39",
+      "matches_local": true
+    },
+    "docs/chapter-0.28-gameplay.mp4": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/docs/chapter-0.28-gameplay.mp4",
+      "http_status": 200,
+      "downloaded_bytes": 978227,
+      "sha256": "5a54d9ebc98a1e327e4c238abc8d71a2a26aaee50f6db438da3c9feee260aa7d",
+      "matches_local": true
+    },
+    "docs/design-review-05/autumn.png": {
+      "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/docs/design-review-05/autumn.png",
+      "http_status": 200,
+      "downloaded_bytes": 3364426,
+      "sha256": "0ae1521ba953bffbb47d206f11fb21dae874237e53f9ce0e66e9f6c21d3e98c4",
+      "matches_local": true
+    }
+  },
+  "physical_android_tested": false,
+  "autumn_status": "separate review concept, excluded from APK"
+}
