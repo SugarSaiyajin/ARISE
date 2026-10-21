@@ -1,0 +1,42 @@
+{
+  "arise-0.25.0.apk": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.25.0/arise-0.25.0.apk",
+    "status": 200,
+    "bytes": 99120272,
+    "sha256": "f524086cfa1d377c079e6424bd4a553e87c81c2a7927238919662a5a7e42a50a",
+    "matches_local": true,
+    "content_type": "application/octet-stream"
+  },
+  "shipping.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.25.0/shipping.png",
+    "status": 200,
+    "bytes": 494326,
+    "sha256": "a3181bf73035749c72454cde224ec268f4da3f10975a9f2f09245fb0fa87e3c1",
+    "matches_local": true,
+    "content_type": "image/png"
+  },
+  "build-legal.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.25.0/build-legal.png",
+    "status": 200,
+    "bytes": 703894,
+    "sha256": "d68ba5ea0f3e7ac9aa4b575b9acd77b037c453529690c3965c4999e818824c5e",
+    "matches_local": true,
+    "content_type": "image/png"
+  },
+  "gameplay.mp4": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.25.0/gameplay.mp4",
+    "status": 200,
+    "bytes": 2330706,
+    "sha256": "f1cc61a8b4aaab666319fbdef63db354a8fd049ee15532a724972f196455d329",
+    "matches_local": true,
+    "content_type": "application/octet-stream"
+  },
+  "design-review-04/proposal.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.25.0/design-review-04/proposal.png",
+    "status": 200,
+    "bytes": 2562259,
+    "sha256": "c58481f1ced2db2b008d5e68fd59ed5a96ca02d95d7994dacddba06e0b10689c",
+    "matches_local": true,
+    "content_type": "image/png"
+  }
+}
