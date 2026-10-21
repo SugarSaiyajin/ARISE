@@ -24,3 +24,5 @@ Android7以上、ARM64、OpenGL ES3。與0.26同套件、同簽章，版本代�
 APK SHA256：`4450365742f84f5fcd9d6076f60bdbd4466d6b6e1ce7ffc340b159e482f72f34`
 
 [原始碼提交](https://github.com/SugarSaiyajin/ARISE/commit/83daeff)
+
+公開APK、七張代表畫面與影片均已重新完整下載，HTTP200且SHA256一致。[下載校驗紀錄](docs/delivery-http-verification-0.27.json)。
