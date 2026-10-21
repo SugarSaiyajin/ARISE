@@ -25,6 +25,7 @@ const LifePanels = preload("res://scripts/life_panels.gd")
 var life_panels: RefCounted
 const RanchWorld = preload("res://scripts/ranch_world.gd")
 const RanchPanels = preload("res://scripts/ranch_panels.gd")
+var home_panels: RefCounted
 var ranch_panels: RefCounted
 const Stick = preload("res://scripts/joystick.gd")
 const TouchButton = preload("res://scripts/touch_button.gd")
@@ -110,6 +111,7 @@ func _ready() -> void:
 	else:
 		Engine.max_fps = 60
 	inventory_panels = InventoryPanels.new(self)
+	home_panels=preload("res://scripts/home_panels.gd").new(self)
 	ranch_panels = RanchPanels.new(self)
 	life_panels = LifePanels.new(self)
 	spring_panels = SpringPanels.new(self)
@@ -390,6 +392,8 @@ func _update_ui() -> void:
 		action = "明日再來" if state.gathered.has(object.trim_prefix("gather:")) else "採集"
 	if object.begins_with("facility:"): action="設施"
 	if object=="lotus_tub": action="水槽"
+	if object=="home_storage": action="收納"
+	if object=="home_chair": action="小歇"
 	action_button.text = action + (("\n互動" if object != "" else "\n按住") if touch_mode else "\nE")
 	if tool_action.active:
 		action_button.text = "作業中\n" + TOOL_NAMES[tool_action.tool]
@@ -709,6 +713,12 @@ func _find_resident(id: String) -> void:
 	_walk_to(world.interactions()[id],{"object":id})
 
 func _interact(object: String) -> void:
+	if object=="home_storage":
+		home_panels.storage()
+		return
+	if object=="home_chair":
+		home_panels.tea_table()
+		return
 	if object=="lotus_tub":
 		estate_panels.water_garden()
 		return

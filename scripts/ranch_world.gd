@@ -45,10 +45,10 @@ func blocked(p: Vector2) -> bool:
 func _draw() -> void:
 	if state == null: return
 	var home := home_index()
-	ART.tile(self,4,Rect2(22,77,24,99))
-	ART.tile(self,4,Rect2(422,92,34,84))
-	ART.tile(self,1,Rect2(18,176,444,28))
-	ART.tile(self,7,Rect2(224,108,30,108))
+	ART.calm_tile(self,0,Rect2(22,77,24,99))
+	ART.calm_tile(self,0,Rect2(422,92,34,84))
+	ART.calm_tile(self,1,Rect2(18,176,444,28))
+	ART.calm_tile(self,1,Rect2(224,108,30,108))
 	for x in range(24,465,16):
 		if x in [24,456]: r(x,70,2,90,"aa8c60")
 		else: r(x,69,16,3,"c6ae7a")
@@ -70,15 +70,18 @@ func _draw() -> void:
 		var id: String = DATA.ORDER[home*2+i]
 		var owned: bool = state.chickens>0 if id=="hen" else state.ranch["animals"][id]["owned"]
 		if owned:
-			var baby: bool = false if id=="hen" else state.ranch["animals"][id]["age"]<DATA.SPECIES[id]["days"]
-			var resting: bool = state.minute>=1140
-			var phase := fmod(elapsed+i,8.0)
-			var roaming: bool = not resting and phase<4
-			var frame := 3 if baby else (0 if not roaming else (2 if cos(phase*TAU/4)>0 else 1))
-			var point: Vector2 = PENS[i]+Vector2(sin(phase*TAU/4)*7 if roaming else 0,0)
 			var effect: String = animal_effects.get(id,{}).get("kind","")
-			if roaming and id=="rabbit": point.y-=absf(sin(elapsed*4))*2
-			if id=="bee": point.y+=sin(elapsed*5)*1.5
+			var pose: Dictionary=preload("res://scripts/animal_behavior.gd").pose(state,id,elapsed,actor.distance_to(PENS[i]),effect)
+			var baby: bool=pose["baby"]
+			var resting: bool=pose["resting"]
+			var frame: int=pose["frame"]
+			var point: Vector2=PENS[i]+pose["offset"]
+			if pose["activity"]=="親近": point+=(actor-PENS[i]).normalized()*3
+			if pose["ready"]>0:
+				var icon: Array=ART.I.FRAMES[1][DATA.ORDER.find(id)]
+				draw_texture_rect_region(ART.ITEMS,Rect2(point-Vector2(5,34+sin(elapsed*2)),Vector2(10,10)),ART.region(icon))
+			elif pose["activity"] in ["親近","覓食"]:
+				label_at(point-Vector2(0,28),pose["activity"])
 			if id=="carp":
 				draw_arc(point+Vector2(0,2),9+sin(elapsed*2),0,TAU,16,Color("b6dbcd88"),1)
 			if effect=="feed":
@@ -115,7 +118,7 @@ func _draw() -> void:
 	for item in layers:
 		if item["id"]=="hero": person(actor)
 		else:
-			ART.resident(self,item["point"],DATA.RESIDENTS[item["id"]]["sprite"],30,elapsed,elapsed if people_moving and not state.is_raining() else -1,DATA.visitor_direction(item["id"],area_id,state.minute,state.is_raining()))
+			ART.resident(self,item["point"],DATA.RESIDENTS[item["id"]]["sprite"],30,elapsed,elapsed if people_moving and DATA.visitor_direction(item["id"],area_id,state.minute,state.is_raining()).length_squared()>0 else -1,DATA.visitor_direction(item["id"],area_id,state.minute,state.is_raining()))
 			label_at(item["point"]-Vector2(0,34),DATA.RESIDENTS[item["id"]]["name"])
 	ART.building(self,10,Rect2(4,55,57,73))
 	ART.building(self,11,Rect2(416,70,60,76))

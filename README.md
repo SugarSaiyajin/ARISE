@@ -1,16 +1,16 @@
 # 異鄉田園 · 雲橋初晴
 
-ARISE 的 Godot 可玩原型：原創異世界、唐宋與西方中世紀融合的像素農耕生活遊戲。**目前為 0.26「清池夏苗」試玩版**，亦可使用鍵盤滑鼠。
+ARISE 的 Godot 可玩原型：原創異世界、唐宋與西方中世紀融合的像素農耕生活遊戲。**目前為 0.27「雲橋日常」試玩版**，亦可使用鍵盤滑鼠。
 
 Android 安裝與實機試玩步驟見 [手機試玩說明](docs/ANDROID_TESTING.md)。
 
 使用者提供的 Godot 農場教學之取得狀態及專案適用性初評見 [教學對照評估](docs/TUTORIAL_REVIEW.md)；目前影片存取受阻，尚未完成內容核實。
 
-本版更新：正式整合已通過的提案04，加入番茄、茄子、獨立水槽蓮藕，三種設施正式外觀，以及艾德里克、素月各四個主要方向的行走圖。沿用0.25的莊園經營功能。詳見 [0.26操作、存檔與驗證](docs/SUMMER_026.md)。手機實測修正暫緩，上架準備未開始。
+本版更新：補齊九位居民四向步態與工作／交流／歇腳日程，加入三道夏季料理、季節委託與喜好、養殖日常提示、農舍收納及每日小歇，並統一牧場道路色調。詳見[0.27操作、驗證與限制](docs/LIVING_027.md)。手機實測修正暫緩，上架準備未開始。
 
-[下載Android 0.26 APK](https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.26.0/arise-0.26.0.apk) · [畫面與驗證紀錄](https://github.com/SugarSaiyajin/ARISE/tree/delivery/android-0.26.0)
+[下載Android 0.27 APK](https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/arise-0.27.0.apk) · [畫面與驗證紀錄](https://github.com/SugarSaiyajin/ARISE/tree/delivery/android-0.27.0)
 
-![觸控版介面，桌面Godot渲染](docs/summer-0.26-farm.png)
+![觸控版介面，桌面Godot渲染](docs/living-0.27-town.png)
 
 ## 啟動
 
@@ -112,7 +112,7 @@ Godot 編輯器可從「專案 → 開啟使用者資料資料夾」找到存檔
     python3 tools/setup_android.py
     python3 tools/build_android.py
 
-輸出至 build/android/arise-prototype-0.26.0.apk，附帶 SHA256 與驗證報告。上一版 APK 保留供比較。工具與本機測試金鑰位於 checkout 外的 /workspace/toolchains；不會提交到 Git。
+輸出至 build/android/arise-prototype-0.27.0.apk，附帶 SHA256 與驗證報告。上一版 APK 保留供比較。工具與本機測試金鑰位於 checkout 外的 /workspace/toolchains；不會提交到 Git。
 
 APK 的建置與檔案檢查不代表已完成手機實測。正式上架前仍需裝置測試、發行簽署、AAB 與商店資料。iOS 尚未建立匯出預設，需要 macOS、Xcode 與 Apple 簽署。
 

@@ -64,24 +64,7 @@ static func resident(canvas: CanvasItem, feet: Vector2, index: int, height: floa
 	if index in [3,7]:
 		preload("res://scripts/summer_art.gd").resident(canvas,feet,index,height,idle_seconds,walk_seconds,direction)
 		return
-	var origin := feet
-	if idle_seconds>=0:
-		canvas.draw_set_transform(feet,0,idle_scale(idle_seconds+index*0.6))
-		origin=Vector2.ZERO
-	var data: Array=R.FRAMES[index/3][index%3]
-	var actual_height := height*(0.8 if index==5 else 1.0)
-	if walk_seconds<0:
-		sprite(canvas,RESIDENTS,data,origin,actual_height)
-	else:
-		var source := region(data)
-		var factor: float=actual_height/(data[5]-4.0)
-		var target := Rect2((origin-Vector2(data[4],data[5])*factor).floor(),source.size*factor)
-		var upper := source.size.y*0.73
-		canvas.draw_texture_rect_region(RESIDENTS,Rect2(target.position,Vector2(target.size.x,upper*factor)),Rect2(source.position,Vector2(source.size.x,upper)))
-		for leg in range(2):
-			var offset := sin(walk_seconds*TAU*2.5+leg*PI)*actual_height*0.025
-			canvas.draw_texture_rect_region(RESIDENTS,Rect2(target.position+Vector2(leg*target.size.x/2,upper*factor+offset),Vector2(target.size.x/2,target.size.y-upper*factor)),Rect2(source.position+Vector2(leg*source.size.x/2,upper),Vector2(source.size.x/2,source.size.y-upper)))
-	if idle_seconds>=0: canvas.draw_set_transform(Vector2.ZERO)
+	preload("res://scripts/resident_walk_art.gd").draw(canvas,feet,index,height,idle_seconds,walk_seconds,direction)
 
 static func building(canvas: CanvasItem, index: int, rectangle: Rect2) -> void:
 	var source := region(B.FRAMES[index/4][index%4])
@@ -132,6 +115,9 @@ static func ground(canvas: CanvasItem, town: bool = false) -> void:
 		calm_tile(canvas,1,Rect2(34,123,412,41))
 		calm_tile(canvas,1,Rect2(178,104,66,99))
 		calm_tile(canvas,1,Rect2(292,132,148,80))
+		# Quiet moss edging ties the warm plaza to the approved jade buildings.
+		for edge in [Rect2(34,123,210,1),Rect2(34,163,210,1),Rect2(292,132,148,1),Rect2(292,211,148,1)]:
+			canvas.draw_rect(edge,Color("6f836544"))
 		tile(canvas,3,Rect2(247,42,37,190))
 		calm_tile(canvas,1,Rect2(247,138,37,18))
 	else:

@@ -12,13 +12,13 @@ const SLOTS := [Vector2(50,155),Vector2(54,181),Vector2(290,168),Vector2(432,154
 const DECOR := ["空白","木圍欄","精靈燈罩","庭園小樹"]
 const COSTS := [{},{"wood":2},{"stone":2,"wood":1},{"wood":1,"herb":2}]
 const LIKES := {
-	"npc":["produce:tea","life:honey_tea"],"shop":["produce:berry","life:star_lantern"],
-	"smith":["materials:stone","life:jade_charm"],"edric":["produce:wheat","life:wool_blanket"],
+	"npc":["produce:tomato","produce:tea","life:honey_tea"],"shop":["produce:berry","life:star_lantern"],
+	"smith":["produce:eggplant","materials:stone","life:jade_charm"],"edric":["produce:wheat","life:wool_blanket"],
 	"lyria":["produce:tea","life:moon_cloth"],"borin":["materials:stone","life:wool_blanket"],
-	"yunji":["materials:herb","life:jade_charm"],"suyue":["materials:herb","life:honey_tea"],
+	"yunji":["materials:herb","life:jade_charm"],"suyue":["produce:lotus","materials:herb","life:honey_tea"],
 	"qinglin":["produce:berry","life:moon_cloth"]}
 const GIFTS := ["produce:tea","produce:berry","produce:wheat","materials:herb","materials:stone",
-	"life:moon_cloth","life:honey_tea","life:wool_blanket","life:jade_charm","life:star_lantern"]
+	"life:moon_cloth","life:honey_tea","life:wool_blanket","life:jade_charm","life:star_lantern","produce:tomato","produce:eggplant","produce:lotus"]
 const CLUES := [Vector2(205,152),Vector2(275,162),Vector2(419,187)]
 const CLUE_TITLES := [["異鄉茶苗","月葉泉記","林居共栽碑"],["舊橋釘","冷卻水槽","雙語工匠印"],["清泉測石","藥田札記","靈脈水聲"],["東西商道圖","舊秤砣","共榮商約"]]
 const CLUE_TEXT := [

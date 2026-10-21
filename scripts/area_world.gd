@@ -88,12 +88,15 @@ func blocked(p: Vector2) -> bool:
 
 func draw_resident(id: String, p: Vector2) -> void:
 	var moving: bool=people_moving and resident_position(id,state.minute+0.1).distance_to(p)>0.01
-	ApprovedArt.resident(self,p,{"npc":0,"shop":1,"smith":2}[id],30,elapsed,elapsed if moving else -1)
+	ApprovedArt.resident(self,p,{"npc":0,"shop":1,"smith":2}[id],30,elapsed,elapsed if moving else -1,(resident_position(id,state.minute+0.1)-p).normalized())
 
 func draw_interior() -> void:
 	draw_rect(Rect2(0,0,480,270),Color("263b35"))
 	draw_rect(Rect2(100,51,280,164),Color("795b40"))
+	var theme: int=state.home["theme"]
 	ApprovedArt.calm_tile(self,2,Rect2(108,79,264,132))
+	if theme>0: draw_rect(Rect2(108,79,264,132),Color(0.7,0.53,0.3,0.1) if theme==1 else Color(0.15,0.45,0.35,0.1))
+	draw_rect(Rect2(106,79,266,2),Color("688474") if theme!=1 else Color("b89a61"))
 	draw_rect(Rect2(106,53,268,26),Color("e2d2ad"))
 	for x in [108,196,284,370]: draw_rect(Rect2(x,53,4,28),Color("74543c"))
 	for x in [136,266]:
@@ -119,6 +122,8 @@ func _draw() -> void:
 		label_at(Vector2(329, 75), "床鋪")
 		label_at(Vector2(170, 78), "莊園手札")
 		label_at(Vector2(136, 134), "爐灶")
+		label_at(Vector2(168, 158), "收納箱")
+		label_at(Vector2(234, 126), "茶桌小歇")
 		label_at(Vector2(239, 210), "出門 ↓")
 		var glow := 0.12 + sin(elapsed * 5) * 0.025
 		draw_rect(Rect2(114, 147, 22, 22), Color(0.9, 0.58, 0.26, glow))

@@ -1,0 +1,114 @@
+{
+  "qinghe": {
+    "sha256": "a27fb75443987516eb308344b28789532df828d9d75c910ca5c87b7ec61956ba",
+    "original_size": [
+      1254,
+      1254
+    ],
+    "source_preserved": true,
+    "approval": "approved resident identities, production walking extension",
+    "frames_used": 16,
+    "directions": [
+      "south",
+      "west",
+      "east",
+      "north"
+    ]
+  },
+  "luoan": {
+    "sha256": "c92a854fcc30adf0b6bc5f30b4075156d5094b57d157234889f2c900982adf68",
+    "original_size": [
+      1254,
+      1254
+    ],
+    "source_preserved": true,
+    "approval": "approved resident identities, production walking extension",
+    "frames_used": 16,
+    "directions": [
+      "south",
+      "west",
+      "east",
+      "north"
+    ]
+  },
+  "rein": {
+    "sha256": "d150eb352704b55b82d196d3c48ded6fbed47b79efef08ad8ea857761271c722",
+    "original_size": [
+      1254,
+      1254
+    ],
+    "source_preserved": true,
+    "approval": "approved resident identities, production walking extension",
+    "frames_used": 16,
+    "directions": [
+      "south",
+      "west",
+      "east",
+      "north"
+    ]
+  },
+  "lyria": {
+    "sha256": "4a3a82388c0ce038036e08c604e9427442823879ce6d709a975f03651f40d559",
+    "original_size": [
+      1254,
+      1254
+    ],
+    "source_preserved": true,
+    "approval": "approved resident identities, production walking extension",
+    "frames_used": 16,
+    "directions": [
+      "south",
+      "west",
+      "east",
+      "north"
+    ]
+  },
+  "borin": {
+    "sha256": "573b80c0513dbca46a5e50f4858fcc796e3cafb4f406239e89f67fc81c97841e",
+    "original_size": [
+      1254,
+      1254
+    ],
+    "source_preserved": true,
+    "approval": "approved resident identities, production walking extension",
+    "frames_used": 16,
+    "directions": [
+      "south",
+      "west",
+      "east",
+      "north"
+    ]
+  },
+  "yunji": {
+    "sha256": "cac051713bb27923c18aa3c9c3e60738f19a3735f0bf754cb26b0c2b149815fb",
+    "original_size": [
+      1254,
+      1254
+    ],
+    "source_preserved": true,
+    "approval": "approved resident identities, production walking extension",
+    "frames_used": 16,
+    "directions": [
+      "south",
+      "west",
+      "east",
+      "north"
+    ]
+  },
+  "qinglin": {
+    "sha256": "dbe84a98896dad48d205095bd9ecaee2493d9c00ebfb2deea90f0773f8139792",
+    "original_size": [
+      1254,
+      1254
+    ],
+    "source_preserved": true,
+    "approval": "approved resident identities, production walking extension",
+    "frames_used": 16,
+    "directions": [
+      "south",
+      "west",
+      "east",
+      "north"
+    ]
+  }
+}

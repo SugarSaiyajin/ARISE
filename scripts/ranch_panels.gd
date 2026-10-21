@@ -130,7 +130,7 @@ func visitor(id: String) -> void:
 		game.toast(answer["text"])
 		return
 	var d: Dictionary = DATA.RESIDENTS[id]
-	var card: Panel = game._open_modal(d["name"]+" · "+d["role"],"好感 %d · 每日初次交談增加一次" % game.state.ranch["friends"][id])
+	var card: Panel = game._open_modal(d["name"]+" · "+d["role"],"好感 %d · %s" % [game.state.ranch["friends"][id],DATA.visitor_activity(id,game.state.area_id,game.state.minute,game.state.is_raining())])
 	ART.icon(card,ART.RESIDENTS,ART.R.FRAMES[d["sprite"]/3][d["sprite"]%3],Rect2(28,100,92,155))
 	game._paragraph(card,game.state.ESTATE.daily_line(game.state,id)+("\n\n雨天路滑，走動時記得小心。" if game.state.is_raining() else ""),Rect2(137,100,315,155)).add_theme_font_size_override("font_size",15)
 	game._button(card,"故事與委託",Rect2(28,282,204,46),game.life_panels.resident.bind(id),true)

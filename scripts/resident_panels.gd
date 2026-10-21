@@ -17,7 +17,7 @@ func show(id: String) -> void:
 	var text: String = s.talk() if id == "npc" else s.SPRING.talk(s,id)
 	if had_reward==s.reward_claimed: text=s.ESTATE.daily_line(s,id)
 	var friendship: int = s.friendship if id == "npc" else s.spring_progress["friends"][id]
-	var card: Panel = game._open_modal(game.State.RESIDENTS.NAMES[id] + " · 雲橋的日常", "好感 %d · %s" % [friendship,game.State.RESIDENTS.location_name(id,s.minute,s.is_raining())])
+	var card: Panel = game._open_modal(game.State.RESIDENTS.NAMES[id] + " · 雲橋的日常", "好感 %d · %s" % [friendship,game.State.RESIDENTS.activity(id,s.minute,s.is_raining())])
 	portrait(card,id)
 	var body: Label = game._paragraph(card,text,Rect2(132,98,320,122))
 	body.add_theme_font_size_override("font_size",14)

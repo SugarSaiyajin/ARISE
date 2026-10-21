@@ -104,7 +104,8 @@ func person(id: String) -> void:
 	game._button(card,"重讀已完成回憶",Rect2(248,354,204,44),replay.bind(id))
 
 func gifts(id: String, page: int = 0) -> void:
-	page=posmod(page,4)
+	var pages: int=game.inventory_panels.pages(RULES.GIFTS)
+	page=posmod(page,pages)
 	var card: Panel=game._open_modal("送禮給"+RULES.NAMES[RULES.PEOPLE.find(id)],"按下即送出一份；走近本人才能交付。",410)
 	for n in range(3):
 		var index := page*3+n
@@ -113,9 +114,9 @@ func gifts(id: String, page: int = 0) -> void:
 		var text := RULES.item_name(item)+" ×%d" % RULES.count(game.state,item)+(" ♥" if item in RULES.LIKES[id] else "")
 		var button: Button=game._button(card,text,Rect2(28,98+n*56,424,46),give.bind(id,item))
 		button.disabled=not RULES.near(game.state,id) or RULES.count(game.state,item)<1 or game.state.journey["gifts"][id]==game.state.day
-	game._button(card,"上一頁",Rect2(28,278,128,44),gifts.bind(id,posmod(page-1,4)))
-	game._label(card,"%d /4" % (page+1),Rect2(190,286,100,26))
-	game._button(card,"下一頁",Rect2(324,278,128,44),gifts.bind(id,(page+1)%4))
+	game._button(card,"上一頁",Rect2(28,278,128,44),gifts.bind(id,posmod(page-1,pages)))
+	game._label(card,"%d /%d" % [page+1,pages],Rect2(190,286,100,26))
+	game._button(card,"下一頁",Rect2(324,278,128,44),gifts.bind(id,(page+1)%pages))
 	game._button(card,"返回",Rect2(28,354,424,44),person.bind(id))
 
 func give(id: String, item: String) -> void:

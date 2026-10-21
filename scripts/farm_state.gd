@@ -1,6 +1,9 @@
 class_name FarmState
 extends RefCounted
 
+const HOME=preload("res://scripts/home_rules.gd")
+var home: Dictionary=HOME.empty()
+
 const SUMMER_GARDEN = preload("res://scripts/summer_garden.gd")
 var summer_garden: Dictionary = SUMMER_GARDEN.empty()
 
@@ -324,7 +327,8 @@ func collect_processing() -> Dictionary:
 	return {"ok": true, "text": "領取了 %d 份%s，可到出貨箱出售。" % [amount, PROCESSING.RECIPES[recipe]["name"]]}
 
 func daily_request_id() -> String:
-	return REQUESTS.ORDER[(day - 1) % REQUESTS.ORDER.size()]
+	var order: Array=REQUESTS.SUMMER if JOURNEY.season(day)=="夏" else REQUESTS.ORDER
+	return order[(day - 1) % order.size()]
 
 func accept_request() -> Dictionary:
 	if area_id != "town" or active_request != "" or request_completed_day == day:
@@ -524,6 +528,7 @@ func sleep() -> void:
 
 func to_data() -> Dictionary:
 	return {
+		"home": home.duplicate(true),
 		"summer_garden": summer_garden.duplicate(true),
 		"estate": estate.duplicate(true),
 		"journey": journey.duplicate(true),
@@ -610,6 +615,7 @@ func _valid_data(data: Variant) -> bool:
 		return false
 	if not ESTATE.valid(data.get("estate",ESTATE.empty()),data):
 		return false
+	if not HOME.valid(data.get("home",HOME.empty()),int(data["day"])): return false
 	if not SUMMER_GARDEN.valid(data.get("summer_garden",SUMMER_GARDEN.empty())): return false
 	if not data.get("plots") is Array or data["plots"].size() != COLS * ROWS:
 		return false
@@ -702,6 +708,7 @@ func _valid_processing(data: Dictionary) -> bool:
 	return true
 
 func _apply_data(data: Dictionary) -> void:
+	home=HOME.normalized(data.get("home",HOME.empty()))
 	summer_garden=data.get("summer_garden",SUMMER_GARDEN.empty()).duplicate(true)
 	summer_garden["growth"]=int(summer_garden["growth"])
 	day = int(data["day"])

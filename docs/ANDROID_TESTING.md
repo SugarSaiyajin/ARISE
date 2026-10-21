@@ -1,4 +1,12 @@
-# Android 手機試玩版 0.26
+# Android 手機試玩版 0.27
+
+## 0.27 新內容
+
+[下載0.27 APK](https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.27.0/arise-0.27.0.apk)。請覆蓋安裝，勿先解除安裝，以保留存檔。手機實測修正依使用者安排繼續暫緩。
+
+九名居民有四向步態，主角八方向保留。農舍木箱提供1／5份收成存取，茶桌每日可小歇20分鐘、回復最多8體力，並更換三種配色；爐灶第10–12道為夏季料理。季節委託由鎮上公告牌接取，青禾喜歡番茄、雷恩喜歡茄子、素月喜歡蓮藕。
+
+[本版操作與限制](LIVING_027.md) · [遊戲截圖與影片](https://github.com/SugarSaiyajin/ARISE/tree/delivery/android-0.27.0)
 
 ## 0.26 新內容
 
@@ -61,7 +69,7 @@
 
 ## 安裝
 
-安裝檔：build/android/arise-prototype-0.26.0.apk。0.14 與先前版本仍保留。
+安裝檔：build/android/arise-prototype-0.27.0.apk。0.14 與先前版本仍保留。
 
 新增試玩項目與養殖規則見 [雲橋靈牧 0.21](RANCH_021.md)。
 

@@ -14,7 +14,7 @@ func check(ok: bool, label: String) -> void:
 
 func _initialize() -> void:
 	var s := State.new()
-	check(State.CROP_DATA.SPRING.size()==8 and State.CROP_ORDER.size()==11 and State.PROCESSING.ORDER.size()==8 and State.COOKING.ORDER.size()==9,"complete spring content catalogs")
+	check(State.CROP_DATA.SPRING.size()==8 and State.CROP_ORDER.size()==11 and State.PROCESSING.ORDER.size()==8 and State.COOKING.ORDER.size()==12,"complete spring content catalogs")
 	for crop in State.CROP_ORDER:
 		check(State.CROPS[crop]["price"] > State.CROPS[crop]["seed_cost"] and State.CROPS[crop]["days"] in range(2,8),"crop has positive margin and defined growth")
 	var legacy := s.to_data()

@@ -37,10 +37,29 @@ static func visitor_position(id: String, area: String, minute: float, rain: bool
 		if visitor_area(key,minute,rain)==area: present.append(key)
 	var index := maxi(0,present.find(id))
 	var x := 110.0+index*110.0
-	return Vector2(x+(0 if rain else sin((minute-420)/35.0+index)*7),190)
+	if rain: return Vector2(x,190)
+	var phase := fposmod(minute-420+index*13,180.0)
+	var route := [[0,Vector2.ZERO],[45,Vector2.ZERO],[55,Vector2(16,0)],[100,Vector2(16,0)],[110,Vector2(16,10)],[125,Vector2(16,10)],[135,Vector2(0,10)],[145,Vector2.ZERO],[180,Vector2.ZERO]]
+	for step in range(1,route.size()):
+		if phase<=route[step][0]:
+			var previous: Array=route[step-1]
+			var next: Array=route[step]
+			return Vector2(x,190)+(previous[1] as Vector2).lerp(next[1],(phase-previous[0])/float(next[0]-previous[0]))
+	return Vector2(x,190)
 
 static func visitor_direction(id: String, area: String, minute: float, rain: bool) -> Vector2:
-	if rain: return Vector2.DOWN
+	if rain: return Vector2.ZERO
 	# Never derive motion across a schedule transition to another map.
-	if visitor_area(id,minute+0.1,rain)!=area: return Vector2.DOWN
+	if visitor_area(id,minute+0.1,rain)!=area: return Vector2.ZERO
 	return (visitor_position(id,area,minute+0.1,rain)-visitor_position(id,area,minute,rain)).normalized()
+
+static func visitor_activity(id: String, area: String, minute: float, rain: bool) -> String:
+	if rain: return "屋簷下整理物資"
+	var present: Array=[]
+	for key in VISITORS:
+		if visitor_area(key,minute,rain)==area: present.append(key)
+	var phase := fposmod(minute-420+maxi(0,present.find(id))*13,180.0)
+	if phase>=110 and phase<125: return "稍作歇腳"
+	if phase>=55 and phase<100: return "與街坊交流"
+	if (phase>=45 and phase<55) or (phase>=100 and phase<110) or (phase>=125 and phase<145): return "前往下一處"
+	return {"edric":"巡查路口","lyria":"整理花圃","borin":"檢查工具","yunji":"記錄泉水","suyue":"整理藥草","qinglin":"觀察林地"}[id]

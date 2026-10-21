@@ -4,9 +4,9 @@ const ORDER := ["npc", "shop", "smith"]
 const NAMES := {"npc": "青禾", "shop": "洛安", "smith": "雷恩"}
 const HOMES := {"npc": Vector2(108, 144), "shop": Vector2(367, 144), "smith": Vector2(331, 181)}
 const SCHEDULES := {
-	"npc": [[420, Vector2(108,144)], [600, Vector2(108,144)], [620, Vector2(190,144)], [760, Vector2(190,144)], [780, Vector2(108,144)], [1080, Vector2(108,144)], [1095, Vector2(190,144)], [1105, Vector2(190,180)], [1260, Vector2(190,180)], [1270, Vector2(190,144)], [1285, Vector2(108,144)], [1320, Vector2(108,144)]],
-	"shop": [[420, Vector2(367,144)], [600, Vector2(367,144)], [620, Vector2(300,147)], [760, Vector2(300,147)], [780, Vector2(367,144)], [1080, Vector2(367,144)], [1095, Vector2(430,147)], [1105, Vector2(430,180)], [1260, Vector2(430,180)], [1270, Vector2(430,147)], [1285, Vector2(367,144)], [1320, Vector2(367,144)]],
-	"smith": [[420, Vector2(331,181)], [600, Vector2(331,181)], [608, Vector2(315,181)], [620, Vector2(315,147)], [760, Vector2(315,147)], [772, Vector2(315,181)], [780, Vector2(331,181)], [1080, Vector2(331,181)], [1090, Vector2(315,181)], [1105, Vector2(315,147)], [1110, Vector2(300,147)], [1260, Vector2(300,147)], [1265, Vector2(315,147)], [1275, Vector2(315,181)], [1285, Vector2(331,181)], [1320, Vector2(331,181)]],
+	"npc": [[420, Vector2(108,144)], [600, Vector2(108,144)], [620, Vector2(190,144)], [760, Vector2(190,144)], [780, Vector2(108,144)], [900, Vector2(108,144)], [920, Vector2(190,144)], [960, Vector2(190,144)], [980, Vector2(108,144)], [1080, Vector2(108,144)], [1095, Vector2(190,144)], [1105, Vector2(190,180)], [1260, Vector2(190,180)], [1270, Vector2(190,144)], [1285, Vector2(108,144)], [1320, Vector2(108,144)]],
+	"shop": [[420, Vector2(367,144)], [600, Vector2(367,144)], [620, Vector2(300,147)], [760, Vector2(300,147)], [780, Vector2(367,144)], [900, Vector2(367,144)], [920, Vector2(300,147)], [960, Vector2(300,147)], [980, Vector2(367,144)], [1080, Vector2(367,144)], [1095, Vector2(430,147)], [1105, Vector2(430,180)], [1260, Vector2(430,180)], [1270, Vector2(430,147)], [1285, Vector2(367,144)], [1320, Vector2(367,144)]],
+	"smith": [[420, Vector2(331,181)], [600, Vector2(331,181)], [608, Vector2(315,181)], [620, Vector2(315,147)], [760, Vector2(315,147)], [772, Vector2(315,181)], [780, Vector2(331,181)], [900, Vector2(331,181)], [910, Vector2(315,181)], [920, Vector2(315,147)], [960, Vector2(315,147)], [970, Vector2(315,181)], [980, Vector2(331,181)], [1080, Vector2(331,181)], [1090, Vector2(315,181)], [1105, Vector2(315,147)], [1110, Vector2(300,147)], [1260, Vector2(300,147)], [1265, Vector2(315,147)], [1275, Vector2(315,181)], [1285, Vector2(331,181)], [1320, Vector2(331,181)]],
 }
 const EVENTS := {
 	"shop": {"title": "洛安 · 遠路的帳簿", "pages": [
@@ -31,6 +31,14 @@ static func position(id: String, minute: float, raining: bool = false) -> Vector
 	return HOMES[id]
 
 static func location_name(id: String, minute: float, raining: bool) -> String:
-	if raining or minute < 600 or (minute >= 780 and minute < 1080) or minute >= 1285:
+	if raining or minute < 600 or (minute >= 780 and minute < 900) or (minute>=980 and minute<1080) or minute >= 1285:
 		return {"npc": "茶館前", "shop": "種子攤前", "smith": "鍛冶鋪前"}[id]
 	return "廣場與橋邊" if minute < 780 else "晚間散步路線"
+
+static func activity(id: String, minute: float, rain: bool) -> String:
+	if rain: return "避雨整理物資"
+	if minute>=1285: return "收工整理"
+	if minute>=1080: return "橋邊散步與晚間閒談"
+	if minute>=900 and minute<980: return {"npc":"採買茶館食材","shop":"交換商隊物資","smith":"與街坊確認修繕"}[id]
+	if minute>=600 and minute<780: return "廣場交流"
+	return {"npc":"備茶與整理菜籃","shop":"整理種苗與帳簿","smith":"檢查農具與修繕"}[id]
