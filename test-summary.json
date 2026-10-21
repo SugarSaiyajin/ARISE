@@ -1,0 +1,26 @@
+{
+  "suite_maxima": {
+    "FARM TESTS": 121,
+    "PRESENTATION TESTS": 42,
+    "AREA TESTS": 143,
+    "FORAGE TESTS": 62,
+    "PROCESSING TESTS": 239,
+    "REQUEST TESTS": 53,
+    "LIVESTOCK TESTS": 65,
+    "EXPLORATION TESTS": 45,
+    "FISHING TESTS": 64,
+    "COOKING TESTS": 49,
+    "ACTION TESTS": 66,
+    "EIGHT DIRECTION TESTS": 114,
+    "CHARACTER PREVIEW TESTS": 113,
+    "LIFE TESTS": 209,
+    "LIFE SCENE TESTS": 82,
+    "RANCH TESTS": 476,
+    "RANCH SCENE TESTS": 208,
+    "SPRING TESTS": 834
+  },
+  "assertions_without_platform_rerun": 2985,
+  "desktop_and_mobile_smoke": "passed",
+  "audio_files": 12,
+  "physical_android_tested": false
+}
