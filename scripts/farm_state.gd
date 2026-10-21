@@ -1,6 +1,9 @@
 class_name FarmState
 extends RefCounted
 
+const ESTATE = preload("res://scripts/estate_rules.gd")
+var estate: Dictionary = ESTATE.empty()
+
 const JOURNEY = preload("res://scripts/journey_rules.gd")
 var journey: Dictionary = JOURNEY.empty()
 
@@ -158,6 +161,7 @@ func sell_all() -> Dictionary:
 	earnings += eggs * LIVESTOCK.EGG_PRICE
 	for species in FISHING.ORDER:
 		earnings += fish[species] * FISHING.FISH[species]["price"]
+	if ESTATE.has_facility(self,3): earnings=earnings*105/100
 	if earnings == 0:
 		return {"ok": false, "text": "行囊裡沒有可出貨的作物、成品、雞蛋或魚獲。"}
 	if money > 1000000000000-earnings or total_earned > 1000000000000-earnings:
@@ -486,7 +490,7 @@ func finish_fishing(caught: bool) -> Dictionary:
 func sleep() -> void:
 	JOURNEY.mark(self,"rest")
 	if life["irrigator"]:
-		for i in range(2):
+		for i in range(6 if ESTATE.has_facility(self,1) else 2):
 			if plots[i]["crop"]!="": plots[i]["watered"] = true
 	RANCH.advance(self)
 	cancel_fishing()
@@ -510,6 +514,7 @@ func sleep() -> void:
 
 func to_data() -> Dictionary:
 	return {
+		"estate": estate.duplicate(true),
 		"journey": journey.duplicate(true),
 		"life": life.duplicate(true), "ranch": ranch.duplicate(true), "hero_style":hero_style,
 		"version": SAVE_VERSION, "day": day, "minute": minute, "money": money,
@@ -591,6 +596,8 @@ func _valid_data(data: Variant) -> bool:
 	if not SPRING.valid(data.get("spring_progress", SPRING.empty_progress()), data):
 		return false
 	if not JOURNEY.valid(data.get("journey",JOURNEY.empty()),data):
+		return false
+	if not ESTATE.valid(data.get("estate",ESTATE.empty()),data):
 		return false
 	if not data.get("plots") is Array or data["plots"].size() != COLS * ROWS:
 		return false
@@ -726,6 +733,7 @@ func _apply_data(data: Dictionary) -> void:
 		fish[species] = int(fish[species])
 	fish_caught_today = int(data.get("fish_caught_today", 0))
 	meals = STOCKS.normalized(data.get("meals", {}), COOKING.ORDER)
+	estate = ESTATE.normalized(data.get("estate",ESTATE.empty()))
 	journey = JOURNEY.normalized(data.get("journey",JOURNEY.empty()))
 	life = LIFE.normalized(data.get("life",LIFE.empty()))
 	ranch = RANCH.normalized(data.get("ranch",RANCH.empty()))

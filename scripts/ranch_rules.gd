@@ -86,9 +86,11 @@ static func care(s: RefCounted, id: String) -> Dictionary:
 	if not on_site(s,id) or id == "hen":
 		return result(false,"母雞照料沿用餵食與巢箱，請選其他夥伴。")
 	var a: Dictionary = s.ranch["animals"][id]
-	if not a["owned"] or a["cared"] or s.energy < 1:
+	var energy_cost := 0 if s.ESTATE.has_facility(s,2) else 1
+	if not a["owned"] or a["cared"] or s.energy < energy_cost:
 		return result(false,"尚未領養、今天已照料，或體力不足。")
-	s.energy -= 1
+	s.energy -= energy_cost
+	s.estate["care_total"]=mini(100000000,s.estate["care_total"]+1)
 	a["cared"] = true
 	a["bond"] = mini(100,a["bond"]+1)
 	return result(true,"照料完成，好感增加。"+DATA.SPECIES[id]["hint"])

@@ -1,5 +1,11 @@
 extends Node2D
 
+const EstatePanels = preload("res://scripts/estate_panels.gd")
+var estate_panels: RefCounted
+var field_queue: Array[int]=[]
+var batch_running := false
+var batch_tool := 2
+
 const JourneyPanels = preload("res://scripts/journey_panels.gd")
 var journey_panels: RefCounted
 var mobile_preferences := preload("res://scripts/mobile_preferences.gd").new()
@@ -94,6 +100,7 @@ var preview_buttons: Array[Button] = []
 
 func _ready() -> void:
 	mobile_preferences.load_settings()
+	estate_panels = EstatePanels.new(self)
 	journey_panels = JourneyPanels.new(self)
 	testing_panels = TestingPanels.new(self)
 	var display_config := ConfigFile.new()
@@ -341,7 +348,7 @@ func _viewport_to_world(point: Vector2) -> Vector2:
 	return world.get_global_transform().affine_inverse() * point
 
 func _update_ui() -> void:
-	if is_instance_valid(stop_button): stop_button.visible = touch_mode and (not path.is_empty() or stick.finger>=0 or stick.mouse_down or stick.direction.length_squared()>0.01)
+	if is_instance_valid(stop_button): stop_button.visible = touch_mode and (batch_running or not path.is_empty() or stick.finger>=0 or stick.mouse_down or stick.direction.length_squared()>0.01)
 	var hour := int(state.minute) / 60
 	var mins := int(state.minute) % 60
 	clock_label.text = "%s %02d /28  %02d:%02d" % [state.JOURNEY.season(state.day),state.SPRING.season_day(state.day), hour, mins]
@@ -373,6 +380,7 @@ func _update_ui() -> void:
 	var first_task: String = state.JOURNEY.next_task(state)
 	if first_task!="" and state.area_id in ["farm","house"]:
 		quest_label.text = "入門 · "+state.JOURNEY.TASK_TEXT[state.JOURNEY.TASKS.find(first_task)]+" · 手札查看"
+	if batch_running: quest_label.text="批量"+TOOL_NAMES[batch_tool]+" · 剩餘%d格 · 可按停止中止" % field_queue.size()
 	var object := _near_object()
 	var action: String = {"fish": "釣魚", "route": "驛路", "relic": "查看", "inscription": "碑文", "coop": "雞舍", "dryer": "加工", "forest": "入林", "repair": "圍欄", "tea": "爐灶", "house": "進屋", "town": "進鎮", "farm": "返回", "bed": "休息", "journal": "手札", "notice": "公告", "smith": "交談", "box": "出貨", "shop": "商店", "npc": "交談"}.get(object, TOOL_NAMES[selected_tool] if state.area_id == "farm" else "探索")
 	for button in tool_buttons:
@@ -394,6 +402,7 @@ func _show_seed_list() -> void:
 	inventory_panels.seeds(maxi(0,State.CROP_ORDER.find(selected_crop))/3)
 
 func _select_tool(index: int) -> void:
+	clear_field_batch()
 	if index < 0 or index >= TOOLS.size():
 		return
 	selected_tool = index
@@ -452,6 +461,7 @@ func _process(delta: float) -> void:
 		if stick.direction.length() > 0:
 			direction = stick.direction
 		if direction.length() > 0:
+			clear_field_batch()
 			path.clear()
 			pending = {}
 			direction = direction.limit_length()
@@ -488,6 +498,9 @@ func _process(delta: float) -> void:
 	world.selected_plot = _target_plot()
 	if not was_working and not tool_action.active and (Input.is_physical_key_pressed(KEY_E) or action_button.is_held()) and work_cooldown <= 0:
 		_act()
+	if is_instance_valid(modal):
+		_update_ui()
+		return
 	state.minute += delta
 	if state.minute >= 1320:
 		_sleep()
@@ -500,6 +513,7 @@ func _process(delta: float) -> void:
 		var next_click: Vector2 = queued_click
 		queued_click = null
 		_click_world(next_click)
+	advance_field_batch()
 
 func _stop_moving() -> void:
 	_manual_control_started()
@@ -509,6 +523,7 @@ func _stop_moving() -> void:
 	_update_ui()
 
 func _manual_control_started() -> void:
+	clear_field_batch()
 	path.clear()
 	pending = {}
 	queued_click = null
@@ -585,7 +600,7 @@ func _click_world(point: Vector2) -> void:
 		_walk_to(point, {})
 
 func _walk_to(target: Vector2, task: Dictionary) -> void:
-	if touch_mode and not mobile_preferences.tap_navigation:
+	if touch_mode and not mobile_preferences.tap_navigation and not batch_running:
 		path.clear()
 		pending={}
 		if state.player_position.distance_to(target)>26:
@@ -639,6 +654,7 @@ func _near_object() -> String:
 	return nearest
 
 func _act() -> void:
+	clear_field_batch()
 	if tool_action.active or is_instance_valid(modal) or work_cooldown > 0 or travel_lock > 0:
 		return
 	path.clear()
@@ -678,6 +694,7 @@ func _work(index: int) -> void:
 	_update_ui()
 
 func _cancel_tool_action() -> void:
+	clear_field_batch()
 	tool_action.finish()
 	queued_click = null
 	if is_instance_valid(world):
@@ -690,6 +707,9 @@ func _find_resident(id: String) -> void:
 	_walk_to(world.interactions()[id],{"object":id})
 
 func _interact(object: String) -> void:
+	if object.begins_with("facility:"):
+		estate_panels.hub()
+		return
 	if object.begins_with("journey_clue:"):
 		journey_panels.clue(int(object.trim_prefix("journey_clue:")))
 		return
@@ -751,11 +771,7 @@ func _interact(object: String) -> void:
 		"smith":
 			_show_smith()
 		"box":
-			var result: Dictionary = state.ship_with_reserve()
-			toast(result["text"])
-			if result["ok"]:
-				audio_system.play_effect("coin")
-				_save(false)
+			estate_panels.shipping()
 		"shop":
 			if state.area_id == "town": resident_panels.show("shop")
 			else: _show_shop()
@@ -1317,7 +1333,7 @@ func _paragraph(parent: Node, text: String, rect: Rect2) -> Label:
 	return label
 
 func _show_intro() -> void:
-	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  春夏相知 0.24")
+	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  田園共作 0.25")
 	_paragraph(card, "一座舊莊園，一片等待照料的田地。\n\n① 澆水：照料左上角四株蕪菁。\n② 休息：進農舍，點床鋪睡到明天。\n③ 採收：成熟後採收，送往出貨箱。\n④ 探索：採集木石，建烘乾架加工收成。", Rect2(28, 98, 424, 175))
 	_button(card, "跟著入門任務", Rect2(28, 282, 204, 46), journey_panels.tutorial)
 	_button(card, "開始田園生活", Rect2(248, 282, 204, 46), _start_play, true)
@@ -1550,6 +1566,7 @@ func _run_smoke() -> void:
 	_smoke_work(0)
 	assert(state.produce["turnip"] == 1)
 	_smoke_walk(World.BOX)
+	estate_panels.confirm_shipping()
 	assert(state.money == 138)
 	_smoke_walk(World.SHOP)
 	assert(is_instance_valid(modal), "Clicking shop must open seed store")
@@ -1750,6 +1767,7 @@ func _smoke_processing() -> void:
 	_close_modal()
 	var before_sale: int = state.money
 	_smoke_walk(World.BOX)
+	estate_panels.confirm_shipping()
 	assert(state.money == before_sale + 84 and state.goods["dried_turnip"] == 0)
 	_save(false)
 	assert(loaded.load_game("user://smoke_session.json") and _smoke_saved_matches(loaded), "Sold goods and completed build persist")
@@ -1903,6 +1921,7 @@ func _smoke_livestock() -> void:
 	_close_modal()
 	var cash: int = state.money
 	_smoke_walk(World.BOX)
+	estate_panels.confirm_shipping()
 	assert(state.money == cash + 56 and state.eggs == 0 and state.chickens == 1)
 	_save(false)
 	assert(loaded.load_game("user://smoke_session.json") and _smoke_saved_matches(loaded))
@@ -2070,6 +2089,7 @@ func _smoke_fishing() -> void:
 	travel_lock = 0
 	var money_before: int = state.money
 	_smoke_walk(World.BOX)
+	estate_panels.confirm_shipping()
 	assert(state.money == money_before + 152 and state.fish.values().all(func(n): return n == 0))
 
 func _smoke_cooking() -> void:
@@ -2147,6 +2167,7 @@ func _smoke_cooking() -> void:
 	_close_modal()
 	var cash: int = state.money
 	_smoke_walk(World.BOX)
+	estate_panels.confirm_shipping()
 	assert(state.money == cash + 48 and state.meals["turnip_soup"] == 1, "Shipping retains cooked food")
 	_save(false)
 	assert(loaded.load_game("user://smoke_session.json") and _smoke_saved_matches(loaded))
@@ -2179,3 +2200,57 @@ func _smoke_walk(point: Vector2) -> void:
 		_process(1.0 / 30.0)
 		frames += 1
 	assert(path.is_empty(), "Click-to-walk must finish")
+
+func field_batch_plan(tool: String) -> Dictionary:
+	var copy: RefCounted=state.ESTATE.clone(state)
+	var indices: Array[int]=[]
+	var reason := ""
+	for index in state.ESTATE.field_targets(state,tool):
+		var result: Dictionary=copy.work(index,tool)
+		if not result["ok"]:
+			reason=result["text"]
+			break
+		indices.append(index)
+	return {"ids":indices,"energy":state.energy-copy.energy,"text":reason if reason!="" else "只安排已種植的待澆田格，或已成熟的作物。"}
+
+func start_field_batch(tool: String) -> void:
+	var plan := field_batch_plan(tool)
+	_close_modal()
+	_stop_moving()
+	if plan["ids"].is_empty():
+		toast("沒有可安排的田間作業。")
+		return
+	field_queue.assign(plan["ids"])
+	batch_running=true
+	batch_tool=2 if tool=="water" else 3
+	advance_field_batch()
+
+func clear_field_batch() -> void:
+	if batch_running:
+		path.clear()
+		pending={}
+		queued_click=null
+	field_queue.clear()
+	batch_running=false
+
+func advance_field_batch() -> void:
+	if not batch_running or tool_action.active or not path.is_empty() or not pending.is_empty(): return
+	if state.area_id!="farm" or is_instance_valid(modal):
+		clear_field_batch()
+		return
+	if field_queue.is_empty():
+		clear_field_batch()
+		toast("這輪田間作業已完成。")
+		return
+	selected_tool=batch_tool
+	var index: int=field_queue.pop_front()
+	var check_copy: RefCounted=state.ESTATE.clone(state)
+	var result: Dictionary=check_copy.work(index,TOOLS[batch_tool])
+	if not result["ok"]:
+		clear_field_batch()
+		toast("作業已停止："+result["text"])
+		return
+	_walk_to(world.plot_center(index),{"plot":index})
+	if path.is_empty() and not tool_action.active:
+		clear_field_batch()
+		toast("無法走近下一塊田，作業已停止。")

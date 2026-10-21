@@ -10,7 +10,7 @@ func hub() -> void:
 	for i in range(entries.size()):
 		game._button(card,entries[i][0],Rect2(28,98+i*48,424,44),entries[i][1],i==0)
 	game._button(card,"第一章與春日回憶",Rect2(28,400,204,44),game.spring_panels.hub)
-	game._button(card,"繼續生活",Rect2(248,400,204,44),game._close_modal)
+	game._button(card,"經營總覽",Rect2(248,400,204,44),game.estate_panels.hub)
 
 func tutorial() -> void:
 	var s: RefCounted=game.state
@@ -100,7 +100,7 @@ func person(id: String) -> void:
 	game._button(card,"選擇禮物",Rect2(28,284,204,44),gifts.bind(id))
 	var tier: int=mini(2,s.journey["events"][id]+1)
 	game._button(card,"信賴回憶" if tier==1 else "知心回憶",Rect2(248,284,204,44),event.bind(id,tier,0),true)
-	game._button(card,"關係名冊",Rect2(28,354,204,44),people)
+	game._button(card,"一起活動",Rect2(28,354,204,44),game.estate_panels.activity_choices.bind(id))
 	game._button(card,"重讀已完成回憶",Rect2(248,354,204,44),replay.bind(id))
 
 func gifts(id: String, page: int = 0) -> void:

@@ -70,6 +70,7 @@ func _run() -> void:
 	await _wait(0.7)
 	game._close_modal()
 	await _walk(game.World.BOX)
+	game.estate_panels.confirm_shipping()
 	assert(game.state.money == 144 and game.state.goods["dried_turnip"] == 0)
 	assert(game.audio_system.music.playing)
 	await _wait(0.7)

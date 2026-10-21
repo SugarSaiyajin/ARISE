@@ -13,7 +13,9 @@ func portrait(card: Panel, id: String) -> void:
 func show(id: String) -> void:
 	if id not in game.State.RESIDENTS.ORDER: return
 	var s: RefCounted = game.state
+	var had_reward: bool=s.reward_claimed
 	var text: String = s.talk() if id == "npc" else s.SPRING.talk(s,id)
+	if had_reward==s.reward_claimed: text=s.ESTATE.daily_line(s,id)
 	var friendship: int = s.friendship if id == "npc" else s.spring_progress["friends"][id]
 	var card: Panel = game._open_modal(game.State.RESIDENTS.NAMES[id] + " · 雲橋的日常", "好感 %d · %s" % [friendship,game.State.RESIDENTS.location_name(id,s.minute,s.is_raining())])
 	portrait(card,id)

@@ -84,6 +84,7 @@ func _run() -> void:
 	await _wait(0.5)
 	game._close_modal()
 	await _walk(game.World.BOX)
+	game.estate_panels.confirm_shipping()
 	assert(game.state.money == 72 and game.state.fish["silver_carp"] == 0)
 	await _wait(0.2)
 	await _capture("shipped")

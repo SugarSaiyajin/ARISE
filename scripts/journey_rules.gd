@@ -132,6 +132,9 @@ static func finish_event(s: RefCounted, id: String, tier: int) -> Dictionary:
 static func decorate(s: RefCounted, slot: int, kind: int) -> Dictionary:
 	if s.area_id!="farm" or slot<0 or slot>=6 or kind<0 or kind>3 or s.journey["decor"][slot]==kind:
 		return result(false,"請在莊園選擇不同的庭園配置。")
+	if kind>0:
+		for site in range(3):
+			if s.estate["fixtures"][site]>0 and s.ESTATE.FOOTPRINTS[site].grow(5).has_point(SLOTS[slot]): return result(false,"這處已被設施占用，請另選裝飾位置。")
 	for key in COSTS[kind]:
 		if s.materials[key]<COSTS[kind][key]: return result(false,"素材不足；原配置已保留。")
 	for key in COSTS[kind]: s.materials[key]-=COSTS[kind][key]

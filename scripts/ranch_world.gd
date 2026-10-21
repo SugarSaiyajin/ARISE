@@ -85,6 +85,9 @@ func _draw() -> void:
 				point.y+=sin(elapsed*8)*1.5
 				for seed in range(4): r(point.x-4+seed*3,point.y+3,1,1,"e4ce87")
 			if resting: label_at(point-Vector2(0,28),"z · z")
+			if effect=="collect":
+				var icon_index: int=DATA.ORDER.find(id)
+				draw_texture_rect_region(ART.ITEMS,Rect2(point-Vector2(6,37),Vector2(12,12)),ART.region(ART.I.FRAMES[1][icon_index]))
 			if effect=="care":
 				r(point.x-3,point.y-31,3,3,"e7a4a1")
 				r(point.x+1,point.y-31,3,3,"e7a4a1")

@@ -45,6 +45,7 @@ var elapsed := 0.0
 var previous_minute := -1.0
 var people_moving := false
 var terrain_layer: Node2D
+var fixture_preview: Dictionary = {}
 var walk_time := 0.0
 var particles: Array = []
 var font: Font
@@ -63,7 +64,11 @@ func _ready() -> void:
 		add_child(terrain_layer)
 
 func interactions() -> Dictionary:
-	return MAP.anchors.duplicate()
+	var result: Dictionary=MAP.anchors.duplicate()
+	if state!=null:
+		for site in range(3):
+			if state.estate["fixtures"][site]>0: result["facility:%d" % site]=state.ESTATE.ANCHORS[site]
+	return result
 
 func interaction_hitbox(id: String) -> Rect2:
 	return MAP.hitboxes.get(id, Rect2(interactions()[id] - Vector2(15,32), Vector2(30,42)))
@@ -96,6 +101,9 @@ func blocked(p: Vector2) -> bool:
 	for rect in MAP.obstacles:
 		if rect.grow(3).has_point(p):
 			return true
+	if state!=null:
+		for site in range(3):
+			if state.estate["fixtures"][site]>0 and state.ESTATE.FOOTPRINTS[site].grow(3).has_point(p): return true
 	for tree_pos in TREE_POINTS:
 		if Rect2(tree_pos - Vector2(3, 3), Vector2(6, 6)).has_point(p):
 			return true
@@ -204,6 +212,8 @@ func crop_at(index: int, p: Dictionary) -> void:
 	var row := State.CROP_ORDER.find(p["crop"])
 	var stage: int = 3 if state.is_mature(p) else mini(int(p["growth"] * 3.0 / State.CROPS[p["crop"]]["days"]), 2)
 	CropVisual.draw(self,p["crop"],center,stage)
+	if selected_plot==index and p["crop"]!="":
+		hint_at(center-Vector2(0,21),"可採收" if state.is_mature(p) else ("待澆水" if not p["watered"] else "已澆水"))
 	if state.is_mature(p) and int(elapsed * 2 + index) % 4 == 0:
 		r(center.x + 5, center.y - 15, 1, 3, "fff0b7")
 		r(center.x + 4, center.y - 14, 3, 1, "fff0b7")
@@ -216,6 +226,8 @@ func _depth_layer() -> void:
 		{"y": actor.y, "kind": "hero"},
 		{"y": 183.0, "kind": "dryer"},
 	]
+	for site in range(3):
+		if state.estate["fixtures"][site]>0: objects.append({"y":state.ESTATE.SITES[site].y,"kind":"facility","site":site})
 	for i in range(state.chickens):
 		var point := Vector2(333 + (i % 2) * 16, 187 + (i / 2) * 10) + Vector2(sin(elapsed * 1.5 + i * 2) * 2, 0)
 		objects.append({"y": point.y, "kind": "hen", "p": point, "i": i})
@@ -227,6 +239,7 @@ func _depth_layer() -> void:
 	objects.sort_custom(func(a: Dictionary, b: Dictionary): return a["y"] < b["y"])
 	for item in objects:
 		match item["kind"]:
+			"facility": preload("res://scripts/estate_art.gd").facility(self,item["site"],state.estate["fixtures"][item["site"]])
 			"coop":
 				ApprovedArt.building(self,5,Rect2(315,141,56,48))
 			"hen":
@@ -286,6 +299,7 @@ func _draw() -> void:
 			r(x + 2, 202, 3, 6, "7f7155")
 	label_at(Vector2(330, 213), "圍欄已修復" if state.fence_repaired else "待修圍欄")
 	_depth_layer()
+	if not fixture_preview.is_empty(): preload("res://scripts/estate_art.gd").facility(self,fixture_preview["site"],fixture_preview["kind"],true,fixture_preview["legal"])
 	if state.life["irrigator"]:
 		r(138,104,11,4,"9b774f")
 		r(141,96,5,10,"719c96")
@@ -316,6 +330,11 @@ func _draw() -> void:
 		draw_rect(Rect2(particle["p"].floor(), Vector2(2, 2)), particle["color"])
 	if action_age < ACTION_DURATION:
 		var progress := action_age / ACTION_DURATION
+		if progress>0.45 and progress<0.9:
+			var strength := sin((progress-0.45)/0.45*PI)
+			draw_arc(action_target-Vector2(0,2),3+progress*4,0,TAU,16,Color(0.84,0.79,0.51,strength*0.7),1)
+			if action_tool==0:
+				for speck in range(4): r(action_target.x-5+speck*3,action_target.y-3-strength*(2+speck%2),2,1,"bda06d")
 		if action_tool == 2:
 			for i in range(5):
 				var p := actor.lerp(action_target, progress) + Vector2(i - 2, -6 + progress * 6)
@@ -323,11 +342,8 @@ func _draw() -> void:
 		elif action_tool == 3:
 			var row := State.CROP_ORDER.find(action_crop)
 			var p := action_target - Vector2(8, 14 + sin(progress * PI) * 12)
-			if row >= 3:
-				CropVisual.draw(self,action_crop,p+Vector2(8,12),3)
-			else:
-				draw_texture_rect_region(CROPS, Rect2(p.floor(), Vector2(16, 16)),
-					Rect2(3 * 24 + 4, row * 24 + 4, 16, 16))
+			CropVisual.draw(self,action_crop,p+Vector2(8,12),3)
+			label_at(p-Vector2(-8,4),"+1")
 	if state.JOURNEY.season(state.day)=="夏" and not state.is_raining():
 		draw_rect(Rect2(0,40,480,180),Color("f4dc7420"))
 	if state.is_raining():

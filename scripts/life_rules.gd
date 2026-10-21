@@ -55,6 +55,7 @@ static func collect(s: RefCounted) -> Dictionary:
 	else:
 		if s.life["stock"][id]>=LIMIT: return answer(false,"工藝行囊已滿，成品仍由工坊保管。")
 		s.life["stock"][id]+=1
+	s.estate["craft_total"]=mini(100000000,s.estate["craft_total"]+1)
 	s.life["job"]={}
 	return answer(true,"已領取"+DATA.RECIPES[id]["name"]+("，每晚會替前兩格作物補水。" if id=="irrigator" else "，可保留或回莊園出貨。"))
 

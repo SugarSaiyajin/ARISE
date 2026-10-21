@@ -85,6 +85,7 @@ func _run() -> void:
 	await _wait(0.7)
 	game._close_modal()
 	await _walk(game.World.BOX)
+	game.estate_panels.confirm_shipping()
 	assert(game.state.money == 168 and game.state.meals["turnip_soup"] == 1)
 	game._show_meals()
 	await _capture("retained")

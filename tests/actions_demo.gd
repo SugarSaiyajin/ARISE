@@ -99,6 +99,7 @@ func _run() -> void:
 	await _wait(0.4)
 	assert(game.path.is_empty() and game.state.energy == energy)
 	await _walk(game.World.BOX)
+	game.estate_panels.confirm_shipping()
 	assert(game.state.money == 138 and game.state.produce["turnip"] == 0)
 	await _capture("farm")
 	await _wait(0.8)
