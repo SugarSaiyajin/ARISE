@@ -388,6 +388,7 @@ func _update_ui() -> void:
 	seed_button.disabled = state.area_id != "farm"
 	if object.begins_with("gather:"):
 		action = "明日再來" if state.gathered.has(object.trim_prefix("gather:")) else "採集"
+	if object.begins_with("facility:"): action="設施"
 	action_button.text = action + (("\n互動" if object != "" else "\n按住") if touch_mode else "\nE")
 	if tool_action.active:
 		action_button.text = "作業中\n" + TOOL_NAMES[tool_action.tool]

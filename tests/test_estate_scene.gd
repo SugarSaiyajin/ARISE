@@ -75,6 +75,9 @@ func run() -> void:
 		for i in range(28):
 			var target: Vector2=game.world.plot_center(i)
 			check(not game.world.blocked(target) and not game.navigation.get_point_path(start,Vector2i(target/8)).is_empty(),"facility configuration leaves all crop plots reachable")
+	game.state.player_position=Rules.ANCHORS[0]
+	game._update_ui()
+	check(game.action_button.text.begins_with("設施"),"new facility interaction is labelled as a facility rather than a farming tool")
 	game.state=State.new()
 	game._mount_area()
 	game._close_modal()
