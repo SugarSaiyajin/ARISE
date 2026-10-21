@@ -1,0 +1,25 @@
+{
+  "type": "staged desktop Godot with mobile UI; independent demonstration save, not physical device footage",
+  "width": 1280,
+  "height": 720,
+  "frames": 687,
+  "fps": "30/1",
+  "duration_seconds": 22.9,
+  "codec": "h264",
+  "pixel_format": "yuvj420p",
+  "source_log_error_free": true,
+  "screenshots": {
+    "autumn-0.29-calendar.png": "9dfbd66892b19a732bf2fbd02c50e23eb125a7edefb535465670e834417b2291",
+    "autumn-0.29-choice.png": "b40a206b4f562f299826d62d20094406a16b5f899100896798e7cd40c8c595bd",
+    "autumn-0.29-crops.png": "7f72c4a072b920e0cde69ad1139b40a6d4e84708f7609c548b0017bd7bb12cec",
+    "autumn-0.29-evening.png": "20eb4d5e7a0c962f354d1aef7eff065e558bc0f4aa1868aa906ab210c7fd7339",
+    "autumn-0.29-fair.png": "9265d122a759f1622d591c0f274620440b5d6526f4e8e1c8e98258a1dbcc2b0c",
+    "autumn-0.29-farm.png": "8c283f7fc13fc488df4792261edebe44cf236519c9a9ffb6b340c43312698b36",
+    "autumn-0.29-juice.png": "e7f4ab207286822eaee11f60cd687b811582242f974f039f6fda45a0ffc7932a",
+    "autumn-0.29-memory.png": "911d873cd1dfb4f5f97f31edc20f3143b970f6de025c40c85a9e208c9f21d08c",
+    "autumn-0.29-recipe.png": "e22182bbb1658c479d9250007e58118e9576e7eada9aeded351f014de292f14d",
+    "autumn-0.29-seeds.png": "8b2fd47a92cb4e5039a6d073fc8c6a5a2debc954223ca127b977c463aae65497",
+    "autumn-0.29-town.png": "b459324f854c7165abc12d4ee37b3434eb0d993658c87a6c50bc882773bd4f1a",
+    "autumn-0.29-workshop.png": "6da7e3979408a620c62bebe06bf183e7420cc8ec80c69b7582791b22fefb8a2e"
+  }
+}

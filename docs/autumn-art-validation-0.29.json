@@ -1,0 +1,32 @@
+{
+  "source_pngs_unchanged": true,
+  "concept_board_used_as_runtime_atlas": false,
+  "runtime_import_limit": 768,
+  "atlases": {
+    "objects.png": {
+      "sha256": "0856f2723f27db1405f4c8a2e09c6776018e245d12c2fde416ca4a6724905b05",
+      "source_dimensions": [
+        1536,
+        1024
+      ]
+    },
+    "crops.png": {
+      "sha256": "8027816d0ee21a8c0fd89e056f428451a2d6e4be940b7ef0fac72dbded70dddf",
+      "source_dimensions": [
+        1536,
+        1024
+      ]
+    }
+  },
+  "runtime_frames": {
+    "crop_growth_and_items": 15,
+    "scene_objects": 8
+  },
+  "existing_atlas_import_limits": {
+    "summer_crops": 768,
+    "suyue": 768,
+    "edric": 512
+  },
+  "geometry_tool": "tools/register_autumn_art.py",
+  "review_status": "Proposal05 explicitly approved by user"
+}
