@@ -1,0 +1,106 @@
+{
+  "capture": "Godot 4.6.3 desktop GLES3 with mobile UI and independent staged save",
+  "physical_android_tested": false,
+  "media": {
+    "chapter-0.28-blocked.png": {
+      "sha256": "373b5e190aa568f5a54361254ed45a2e1088907c4369c9bfb1b123efd2a578e1",
+      "size_bytes": 168873,
+      "decoded": true
+    },
+    "chapter-0.28-choice.png": {
+      "sha256": "9218d8334137f52208342000b7b35590a77a893a7e4ad037401dcf346f135bcb",
+      "size_bytes": 431933,
+      "decoded": true
+    },
+    "chapter-0.28-craft-delivery.png": {
+      "sha256": "b6b24c973d5f60e9d9e14bcc97c913f4c64023c2324248001cb1f7ddf6bb668d",
+      "size_bytes": 390270,
+      "decoded": true
+    },
+    "chapter-0.28-furniture-preview.png": {
+      "sha256": "7dd25ded91619282d624fb29a780d1641faea03b70947dfcafe3b6394b7530a3",
+      "size_bytes": 176493,
+      "decoded": true
+    },
+    "chapter-0.28-goals.png": {
+      "sha256": "d125fbd35babd7bcc8b9d94a1a90b59bbfda151cb3db91817b65146c93a2da84",
+      "size_bytes": 519393,
+      "decoded": true
+    },
+    "chapter-0.28-growth.png": {
+      "sha256": "e54777f15994ce6ef4bffca66376150ce9fffda175031df3fed1749fcf52164f",
+      "size_bytes": 397646,
+      "decoded": true
+    },
+    "chapter-0.28-hub.png": {
+      "sha256": "54eed4e26999680f40b651f755aff5b0931416bc74f6b1c6f58acc1e06eb66ee",
+      "size_bytes": 510584,
+      "decoded": true
+    },
+    "chapter-0.28-journey-done.png": {
+      "sha256": "aa49ba3c663ef232336869236e96b1d6102032bf57adb5b9c82efb80fddc09ec",
+      "size_bytes": 385101,
+      "decoded": true
+    },
+    "chapter-0.28-journey.png": {
+      "sha256": "a65bcaa3f695844434f6c1014c724e288478583145a357f59cb2f97d0a59de11",
+      "size_bytes": 388455,
+      "decoded": true
+    },
+    "chapter-0.28-milestone.png": {
+      "sha256": "697c761fa7c8fd2604c3d255bb25d3aba21c7c50f23e9d8423e91a5f2e48178a",
+      "size_bytes": 397393,
+      "decoded": true
+    },
+    "chapter-0.28-order-done.png": {
+      "sha256": "ab0e1b6f01015ee7a3d22bf28e60e9449727ba208bbde4adea53cec1c22fecfe",
+      "size_bytes": 507905,
+      "decoded": true
+    },
+    "chapter-0.28-order.png": {
+      "sha256": "cece1916ea16fcf5e4c037f51bfce40d4274036668e7cfac5616f64b7c29139e",
+      "size_bytes": 496746,
+      "decoded": true
+    },
+    "chapter-0.28-remembered.png": {
+      "sha256": "8b4c2d730c55a9e89a52322b7b39fed6a6a1ff7e269e3d69f4b165bbbeb2a5af",
+      "size_bytes": 431360,
+      "decoded": true
+    },
+    "chapter-0.28-room.png": {
+      "sha256": "7092de2ef1d3a764f5cb296886fbcdb4312f11561e26f0688784d61387b42e39",
+      "size_bytes": 275118,
+      "decoded": true
+    },
+    "chapter-0.28-rotation.png": {
+      "sha256": "5e17d271fee0742445d7fd42df3851164ec2def6195329f2607272a67f3a5edd",
+      "size_bytes": 176757,
+      "decoded": true
+    },
+    "chapter-0.28-story.png": {
+      "sha256": "269af98a792e522daf12459ee7337ecad72732747569c39fed51e3c063f4d020",
+      "size_bytes": 467192,
+      "decoded": true
+    },
+    "chapter-0.28-gameplay.mp4": {
+      "sha256": "5a54d9ebc98a1e327e4c238abc8d71a2a26aaee50f6db438da3c9feee260aa7d",
+      "size_bytes": 978227,
+      "probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 1280,
+            "height": 720,
+            "nb_frames": "471"
+          }
+        ],
+        "format": {
+          "duration": "15.700000",
+          "size": "978227"
+        }
+      }
+    }
+  }
+}
