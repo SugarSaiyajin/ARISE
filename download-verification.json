@@ -1,0 +1,26 @@
+{
+  "arise-0.23.0.apk": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.23.0/arise-0.23.0.apk",
+    "status": 200,
+    "bytes": 99048076,
+    "sha256": "97f31ee12718f9d79267d17b3ef8efa04007e8d56d78fe46c39eeef93a6e8b2a",
+    "matches_local": true,
+    "content_type": "application/octet-stream"
+  },
+  "backup.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.23.0/backup.png",
+    "status": 200,
+    "bytes": 516318,
+    "sha256": "051036d662acc520c09507c8f1e8ff2ef45f5a02e36acd53760840d37718447c",
+    "matches_local": true,
+    "content_type": "image/png"
+  },
+  "guide.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.23.0/guide.png",
+    "status": 200,
+    "bytes": 554822,
+    "sha256": "5d98c7e57ee06c1bd3514f11ae7fb58c71d23d90ec4b27cb48356bf8f897f9f7",
+    "matches_local": true,
+    "content_type": "image/png"
+  }
+}
