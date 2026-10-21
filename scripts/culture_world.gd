@@ -30,6 +30,7 @@ func resident_position(id: String) -> Vector2:
 
 func interactions() -> Dictionary:
 	var result := {"town":Vector2(240,207),"culture_craft":Vector2(180,169),"culture_gather":Vector2(360,183)}
+	for i in range(3): result["journey_clue:%d" % i]=state.JOURNEY.CLUES[i]
 	for id in RESIDENTS.VISITORS:
 		if RESIDENTS.visitor_area(id,state.minute,state.is_raining())==area_id: result["visitor:"+id]=resident_position(id)
 	return result
@@ -40,7 +41,6 @@ func interaction_hitbox(id: String) -> Rect2:
 func _draw() -> void:
 	if state==null: return
 	var index := place_index()
-	ApprovedArt.calm_tile(self,0,Rect2(0,0,480,270))
 	ApprovedArt.calm_tile(self,1 if index in [1,3] else 3,Rect2(35,172,410,32))
 	ApprovedArt.calm_tile(self,1,Rect2(225,112,30,104))
 	var building_ids := [[2,8],[9,3],[8,2],[1,4]]
@@ -73,8 +73,13 @@ func _draw() -> void:
 	for item in layers:
 		if item["id"]=="hero": person(actor)
 		else:
-			ApprovedArt.resident(self,item["p"],RESIDENTS.RESIDENTS[item["id"]]["sprite"],30,elapsed)
+			ApprovedArt.resident(self,item["p"],RESIDENTS.RESIDENTS[item["id"]]["sprite"],30,elapsed,elapsed if people_moving and not state.is_raining() else -1)
 			label_at(item["p"]-Vector2(0,34),RESIDENTS.RESIDENTS[item["id"]]["name"])
+	for i in range(3):
+		var point: Vector2=state.JOURNEY.CLUES[i]
+		r(point.x-3,point.y-8,6,8,"9c8058")
+		r(point.x-2,point.y-7,4,5,"d9cca2")
+		hint_at(point-Vector2(0,12),state.JOURNEY.CLUE_TITLES[index][i])
 	label_at(Vector2(180,160),"聚落工坊")
 	label_at(Vector2(360,179),"今日已採集" if state.life["gathered"][area_id]==state.day else "聚落採集")
 	label_at(Vector2(240,216),"返回雲橋鎮 ↓")

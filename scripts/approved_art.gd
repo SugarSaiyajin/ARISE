@@ -48,17 +48,36 @@ static func hero(canvas: CanvasItem, feet: Vector2, style: String, row: int, fra
 		canvas.draw_set_transform(feet,sin(idle_seconds*TAU/7)*0.008,idle_scale(idle_seconds))
 		origin = Vector2.ZERO
 	canvas.draw_texture_rect_region(hero_texture(style,row),Rect2((origin-Vector2(data[4],data[5])*factor).floor(),source.size*factor),source)
+	if idle_seconds>=0 and row==0 and frame==0 and fmod(idle_seconds,5.1)>4.94:
+		# Eye rectangles are registered to the approved front pose's source pixels.
+		var eyes := [Rect2(93,62,7,7),Rect2(117,61,8,8)] if style!="female" else [Rect2(125,74,6,5),Rect2(145,72,7,6)]
+		for eye in eyes:
+			var eyelid := Rect2(origin+(eye.position-source.position-Vector2(data[4],data[5]))*factor,eye.size*factor)
+			canvas.draw_rect(eyelid,Color("f4c38a"))
+			canvas.draw_line(eyelid.position+Vector2(0,eyelid.size.y*0.65),eyelid.position+Vector2(eyelid.size.x,eyelid.size.y*0.65),Color("65402b"),maxf(0.4,height*0.008))
 	if idle_seconds >= 0: canvas.draw_set_transform(Vector2.ZERO)
 
 static func animal(canvas: CanvasItem, feet: Vector2, index: int, frame: int, height: float = 22) -> void:
 	sprite(canvas,ANIMALS,A.FRAMES[index][frame],feet,height)
 
-static func resident(canvas: CanvasItem, feet: Vector2, index: int, height: float = 30, idle_seconds: float = -1) -> void:
+static func resident(canvas: CanvasItem, feet: Vector2, index: int, height: float = 30, idle_seconds: float = -1, walk_seconds: float = -1) -> void:
 	var origin := feet
 	if idle_seconds>=0:
 		canvas.draw_set_transform(feet,0,idle_scale(idle_seconds+index*0.6))
 		origin=Vector2.ZERO
-	sprite(canvas,RESIDENTS,R.FRAMES[index/3][index%3],origin,height*(0.8 if index==5 else 1.0))
+	var data: Array=R.FRAMES[index/3][index%3]
+	var actual_height := height*(0.8 if index==5 else 1.0)
+	if walk_seconds<0:
+		sprite(canvas,RESIDENTS,data,origin,actual_height)
+	else:
+		var source := region(data)
+		var factor: float=actual_height/(data[5]-4.0)
+		var target := Rect2((origin-Vector2(data[4],data[5])*factor).floor(),source.size*factor)
+		var upper := source.size.y*0.73
+		canvas.draw_texture_rect_region(RESIDENTS,Rect2(target.position,Vector2(target.size.x,upper*factor)),Rect2(source.position,Vector2(source.size.x,upper)))
+		for leg in range(2):
+			var offset := sin(walk_seconds*TAU*2.5+leg*PI)*actual_height*0.025
+			canvas.draw_texture_rect_region(RESIDENTS,Rect2(target.position+Vector2(leg*target.size.x/2,upper*factor+offset),Vector2(target.size.x/2,target.size.y-upper*factor)),Rect2(source.position+Vector2(leg*source.size.x/2,upper),Vector2(source.size.x/2,source.size.y-upper)))
 	if idle_seconds>=0: canvas.draw_set_transform(Vector2.ZERO)
 
 static func building(canvas: CanvasItem, index: int, rectangle: Rect2) -> void:
@@ -90,7 +109,8 @@ static func tile(canvas: CanvasItem, index: int, rect: Rect2) -> void:
 
 static func idle_scale(seconds: float) -> Vector2:
 	var phase := sin(seconds*TAU/3.4)
-	return Vector2(1+phase*0.006,1+phase*0.018)
+	var stretch := sin(clampf((fmod(seconds,12.0)-10.4)/1.6,0,1)*PI)
+	return Vector2(1+phase*0.006-stretch*0.02,1+phase*0.018+stretch*0.035)
 
 static func calm_tile(canvas: CanvasItem, index: int, rect: Rect2) -> void:
 	var source := Rect2(index*CALM.get_width()/4.0,0,CALM.get_width()/4.0,CALM.get_height())
@@ -123,3 +143,13 @@ static func ground(canvas: CanvasItem, town: bool = false) -> void:
 
 static func culture_building(canvas: CanvasItem, index: int, rect: Rect2) -> void:
 	canvas.draw_texture_rect_region(CULTURE,rect,region(CULTURE_FRAMES.FRAMES[index/2][index%2]))
+
+static func farm_ground(canvas: CanvasItem, layout: int) -> void:
+	ground(canvas)
+	if layout==1:
+		calm_tile(canvas,1,Rect2(128,192,182,19))
+		calm_tile(canvas,1,Rect2(275,116,14,92))
+	elif layout==2:
+		calm_tile(canvas,3,Rect2(128,110,180,10))
+		calm_tile(canvas,3,Rect2(274,113,15,99))
+		calm_tile(canvas,1,Rect2(70,186,64,26))

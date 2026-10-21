@@ -3,6 +3,7 @@ extends Control
 signal engaged
 signal released
 
+var deadzone := 0.25
 var direction := Vector2.ZERO
 var finger := -1
 var mouse_down := false
@@ -19,10 +20,10 @@ func update_pointer(p: Vector2) -> void:
 	if direction.length() > 1:
 		direction = direction.normalized()
 	var amount := direction.length()
-	if amount < 0.25:
+	if amount < deadzone:
 		direction = Vector2.ZERO
 	else:
-		direction = direction.normalized()*clampf((amount-0.25)/0.75,0,1)
+		direction = direction.normalized()*clampf((amount-deadzone)/(1.0-deadzone),0,1)
 	queue_redraw()
 
 func _gui_input(event: InputEvent) -> void:
@@ -31,7 +32,7 @@ func _gui_input(event: InputEvent) -> void:
 			finger = event.index
 			engaged.emit()
 			update_pointer(event.position)
-		elif not event.pressed and event.index == finger:
+		elif (not event.pressed or event.canceled) and event.index == finger:
 			release_pointer()
 		accept_event()
 	elif event is InputEventScreenDrag and event.index == finger:
@@ -63,7 +64,7 @@ func _input(event: InputEvent) -> void:
 		release_pointer()
 
 func _notification(what: int) -> void:
-	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED]:
+	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_VISIBILITY_CHANGED, NOTIFICATION_EXIT_TREE]:
 		release_pointer()
 
 func release_pointer() -> void:

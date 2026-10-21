@@ -1,6 +1,9 @@
 class_name FarmState
 extends RefCounted
 
+const JOURNEY = preload("res://scripts/journey_rules.gd")
+var journey: Dictionary = JOURNEY.empty()
+
 const LIFE = preload("res://scripts/life_rules.gd")
 const LIFE_DATA = preload("res://scripts/life_data.gd")
 const RANCH = preload("res://scripts/ranch_rules.gd")
@@ -75,7 +78,7 @@ func _init() -> void:
 	plots[2]["tilled"] = true
 
 func is_raining() -> bool:
-	return day % 4 == 0
+	return JOURNEY.rain(day)
 
 func is_mature(plot: Dictionary) -> bool:
 	return plot["crop"] != "" and plot["growth"] >= CROPS[plot["crop"]]["days"]
@@ -84,7 +87,7 @@ func work(index: int, tool: String, crop: String = "turnip") -> Dictionary:
 	if index < 0 or index >= plots.size():
 		return {"ok": false, "text": "請靠近田地再操作。"}
 	var p: Dictionary = plots[index]
-	var cost: int = 1 if tool in ["seed", "harvest"] else 2
+	var cost: int = 1 if tool in ["seed", "harvest"] or (tool=="water" and journey["tool_level"]==1) else 2
 	if energy < cost:
 		return {"ok": false, "text": "有點累了，回農舍睡一覺吧。"}
 	var message := ""
@@ -127,6 +130,7 @@ func work(index: int, tool: String, crop: String = "turnip") -> Dictionary:
 		_:
 			return {"ok": false, "text": "請選擇一項工具。"}
 	energy -= cost
+	JOURNEY.mark(self,tool)
 	return {"ok": true, "text": message}
 
 func buy(crop: String, amount: int = 1) -> Dictionary:
@@ -144,7 +148,7 @@ func buy(crop: String, amount: int = 1) -> Dictionary:
 func sell_all() -> Dictionary:
 	var earnings: int = 0
 	for crop in CROP_ORDER:
-		earnings += produce.get(crop, 0) * CROPS[crop]["price"]
+		earnings += produce.get(crop, 0) * JOURNEY.crop_price(self,crop)
 	for recipe in PROCESSING.ORDER:
 		earnings += goods.get(recipe, 0) * PROCESSING.RECIPES[recipe]["price"]
 	for id in RANCH_DATA.EXTRA:
@@ -170,6 +174,7 @@ func sell_all() -> Dictionary:
 		fish[species] = 0
 	money += earnings
 	total_earned += earnings
+	JOURNEY.mark(self,"ship")
 	return {"ok": true, "text": "商隊收走了作物、成品、養殖產物與魚獲，獲得 %d 銀幣。" % earnings}
 
 func talk() -> String:
@@ -479,6 +484,7 @@ func finish_fishing(caught: bool) -> Dictionary:
 	return {"ok": true, "text": "釣到了%s！可出貨 %d 銀，今日魚獲 %d / 3。" % [FISHING.FISH[species]["name"], FISHING.FISH[species]["price"], fish_caught_today]}
 
 func sleep() -> void:
+	JOURNEY.mark(self,"rest")
 	if life["irrigator"]:
 		for i in range(2):
 			if plots[i]["crop"]!="": plots[i]["watered"] = true
@@ -489,7 +495,7 @@ func sleep() -> void:
 	fed_chickens = 0
 	for p in plots:
 		if p["crop"] != "" and p["watered"]:
-			p["growth"] = mini(p["growth"] + 1, CROPS[p["crop"]]["days"])
+			p["growth"] = mini(p["growth"] + (2 if JOURNEY.season(day)=="夏" and day%3==0 and p["crop"] in ["berry","potato","tea"] else 1), CROPS[p["crop"]]["days"])
 	gathered.clear()
 	day += 1
 	if day >= 29:
@@ -504,6 +510,7 @@ func sleep() -> void:
 
 func to_data() -> Dictionary:
 	return {
+		"journey": journey.duplicate(true),
 		"life": life.duplicate(true), "ranch": ranch.duplicate(true), "hero_style":hero_style,
 		"version": SAVE_VERSION, "day": day, "minute": minute, "money": money,
 		"energy": energy, "seeds": STOCKS.normalized(seeds, CROP_ORDER), "produce": STOCKS.normalized(produce, CROP_ORDER),
@@ -582,6 +589,8 @@ func _valid_data(data: Variant) -> bool:
 		if not STOCKS.valid(data.get(key), CROP_ORDER, CROP_DATA.LEGACY):
 			return false
 	if not SPRING.valid(data.get("spring_progress", SPRING.empty_progress()), data):
+		return false
+	if not JOURNEY.valid(data.get("journey",JOURNEY.empty()),data):
 		return false
 	if not data.get("plots") is Array or data["plots"].size() != COLS * ROWS:
 		return false
@@ -717,6 +726,7 @@ func _apply_data(data: Dictionary) -> void:
 		fish[species] = int(fish[species])
 	fish_caught_today = int(data.get("fish_caught_today", 0))
 	meals = STOCKS.normalized(data.get("meals", {}), COOKING.ORDER)
+	journey = JOURNEY.normalized(data.get("journey",JOURNEY.empty()))
 	life = LIFE.normalized(data.get("life",LIFE.empty()))
 	ranch = RANCH.normalized(data.get("ranch",RANCH.empty()))
 	hero_style = data.get("hero_style","male")
@@ -773,3 +783,21 @@ func load_game(path: String = "user://farm_save.json") -> bool:
 	if FileAccess.file_exists(path) or FileAccess.file_exists(path + ".bak"):
 		load_notice = "存檔無法讀取。原檔已保留；本次將不自動覆寫，請先備份後重新開始。"
 	return false
+
+func ship_with_reserve() -> Dictionary:
+	if not journey["reserve"]: return sell_all()
+	var retained := {}
+	var sources := {"produce":produce,"goods":goods,"ranch":ranch["stock"],"craft":life["stock"],"fish":fish}
+	for category in sources:
+		retained[category]={}
+		for id in sources[category]:
+			var amount: int=mini(2,sources[category][id])
+			retained[category][id]=amount
+			sources[category][id]-=amount
+	var saved_eggs := mini(2,eggs)
+	eggs-=saved_eggs
+	var result := sell_all()
+	for category in sources:
+		for id in sources[category]: sources[category][id]+=retained[category][id]
+	eggs+=saved_eggs
+	return result

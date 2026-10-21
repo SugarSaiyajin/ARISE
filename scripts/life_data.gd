@@ -10,6 +10,7 @@ const PRODUCTS := {
 	"jade_charm":{"name":"青玉護符","price":290,"icon":6},
 	"star_lantern":{"name":"星露靈燈","price":220,"icon":7},
 }
+const FEES := {"grain_feed":0,"herb_feed":0,"moon_cloth":8,"honey_tea":8,"wool_blanket":10,"jade_charm":12,"star_lantern":10,"irrigator":20}
 const ORDER := ["grain_feed","herb_feed","moon_cloth","honey_tea","wool_blanket","jade_charm","star_lantern","irrigator"]
 const RECIPES := {
 	"grain_feed":{"name":"穀物照料飼料","area":"farm","output":20,"needs":[["produce","wheat",1]]},

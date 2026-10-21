@@ -29,7 +29,8 @@ func show(id: String) -> void:
 	else:
 		var event: Button = game._button(card,"鐘聲與星紋",Rect2(28,230,424,44),event_page.bind(id,0,s.spring_progress["events"][id]),true)
 		event.disabled = not s.spring_progress["events"][id] and not s.SPRING.event_available(s,id)
-	game._button(card,"稍後再聊",Rect2(28,282,424,46),game._close_modal)
+	game._button(card,"送禮與關係",Rect2(28,282,204,46),game.journey_panels.person.bind(id))
+	game._button(card,"稍後再聊",Rect2(248,282,204,46),game._close_modal)
 	game.audio_system.play_effect("talk")
 	game._save(false)
 	game._update_ui()

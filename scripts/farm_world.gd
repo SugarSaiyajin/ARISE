@@ -42,6 +42,9 @@ var facing_filter := FacingFilter.new()
 var walking := false
 var selected_plot := -1
 var elapsed := 0.0
+var previous_minute := -1.0
+var people_moving := false
+var terrain_layer: Node2D
 var walk_time := 0.0
 var particles: Array = []
 var font: Font
@@ -53,6 +56,11 @@ var action_crop := "turnip"
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if area_id in ["farm","town"] or area_id.begins_with("culture_") or area_id.begins_with("ranch_"):
+		terrain_layer=preload("res://scripts/terrain_layer.gd").new()
+		terrain_layer.area=area_id
+		terrain_layer.layout=state.journey["layout"] if state!=null else 0
+		add_child(terrain_layer)
 
 func interactions() -> Dictionary:
 	return MAP.anchors.duplicate()
@@ -124,6 +132,8 @@ func emit_spark(p: Vector2, color: Color) -> void:
 		particles.append({"p": p + Vector2(0, -5), "v": Vector2(randf_range(-15, 15), randf_range(-30, -10)), "life": 0.7, "color": color})
 
 func _process(delta: float) -> void:
+	people_moving = state != null and previous_minute>=0 and state.minute>previous_minute
+	if state!=null: previous_minute=state.minute
 	elapsed += delta
 	if not action_managed:
 		action_age = minf(action_age + delta, ACTION_DURATION)
@@ -242,7 +252,16 @@ func _depth_layer() -> void:
 func _draw() -> void:
 	if state == null:
 		return
-	ApprovedArt.ground(self)
+	for i in range(6):
+		var point: Vector2=state.JOURNEY.SLOTS[i]
+		var kind: int=state.journey["decor"][i]
+		if kind==1:
+			prop(point-Vector2(8,12),Rect2(0,40,16,16))
+		elif kind==2:
+			draw_texture_rect_region(ApprovedArt.ITEMS,Rect2(point-Vector2(6,16),Vector2(12,18)),ApprovedArt.region(ApprovedArt.I.FRAMES[2][5]))
+		elif kind==3:
+			ApprovedArt.building(self,10,Rect2(point-Vector2(9,23),Vector2(18,25)))
+		if kind>0: hint_at(point-Vector2(0,20),"庭園%d" % (i+1))
 	for i in range(state.plots.size()):
 		var p: Dictionary = state.plots[i]
 		var center := plot_center(i)
@@ -309,6 +328,8 @@ func _draw() -> void:
 			else:
 				draw_texture_rect_region(CROPS, Rect2(p.floor(), Vector2(16, 16)),
 					Rect2(3 * 24 + 4, row * 24 + 4, 16, 16))
+	if state.JOURNEY.season(state.day)=="夏" and not state.is_raining():
+		draw_rect(Rect2(0,40,480,180),Color("f4dc7420"))
 	if state.is_raining():
 		draw_rect(Rect2(0, 40, 480, 185), Color("425b7b20"))
 		for i in range(55):

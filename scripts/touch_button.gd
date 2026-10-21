@@ -28,11 +28,11 @@ func _gui_input(event: InputEvent) -> void:
 			if action_mode == BaseButton.ACTION_MODE_BUTTON_PRESS:
 				pressed.emit()
 			accept_event()
-		elif not event.pressed and event.index == touch_id:
+		elif (not event.pressed or event.canceled) and event.index == touch_id:
 			touch_id = -1
 			touch_inside = false
 			modulate = Color.WHITE
-			if action_mode == BaseButton.ACTION_MODE_BUTTON_RELEASE and Rect2(Vector2.ZERO, size).has_point(event.position):
+			if not event.canceled and action_mode == BaseButton.ACTION_MODE_BUTTON_RELEASE and Rect2(Vector2.ZERO, size).has_point(event.position):
 				pressed.emit()
 			accept_event()
 	elif event is InputEventScreenDrag and event.index == touch_id:
@@ -54,5 +54,5 @@ func _input(event: InputEvent) -> void:
 		mouse_held = false
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_PAUSED or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+	if what in [NOTIFICATION_APPLICATION_PAUSED,NOTIFICATION_APPLICATION_FOCUS_OUT,NOTIFICATION_VISIBILITY_CHANGED,NOTIFICATION_EXIT_TREE]:
 		cancel_touch()

@@ -14,7 +14,7 @@ import os
 
 def main():
     project = Path(__file__).resolve().parents[1]
-    version = "0.23.0"  # Last completed build; do not label unfinished work as released.
+    version = "0.24.0"  # Last completed build; do not label unfinished work as released.
     source = project / "build/android" / f"arise-prototype-{version}.apk"
     env = os.environ.copy()
     toolchain = project.parent / "toolchains"
@@ -28,9 +28,9 @@ def main():
     destination = project / "build/delivery" / f"arise-{version}"
     destination.mkdir(parents=True, exist_ok=True)
     files = [(source, f"arise-{version}.apk"),
-             (project / "docs/testing-0.23-backup.png", "backup.png"),
-             (project / "docs/testing-0.23-guide.png", "guide.png"),
-             (project / "docs/refinement-0.22-farm.png", "farm.png")]
+             (project / "docs/journey-0.24-controls.png", "controls.png"),
+             (project / "docs/journey-0.24-plan.png", "plan.png"),
+             (project / "docs/journey-0.24-farm.png", "farm.png")]
     for original, name in files:
         if original.suffix == ".png":
             with Image.open(original) as picture:
@@ -41,12 +41,12 @@ def main():
                   delivery_url_verified=False)
     (destination / "validation.json").write_text(json.dumps(report, indent=2) + "\n")
     (destination / "README.txt").write_text(
-        "異鄉田園 Android 試玩版 0.23.0\n\n"
-        "解壓後將 arise-0.23.0.apk 傳到 Android 手機並安裝。\n"
+        "異鄉田園 Android 試玩版 0.24.0\n\n"
+        "解壓後將 arise-0.24.0.apk 傳到 Android 手機並安裝。\n"
         "需求：Android 7.0+、ARM64、OpenGL ES 3.0；不適用 iPhone。\n"
         "更新請覆蓋安裝，先勿解除安裝，以免刪除存檔。\n"
-        "backup.png / guide.png / farm.png 為獨立展示存檔的實際遊戲畫面。\n"
-        "手札 → 存檔與試玩設定，提供手動備份、備份碼與30／60 FPS設定。\n"
+        "controls.png / plan.png / farm.png 為獨立展示存檔的實際遊戲畫面。\n"
+        "右上手札提供入門、配置、送禮、探索與春夏日曆；選單提供手機手感設定。\n"
         "本包已檢查簽章與完整性，尚未於實體手機安裝驗證。\n"
         "工作區路徑不是公開網址；本工具只打包，不宣稱已發布下載連結。\n",
         encoding="utf-8")

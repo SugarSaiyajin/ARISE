@@ -23,7 +23,7 @@ static func count(s: RefCounted, source: Array) -> int:
 static func can_craft(s: RefCounted, id: String) -> bool:
 	if not DATA.RECIPES.has(id): return false
 	var recipe: Dictionary = DATA.RECIPES[id]
-	if s.area_id!=recipe["area"]: return false
+	if s.area_id!=recipe["area"] or s.money<DATA.FEES[id]: return false
 	if id in ["grain_feed","herb_feed"]:
 		if s.ranch["feed"]>LIMIT-recipe["output"]: return false
 	elif not s.life["job"].is_empty() or (id=="irrigator" and s.life["irrigator"]): return false
@@ -34,6 +34,7 @@ static func can_craft(s: RefCounted, id: String) -> bool:
 static func craft(s: RefCounted, id: String) -> Dictionary:
 	if not can_craft(s,id): return answer(false,"請到指定工坊備齊材料；也請先領取上一件成品。")
 	var recipe: Dictionary = DATA.RECIPES[id]
+	s.money-=DATA.FEES[id]
 	for ingredient in recipe["needs"]:
 		if ingredient[0]=="ranch": s.ranch["stock"][ingredient[1]]-=ingredient[2]
 		else: s.get(ingredient[0])[ingredient[1]]-=ingredient[2]

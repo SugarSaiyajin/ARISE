@@ -6,8 +6,8 @@ func _init(controller: Node) -> void:
 	game = controller
 
 func hub() -> void:
-	var card: Panel = game._open_modal("春日手札","第 %d 年 · 春 %d / 28 日" % [game.state.SPRING.year(game.state.day),game.state.SPRING.season_day(game.state.day)],410)
-	for entry in [["春日曆與今日安排",calendar],["第一章 · 雲橋初晴",chapter],["居民行蹤與相識",residents],["重讀春日回憶",memories]]:
+	var card: Panel = game._open_modal("春日手札","第 %d 年 · %s %d / 28 日" % [game.state.JOURNEY.year(game.state.day),game.state.JOURNEY.season(game.state.day),game.state.SPRING.season_day(game.state.day)],410)
+	for entry in [["當季日曆與今日安排",calendar],["第一章 · 雲橋初晴",chapter],["居民行蹤與相識",residents],["重讀春日回憶",memories]]:
 		var i: int = [calendar,chapter,residents,memories].find(entry[1])
 		game._button(card,entry[0],Rect2(28,98+i*56,424,46),entry[1],i==1)
 	game._button(card,"回到選單",Rect2(28,344,424,46),game._show_menu)
@@ -15,27 +15,13 @@ func hub() -> void:
 func board() -> void:
 	var card: Panel = game._open_modal("雲橋公告牌","委託、春宴與驛站故事，都從這裡相遇。",410)
 	game._button(card,"今日居民委託",Rect2(28,100,424,46),game._show_requests,true)
-	game._button(card,"春日市集 · 收成共宴",Rect2(28,156,424,46),festival)
+	game._button(card,"春日市集 · 收成共宴" if game.state.JOURNEY.season(game.state.day)=="春" else "夏夜星燈會",Rect2(28,156,424,46),festival if game.state.JOURNEY.season(game.state.day)=="春" else game.journey_panels.summer)
 	game._button(card,"第一章 · 驛站名冊",Rect2(28,212,424,46),chapter)
 	game._button(card,"居民行蹤",Rect2(28,268,424,46),residents)
 	game._button(card,"回到街道",Rect2(28,344,424,46),game._close_modal)
 
 func calendar() -> void:
-	var s: RefCounted = game.state
-	var today: int = s.SPRING.season_day(s.day)
-	var card: Panel = game._open_modal("雲橋春日曆","28 天春季 · 每四天下雨 · 春 14 至 28 日可赴市集",420)
-	for i in range(28):
-		var day := i+1
-		var x := 28 + (i%7)*61
-		var y := 98 + (i/7)*43
-		game._panel(card,Rect2(x,y,56,39),"60764c" if day==today else "2c493c","dfc68a" if day==today else "678163")
-		var text := "%02d%s" % [day," 雨" if day%4==0 else (" 宴" if day==14 else "")]
-		game._label(card,text,Rect2(x+4,y+7,50,25),13)
-	var hint := "今天：" + ("雨水照料田地，可採集、加工或拜訪居民。" if s.is_raining() else "照料田地後，留點體力走走林地。")
-	if today >= 14: hint = "市集開放：備齊三種不同收成，到鎮上公告牌赴宴。"
-	if today == 28: hint += "\n睡醒會記下本季總結；作物與進度繼續保留。"
-	game._paragraph(card,hint,Rect2(28,280,424,58)).add_theme_font_size_override("font_size",14)
-	game._button(card,"回到手札",Rect2(28,354,424,46),hub,true)
+	game.journey_panels.calendar()
 
 func chapter() -> void:
 	var s: RefCounted = game.state

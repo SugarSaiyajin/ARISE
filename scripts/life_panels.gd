@@ -51,6 +51,7 @@ func recipe(id: String) -> void:
 	var text := "材料與持有數：\n"
 	for source in recipe_data["needs"]:
 		text+="%s ×%d（持有%d）\n" % [item_name(source),source[2],RULES.count(game.state,source)]
+	text += "\n工費 %d 銀（持有%d）。" % [DATA.FEES[id],game.state.money]
 	text += "\n完成 %d 份飼料，立即入庫。" % recipe_data["output"] if id in ["grain_feed","herb_feed"] else "\n休息一天後回本工坊領取。"
 	if id=="irrigator": text+="\n一次安裝，每晚替前兩格作物補水。"
 	game._paragraph(card,text,Rect2(28,101,424,186)).add_theme_font_size_override("font_size",15)
@@ -70,7 +71,7 @@ func job() -> void:
 	var text := "目前沒有工單。\n\n可先製作飼料，或帶養殖產物到聚落加工。"
 	var task: Dictionary = game.state.life["job"]
 	if not task.is_empty():
-		text="%s\n領取地點：%s\n預計春第%d日完成。\n\n%s" % [DATA.RECIPES[task["id"]]["name"],where(task["id"]),game.state.SPRING.season_day(task["ready_day"]),"成品已完成。" if game.state.day>=task["ready_day"] else "材料已交付，請休息後再來。"]
+		text="%s\n領取地點：%s\n預計莊園第%d日完成。\n\n%s" % [DATA.RECIPES[task["id"]]["name"],where(task["id"]),task["ready_day"],"成品已完成。" if game.state.day>=task["ready_day"] else "材料已交付，請休息後再來。"]
 	game._paragraph(card,text,Rect2(28,100,424,165)).add_theme_font_size_override("font_size",15)
 	game._button(card,"回配方表",Rect2(28,282,204,46),workshop)
 	game._button(card,"領取成品",Rect2(248,282,204,46),collect,true)
@@ -109,7 +110,8 @@ func resident(id: String) -> void:
 	var replay: bool = game.state.life["events"][id]
 	var story_button: Button = game._button(card,"重讀故事" if replay else "相識故事",Rect2(248,294,204,44),story.bind(id,0,replay))
 	story_button.disabled = not replay and not RULES.event_available(game.state,id)
-	game._button(card,"稍後再聊",Rect2(28,354,424,44),game._close_modal)
+	game._button(card,"送禮與關係",Rect2(28,354,204,44),game.journey_panels.person.bind(id))
+	game._button(card,"稍後再聊",Rect2(248,354,204,44),game._close_modal)
 
 func deliver(id: String) -> void:
 	var result := RULES.deliver(game.state,id)

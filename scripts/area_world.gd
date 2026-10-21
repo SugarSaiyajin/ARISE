@@ -87,7 +87,8 @@ func blocked(p: Vector2) -> bool:
 	return false
 
 func draw_resident(id: String, p: Vector2) -> void:
-	ApprovedArt.resident(self,p,{"npc":0,"shop":1,"smith":2}[id],30,elapsed)
+	var moving: bool=people_moving and resident_position(id,state.minute+0.1).distance_to(p)>0.01
+	ApprovedArt.resident(self,p,{"npc":0,"shop":1,"smith":2}[id],30,elapsed,elapsed if moving else -1)
 
 func draw_interior() -> void:
 	draw_rect(Rect2(0,0,480,270),Color("263b35"))
@@ -122,7 +123,6 @@ func _draw() -> void:
 		var glow := 0.12 + sin(elapsed * 5) * 0.025
 		draw_rect(Rect2(114, 147, 22, 22), Color(0.9, 0.58, 0.26, glow))
 		return
-	ApprovedArt.ground(self,true)
 	for shadow in [Rect2(66,119,77,7),Rect2(343,131,59,6),Rect2(347,202,65,7),Rect2(149,204,29,7)]:
 		draw_rect(shadow,Color("314a3e38"))
 	if state.SPRING.festival_open(state):

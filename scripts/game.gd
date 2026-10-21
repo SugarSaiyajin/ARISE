@@ -1,5 +1,11 @@
 extends Node2D
 
+const JourneyPanels = preload("res://scripts/journey_panels.gd")
+var journey_panels: RefCounted
+var mobile_preferences := preload("res://scripts/mobile_preferences.gd").new()
+var application_paused := false
+var application_unfocused := false
+
 const TestingPanels = preload("res://scripts/testing_panels.gd")
 var testing_panels: RefCounted
 
@@ -87,6 +93,8 @@ var preview_mode_button: Button
 var preview_buttons: Array[Button] = []
 
 func _ready() -> void:
+	mobile_preferences.load_settings()
+	journey_panels = JourneyPanels.new(self)
 	testing_panels = TestingPanels.new(self)
 	var display_config := ConfigFile.new()
 	if display_config.load("user://display_preferences.cfg") == OK:
@@ -269,7 +277,7 @@ func _build_ui() -> void:
 	_button(ui, "選單", Rect2(881, 21, 55, 44), _show_menu)
 	_panel(ui, Rect2(292, 82, 376, 28), "264435d9", "68835f")
 	quest_label = _label(ui, "", Rect2(305, 85, 354, 23), 12, "f3e1b2")
-	_button(ui,"手札",Rect2(680,80,70,44),spring_panels.hub)
+	_button(ui,"手札",Rect2(680,80,70,44),journey_panels.hub)
 	_button(ui,"牧場",Rect2(764,80,70,44),ranch_panels.hub)
 	_button(ui,"行旅",Rect2(848,80,78,44),life_panels.hub)
 	if touch_mode:
@@ -295,7 +303,9 @@ func _build_ui() -> void:
 		seed_button = _button(ui, "", Rect2(604, row_y, 177, row_height), _cycle_crop)
 	stick = Stick.new()
 	stick.position = Vector2(8, 382)
-	stick.size = Vector2(148, 148)
+	stick.size = Vector2.ONE*mobile_preferences.stick_size
+	stick.position = Vector2(4 if mobile_preferences.stick_size==160 else 8,530-mobile_preferences.stick_size)
+	stick.deadzone = mobile_preferences.deadzone
 	stick.engaged.connect(_manual_control_started)
 	stick.released.connect(_manual_control_started)
 	ui.add_child(stick)
@@ -317,6 +327,8 @@ func _apply_mobile_layout() -> void:
 		var display_safe := Rect2(DisplayServer.get_display_safe_area())
 		if display_safe.has_area():
 			safe = get_viewport().get_screen_transform().affine_inverse() * display_safe
+	if is_instance_valid(stick):
+		_stop_moving()
 	_apply_safe_frame(MobileLayout.fit_safe_frame(viewport_size, safe))
 
 func _apply_safe_frame(frame: Rect2) -> void:
@@ -332,8 +344,8 @@ func _update_ui() -> void:
 	if is_instance_valid(stop_button): stop_button.visible = touch_mode and (not path.is_empty() or stick.finger>=0 or stick.mouse_down or stick.direction.length_squared()>0.01)
 	var hour := int(state.minute) / 60
 	var mins := int(state.minute) % 60
-	clock_label.text = "春 %02d /28  %02d:%02d" % [state.SPRING.season_day(state.day), hour, mins]
-	weather_label.text = "第%d年 · " % state.SPRING.year(state.day) + world.display_name() + (" · 室內" if state.area_id == "house" else (" · 細雨" if state.is_raining() else " · 晴朗"))
+	clock_label.text = "%s %02d /28  %02d:%02d" % [state.JOURNEY.season(state.day),state.SPRING.season_day(state.day), hour, mins]
+	weather_label.text = "第%d年 · " % state.JOURNEY.year(state.day) + world.display_name() + (" · 室內" if state.area_id == "house" else " · "+state.JOURNEY.weather(state.day))
 	money_label.text = "%d  銀" % state.money
 	energy_label.text = "體力   %d / 100" % state.energy
 	energy_bar.value = state.energy
@@ -358,6 +370,9 @@ func _update_ui() -> void:
 		quest_label.text = "委託：%s · 找%s交付" % [request["title"], request["resident"]]
 	if state.area_id == "ruins":
 		quest_label.text = "星紋殘片已記入手札 · 可探索碑文或返回莊園" if state.relic_recovered else "舊驛的星紋石台 · 查看殘片，記下星潮的線索"
+	var first_task: String = state.JOURNEY.next_task(state)
+	if first_task!="" and state.area_id in ["farm","house"]:
+		quest_label.text = "入門 · "+state.JOURNEY.TASK_TEXT[state.JOURNEY.TASKS.find(first_task)]+" · 手札查看"
 	var object := _near_object()
 	var action: String = {"fish": "釣魚", "route": "驛路", "relic": "查看", "inscription": "碑文", "coop": "雞舍", "dryer": "加工", "forest": "入林", "repair": "圍欄", "tea": "爐灶", "house": "進屋", "town": "進鎮", "farm": "返回", "bed": "休息", "journal": "手札", "notice": "公告", "smith": "交談", "box": "出貨", "shop": "商店", "npc": "交談"}.get(object, TOOL_NAMES[selected_tool] if state.area_id == "farm" else "探索")
 	for button in tool_buttons:
@@ -394,6 +409,8 @@ func _cycle_crop() -> void:
 	toast("已選擇%s種子 · 成長需 %d 個澆水日" % [State.CROPS[selected_crop]["name"], State.CROPS[selected_crop]["days"]])
 
 func _process(delta: float) -> void:
+	if application_paused or application_unfocused:
+		return
 	if world == null:
 		return
 	travel_lock = maxf(0, travel_lock - delta)
@@ -440,7 +457,7 @@ func _process(delta: float) -> void:
 			direction = direction.limit_length()
 		elif not path.is_empty() and stick.finger < 0 and not stick.mouse_down:
 			var diff: Vector2 = path[0] - state.player_position
-			if diff.length() <= SPEED * delta + 0.8:
+			if diff.length() <= SPEED * minf(delta,0.1) + 0.8:
 				state.player_position = path[0]
 				path.remove_at(0)
 				if path.is_empty() and not pending.is_empty():
@@ -449,7 +466,7 @@ func _process(delta: float) -> void:
 				direction = diff.normalized()
 		if direction.length() > 0:
 			facing = direction.normalized()
-			var step := direction * SPEED * delta
+			var step := direction * SPEED * minf(delta,0.1)
 			var next: Vector2 = state.player_position + Vector2(step.x, 0)
 			if not world.blocked(next):
 				state.player_position = next
@@ -497,6 +514,7 @@ func _manual_control_started() -> void:
 	queued_click = null
 
 func _unhandled_input(event: InputEvent) -> void:
+	if application_paused or application_unfocused: return
 	if fishing_round != null and event is InputEventKey and event.pressed and not event.echo and event.physical_keycode in [KEY_SPACE, KEY_E]:
 		_reel_fishing()
 		get_viewport().set_input_as_handled()
@@ -526,7 +544,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		click = true
 		point = _viewport_to_world(event.position)
-	elif event is InputEventScreenTouch and event.pressed:
+	elif event is InputEventScreenTouch and event.pressed and not event.canceled:
 		click = true
 		point = _viewport_to_world(event.position)
 	if click:
@@ -534,6 +552,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _click_world(point: Vector2) -> void:
+	if application_paused or application_unfocused: return
 	if touch_mode and (stick.finger >= 0 or stick.mouse_down):
 		return
 	_hide_tool_palette()
@@ -566,6 +585,15 @@ func _click_world(point: Vector2) -> void:
 		_walk_to(point, {})
 
 func _walk_to(target: Vector2, task: Dictionary) -> void:
+	if touch_mode and not mobile_preferences.tap_navigation:
+		path.clear()
+		pending={}
+		if state.player_position.distance_to(target)>26:
+			toast("目前是手動移動；請先用方向盤走近目標。")
+		else:
+			pending=task
+			_complete_pending()
+		return
 	var start := Vector2i(state.player_position / 8)
 	var end := Vector2i(target / 8)
 	if not navigation.is_in_boundsv(end) or navigation.is_point_solid(end):
@@ -662,6 +690,9 @@ func _find_resident(id: String) -> void:
 	_walk_to(world.interactions()[id],{"object":id})
 
 func _interact(object: String) -> void:
+	if object.begins_with("journey_clue:"):
+		journey_panels.clue(int(object.trim_prefix("journey_clue:")))
+		return
 	if object=="culture_craft":
 		life_panels.workshop()
 		return
@@ -720,7 +751,7 @@ func _interact(object: String) -> void:
 		"smith":
 			_show_smith()
 		"box":
-			var result: Dictionary = state.sell_all()
+			var result: Dictionary = state.ship_with_reserve()
 			toast(result["text"])
 			if result["ok"]:
 				audio_system.play_effect("coin")
@@ -822,7 +853,7 @@ func _deliver_request(recipient: String) -> void:
 	_update_ui()
 
 func _show_journal() -> void:
-	var card := _open_modal("莊園手札", "春 %d 日 · 在雲橋留下的足跡" % state.day)
+	var card := _open_modal("莊園手札", "莊園第 %d 日 · 在雲橋留下的足跡" % state.day)
 	var text := "收成 %d 份 · 出貨 %d 銀\n委託 %d 件 · 青禾好感 %d\n母雞 %d 隻 · 行囊雞蛋 %d 顆\n舊驛路：%s\n星紋殘片：%s" % [state.harvested, state.total_earned, state.requests_completed, state.friendship, state.chickens, state.eggs, "已修復" if state.route_restored else "尚待修復", "已收藏" if state.relic_recovered else "尚未發現"]
 	var body := _paragraph(card, text, Rect2(28, 98, 424, 124))
 	body.add_theme_font_size_override("font_size", 14)
@@ -1255,7 +1286,9 @@ func _open_modal(title: String, subtitle: String = "", height: float = 348) -> P
 	var card := _panel(modal, Rect2(240, (540-height)/2.0, 480, height), "213c33", "bdc397")
 	card.mouse_filter = Control.MOUSE_FILTER_STOP
 	_label(card, title, Rect2(28, 22, 388, 34), 24)
-	_label(card, subtitle, Rect2(29, 62, 420, 24), 12, "b5c59e")
+	var subtitle_label := _label(card, subtitle, Rect2(29, 62, 420, 30), 12, "b5c59e")
+	subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	subtitle_label.size = Vector2(420,30)
 	_button(card, "×", Rect2(423, 15, 44, 44), _close_modal)
 	return card
 
@@ -1284,9 +1317,10 @@ func _paragraph(parent: Node, text: String, rect: Rect2) -> Label:
 	return label
 
 func _show_intro() -> void:
-	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  旅人手札 0.23")
+	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  春夏相知 0.24")
 	_paragraph(card, "一座舊莊園，一片等待照料的田地。\n\n① 澆水：照料左上角四株蕪菁。\n② 休息：進農舍，點床鋪睡到明天。\n③ 採收：成熟後採收，送往出貨箱。\n④ 探索：採集木石，建烘乾架加工收成。", Rect2(28, 98, 424, 175))
-	_button(card, "開始我的田園生活", Rect2(28, 282, 424, 46), _start_play, true)
+	_button(card, "跟著入門任務", Rect2(28, 282, 204, 46), journey_panels.tutorial)
+	_button(card, "開始田園生活", Rect2(248, 282, 204, 46), _start_play, true)
 
 func _start_play() -> void:
 	_close_modal()
@@ -1295,13 +1329,13 @@ func _start_play() -> void:
 func _show_menu() -> void:
 	var card := _open_modal("莊園手札", "遊戲已暫停 · 關閉視窗或切到背景時會存檔")
 	_button(card, "背包與收成", Rect2(28, 99, 204, 48), _show_bag)
-	_button(card, "春日手札", Rect2(248, 99, 204, 48), spring_panels.hub)
+	_button(card, "莊園生活手札", Rect2(248, 99, 204, 48), journey_panels.hub)
 	_button(card, "存檔與試玩設定", Rect2(28, 161, 204, 48), testing_panels.hub)
 	_button(card, "繼續遊玩", Rect2(248, 161, 204, 48), _close_modal, true)
 	_button(card, "音樂與音效", Rect2(28, 220, 204, 46), _show_audio_settings)
 	_button(card, "角色外觀", Rect2(248, 220, 204, 46), _show_character)
 	_button(card,"旅人造型",Rect2(28,282,204,46),_show_style)
-	_button(card,"居民行蹤",Rect2(248,282,204,46),spring_panels.residents)
+	_button(card,"手機手感",Rect2(248,282,204,46),journey_panels.controls)
 
 func _show_style() -> void:
 	var art = preload("res://scripts/approved_art.gd")
@@ -1396,7 +1430,7 @@ func _show_sleep() -> void:
 			planted += 1
 			if plot["watered"]:
 				wet += 1
-	_paragraph(card, "今天已照料 %d / %d 格作物。\n\n沒有澆水的作物會暫停生長，不會枯死。\n明天的天氣：%s\n\n休息後會自動儲存進度。" % [wet, planted, "細雨" if (state.day + 1) % 4 == 0 else "晴朗"], Rect2(28, 100, 424, 170))
+	_paragraph(card, "今天已照料 %d / %d 格作物。\n\n沒有澆水的作物會暫停生長，不會枯死。\n明天的天氣：%s\n\n休息後會自動儲存進度。" % [wet, planted, state.JOURNEY.weather(state.day+1)], Rect2(28, 100, 424, 170))
 	_button(card, "再忙一會", Rect2(28, 282, 204, 46), _close_modal)
 	_button(card, "睡到明天", Rect2(248, 282, 204, 46), _sleep, true)
 
@@ -1414,9 +1448,9 @@ func _sleep() -> void:
 	world.actor = state.player_position
 	_save(false)
 	_update_ui()
-	toast("春 %d 日的早晨。%s" % [state.day, "雨水已替田地澆好水。" if state.is_raining() else "體力恢復了，去看看田地吧。"])
+	toast("%s %d 日的早晨。%s" % [state.JOURNEY.season(state.day),state.SPRING.season_day(state.day), "雨水已替田地澆好水。" if state.is_raining() else "體力恢復了，去看看田地吧。"])
 	if finished_spring:
-		_show_reading("春日小結","一個春季已記入手札，莊園進度繼續保留。", "累計收成 %d 份，出貨收入 %d 銀。\n完成居民委託 %d 件，青禾好感 %d。\n\n第一章：%s\n\n新的春日從今天開始，作物、物品與相識都會留下。" % [state.harvested,state.total_earned,state.requests_completed,state.friendship,"已完成" if state.spring_progress["chapter_done"] else "仍在旅途中"])
+		_show_reading("換季小結","新季節已到來，莊園進度繼續保留。", "累計收成 %d 份，出貨收入 %d 銀。\n完成居民委託 %d 件，青禾好感 %d。\n\n第一章：%s\n\n新的季節從今天開始，作物、物品與相識都會留下。" % [state.harvested,state.total_earned,state.requests_completed,state.friendship,"已完成" if state.spring_progress["chapter_done"] else "仍在旅途中"])
 
 func _save(feedback: bool = false) -> void:
 	save_timer = 0
@@ -1442,11 +1476,15 @@ func _notification(what: int) -> void:
 		else:
 			_show_menu()
 	elif what == NOTIFICATION_APPLICATION_RESUMED:
+		application_paused = false
 		audio_system.set_suspended("application", false)
 		_apply_mobile_layout.call_deferred()
 	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
+		application_unfocused = false
 		audio_system.set_suspended("focus", false)
 	elif what == NOTIFICATION_APPLICATION_PAUSED or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		if what == NOTIFICATION_APPLICATION_PAUSED: application_paused = true
+		else: application_unfocused = true
 		_cancel_tool_action()
 		audio_system.set_suspended("application" if what == NOTIFICATION_APPLICATION_PAUSED else "focus", true)
 		if fishing_round != null:
