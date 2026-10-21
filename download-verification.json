@@ -1,0 +1,42 @@
+{
+  "arise-0.22.0.apk": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.22.0/arise-0.22.0.apk",
+    "status": 200,
+    "bytes": 99038394,
+    "sha256": "6e13f463381181d827d09ca1c9bf9941b686a598ee82220dcef6889c1770c1e5",
+    "matches_local": true,
+    "content_type": "application/octet-stream"
+  },
+  "house.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.22.0/house.png",
+    "status": 200,
+    "bytes": 284033,
+    "sha256": "e7f892bf3cbf2fde4c9aca765043115b7d115279ec4d1323b92ba66e2428c06c",
+    "matches_local": true,
+    "content_type": "image/png"
+  },
+  "farm.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.22.0/farm.png",
+    "status": 200,
+    "bytes": 806931,
+    "sha256": "086cf32636f26072580382a5d6be3990e84558ea55afba620687c38803669504",
+    "matches_local": true,
+    "content_type": "image/png"
+  },
+  "town.png": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.22.0/town.png",
+    "status": 200,
+    "bytes": 808502,
+    "sha256": "edc70871f33dde0abc6a4d71ba9e6ac964c14e277caca53b84ac2cbd3a62f711",
+    "matches_local": true,
+    "content_type": "image/png"
+  },
+  "gameplay.mp4": {
+    "url": "https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.22.0/gameplay.mp4",
+    "status": 200,
+    "bytes": 1920128,
+    "sha256": "8f2c2fc6956000ef06ed408c5a570e2686f4554ae2eb5e5d1557d0de71a757d8",
+    "matches_local": true,
+    "content_type": "application/octet-stream"
+  }
+}

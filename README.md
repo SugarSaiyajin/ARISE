@@ -41,3 +41,5 @@
 [APK驗證](validation.json) · [測試摘要](test-summary.json) · [覆蓋更新相容性](update-compatibility.json) · [檔案校驗碼](SHA256SUMS.txt)
 
 [Godot原始碼](https://github.com/SugarSaiyajin/ARISE/tree/feature/cloudbridge-refinement-0.22)
+
+[HTTPS重新下載校驗](download-verification.json)：APK、三張主要截圖與影片均重新下載，HTTP 200且SHA-256吻合。
