@@ -1,5 +1,6 @@
 extends "res://scripts/farm_world.gd"
 
+const Furniture=preload("res://scripts/interior_layout.gd")
 const HOUSE_DEF = preload("res://data/maps/house.tres")
 const TOWN_DEF = preload("res://data/maps/town.tres")
 const Residents = preload("res://scripts/resident_data.gd")
@@ -38,7 +39,7 @@ func resident_anchor(id: String) -> Vector2:
 
 func interactions() -> Dictionary:
 	if area_id == "house":
-		return HOUSE_DEF.anchors.duplicate()
+		return Furniture.anchors(room_layout())
 	var result: Dictionary = TOWN_DEF.anchors.duplicate()
 	for id in Residents.ORDER:
 		result[id] = resident_anchor(id)
@@ -46,7 +47,9 @@ func interactions() -> Dictionary:
 
 func interaction_hitbox(id: String) -> Rect2:
 	if area_id == "house":
-		return HOUSE_DEF.hitboxes.get(id, Rect2())
+		if id=="farm": return HOUSE_DEF.hitboxes["farm"]
+		if room_layout()==Furniture.defaults(): return HOUSE_DEF.hitboxes.get(id,Rect2())
+		return Furniture.shape(room_layout(),Furniture.INTERACTIONS[id]).grow(2)
 	if id in Residents.ORDER:
 		var p := resident_position(id)
 		if p.distance_to(Residents.HOMES[id]) < 1:
@@ -71,12 +74,8 @@ func plot_at(_p: Vector2) -> int:
 
 func blocked(p: Vector2) -> bool:
 	if area_id == "house":
-		if not HOUSE_DEF.walkable.has_point(p):
-			return true
-		for rect in HOUSE_DEF.obstacles:
-			if rect.grow(3).has_point(p):
-				return true
-		return false
+		return Furniture.blocked(room_layout(),p)
+
 	if not TOWN_DEF.walkable.has_point(p):
 		return true
 	if p.x > 247 and p.x < 284 and (p.y < 138 or p.y > 156):
@@ -103,14 +102,8 @@ func draw_interior() -> void:
 		draw_rect(Rect2(x,58,28,16),Color("749d9b"))
 		draw_rect(Rect2(x+2,60,24,12),Color("c0d6c0"))
 		draw_rect(Rect2(x+13,58,2,16),Color("8a7350"))
-	ApprovedArt.furniture(self,7,Rect2(197,127,66,43))
-	ApprovedArt.furniture(self,0,Rect2(302,76,50,38))
-	ApprovedArt.furniture(self,1,Rect2(146,82,49,30))
-	ApprovedArt.furniture(self,2,Rect2(109,133,29,38))
-	ApprovedArt.furniture(self,3,Rect2(216,130,35,25))
-	ApprovedArt.furniture(self,4,Rect2(334,139,33,40))
-	ApprovedArt.furniture(self,5,Rect2(275,82,22,35))
-	ApprovedArt.furniture(self,6,Rect2(154,162,26,19))
+	for item in [7,0,1,2,3,4,5,6]: Furniture.draw(self,room_layout(),item)
+
 	draw_rect(Rect2(224,209,32,7),Color("d8c39b"))
 
 func _draw() -> void:
@@ -119,11 +112,11 @@ func _draw() -> void:
 	if area_id == "house":
 		draw_interior()
 		person(actor)
-		label_at(Vector2(329, 75), "床鋪")
-		label_at(Vector2(170, 78), "莊園手札")
-		label_at(Vector2(136, 134), "爐灶")
-		label_at(Vector2(168, 158), "收納箱")
-		label_at(Vector2(234, 126), "茶桌小歇")
+		label_at(Furniture.shape(room_layout(),Furniture.INTERACTIONS["bed"]).position+Vector2(Furniture.shape(room_layout(),Furniture.INTERACTIONS["bed"]).size.x/2,-2), "床鋪")
+		label_at(Furniture.shape(room_layout(),Furniture.INTERACTIONS["journal"]).position+Vector2(Furniture.shape(room_layout(),Furniture.INTERACTIONS["journal"]).size.x/2,-2), "莊園手札")
+		label_at(Furniture.shape(room_layout(),Furniture.INTERACTIONS["tea"]).position+Vector2(Furniture.shape(room_layout(),Furniture.INTERACTIONS["tea"]).size.x/2,-2), "爐灶")
+		label_at(Furniture.shape(room_layout(),Furniture.INTERACTIONS["home_storage"]).position+Vector2(Furniture.shape(room_layout(),Furniture.INTERACTIONS["home_storage"]).size.x/2,-2), "收納箱")
+		label_at(Furniture.shape(room_layout(),Furniture.INTERACTIONS["home_chair"]).position+Vector2(Furniture.shape(room_layout(),Furniture.INTERACTIONS["home_chair"]).size.x/2,-2), "茶桌小歇")
 		label_at(Vector2(239, 210), "出門 ↓")
 		var glow := 0.12 + sin(elapsed * 5) * 0.025
 		draw_rect(Rect2(114, 147, 22, 22), Color(0.9, 0.58, 0.26, glow))
@@ -186,3 +179,6 @@ func _draw() -> void:
 			draw_line(Vector2(x, y), Vector2(x - 2, y + 4), Color("d0e4de66"), 1)
 	if state.minute >= 1080:
 		draw_rect(Rect2(0, 0, 480, 270), Color(0.14, 0.18, 0.3, clampf((state.minute - 1080) / 240.0, 0, 1) * 0.36))
+
+func room_layout() -> Array:
+	return state.interior if state!=null else Furniture.defaults()

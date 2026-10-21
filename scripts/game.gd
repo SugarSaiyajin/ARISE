@@ -1,5 +1,6 @@
 extends Node2D
 
+var chapter_panels: RefCounted
 const EstatePanels = preload("res://scripts/estate_panels.gd")
 var estate_panels: RefCounted
 var field_queue: Array[int]=[]
@@ -101,6 +102,7 @@ var preview_buttons: Array[Button] = []
 
 func _ready() -> void:
 	mobile_preferences.load_settings()
+	chapter_panels=preload("res://scripts/chapter_panels.gd").new(self)
 	estate_panels = EstatePanels.new(self)
 	journey_panels = JourneyPanels.new(self)
 	testing_panels = TestingPanels.new(self)
@@ -360,7 +362,7 @@ func _update_ui() -> void:
 	energy_bar.value = state.energy
 	seed_button.text = "%s ×%d" % [State.CROPS[selected_crop]["name"], state.seeds.get(selected_crop,0)]
 	if is_instance_valid(current_tool_button):
-		current_tool_button.text = TOOL_NAMES[selected_tool]+" ▴"
+		current_tool_button.text = TOOL_NAMES[selected_tool]+" ▲"
 		current_tool_button.disabled = state.area_id != "farm"
 	if last_drawn_tool != selected_tool:
 		for i in range(4):
@@ -1348,7 +1350,7 @@ func _paragraph(parent: Node, text: String, rect: Rect2) -> Label:
 	return label
 
 func _show_intro() -> void:
-	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  田園共作 0.25")
+	var card := _open_modal("風把你帶到了雲橋", "異鄉田園  /  旅章與共生 0.28")
 	_paragraph(card, "一座舊莊園，一片等待照料的田地。\n\n① 澆水：照料左上角四株蕪菁。\n② 休息：進農舍，點床鋪睡到明天。\n③ 採收：成熟後採收，送往出貨箱。\n④ 探索：採集木石，建烘乾架加工收成。", Rect2(28, 98, 424, 175))
 	_button(card, "跟著入門任務", Rect2(28, 282, 204, 46), journey_panels.tutorial)
 	_button(card, "開始田園生活", Rect2(248, 282, 204, 46), _start_play, true)

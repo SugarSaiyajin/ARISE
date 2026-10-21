@@ -1,4 +1,12 @@
-# Android 手機試玩版 0.27
+# Android 手機試玩版 0.28
+
+## 0.28 新內容
+
+[下載0.28 APK](https://github.com/SugarSaiyajin/ARISE/raw/refs/heads/delivery/android-0.28.0/arise-0.28.0.apk)。請覆蓋安裝，勿先解除安裝，以保留存檔。手機手感修正繼續依使用者安排暫緩。
+
+手札→經營總覽→長期發展，提供九名居民生活事件、八種生物的個性與成長、四聚落旅章、每週合作訂單、長期目標及家具布置。家具預覽不直接改動存檔，確認時檢查占位與通道；箱子和茶桌的操作位置會跟著移動。
+
+[本版操作、數值與限制](CHAPTER_028.md) · [畫面與影片](https://github.com/SugarSaiyajin/ARISE/tree/delivery/android-0.28.0) · [秋季待審提案](design-review-05/README.md)。秋季概念沒有放入APK，遊戲仍是春夏循環。
 
 ## 0.27 新內容
 
@@ -69,7 +77,7 @@
 
 ## 安裝
 
-安裝檔：build/android/arise-prototype-0.27.0.apk。0.14 與先前版本仍保留。
+安裝檔：build/android/arise-prototype-0.28.0.apk。0.14 與先前版本仍保留。
 
 新增試玩項目與養殖規則見 [雲橋靈牧 0.21](RANCH_021.md)。
 

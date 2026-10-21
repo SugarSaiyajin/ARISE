@@ -8,7 +8,7 @@ func hub() -> void:
 	var card: Panel=game._open_modal("莊園經營總覽","先查看清單與消耗，再安排今天的工作。",460)
 	var entries := [["田間狀態與批量作業",field],["本地養殖一鍵照料",ranch],["出貨清單與確認",shipping],["設施施工預覽",construction],["夏季聚落週活動",summer],["莊園階段目標",goals]]
 	for i in range(6): game._button(card,entries[i][0],Rect2(28,98+i*48,424,44),entries[i][1],i==0)
-	game._button(card,"生活手札",Rect2(28,406,204,44),game.journey_panels.hub)
+	game._button(card,"長期發展",Rect2(28,406,204,44),game.chapter_panels.hub)
 	game._button(card,"回到場景",Rect2(248,406,204,44),game._close_modal)
 func field() -> void:
 	var status := RULES.crop_status(game.state)

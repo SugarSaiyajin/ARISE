@@ -196,7 +196,9 @@ static func claim_goal(s: RefCounted, index: int) -> Dictionary:
 static func daily_line(s: RefCounted, id: String) -> String:
 	var index := JOURNEY.PEOPLE.find(id)
 	if index<0: return ""
+	var story_choice: int=s.chapter["stories"][id]
 	var memories: int=s.estate["choices"][id]
+	if story_choice>0: return s.CHAPTER.DATA.STORIES[index][story_choice+3]+"\n"+(ACTIVITY_LINES[index][memories-1] if memories>0 and s.day%3==0 else DAILY_TOPICS[index][(s.day+index)%3])
 	if memories>0 and s.day%3==0: return ACTIVITY_LINES[index][memories-1]+" 這段相處，我還記得。"
 	var points := JOURNEY.friendship(s,id)
 	var level := 3 if points>=25 else 2 if points>=10 else 1 if points>=3 else 0

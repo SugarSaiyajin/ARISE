@@ -15,6 +15,8 @@ static func valid(value: Variant, day: int) -> bool:
 		if not (n is int or n is float) or not is_finite(float(n)) or n!=int(n) or n<0: return false
 	return value["theme"]<=2 and value["rested_day"]<=day
 static func near(s: RefCounted, point: Vector2) -> bool:
+	if point==STORAGE: point=s.INTERIOR.anchors(s.interior)["home_storage"]
+	elif point==CHAIR: point=s.INTERIOR.anchors(s.interior)["home_chair"]
 	return s.area_id=="house" and s.player_position.distance_to(point)<=30
 static func transfer(s: RefCounted, id: String, deposit: bool, amount: int = 1) -> Dictionary:
 	if id not in CROPS.ORDER or amount not in [1,5] or not near(s,STORAGE): return {"ok":false,"text":"請走近農舍收納箱；每次移動1或5份收成。"}

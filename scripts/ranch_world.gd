@@ -76,7 +76,7 @@ func _draw() -> void:
 			var resting: bool=pose["resting"]
 			var frame: int=pose["frame"]
 			var point: Vector2=PENS[i]+pose["offset"]
-			if pose["activity"]=="親近": point+=(actor-PENS[i]).normalized()*3
+			if pose["activity"]=="親近": point+=(actor-PENS[i]).normalized()*(5 if state.GROWTH.stage(state,id)>=2 else 3)
 			if pose["ready"]>0:
 				var icon: Array=ART.I.FRAMES[1][DATA.ORDER.find(id)]
 				draw_texture_rect_region(ART.ITEMS,Rect2(point-Vector2(5,34+sin(elapsed*2)),Vector2(10,10)),ART.region(icon))

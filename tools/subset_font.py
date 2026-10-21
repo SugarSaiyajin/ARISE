@@ -15,7 +15,8 @@ parser.add_argument("--font-index", type=int, default=3,
                     help="NotoSansCJK TTC: Traditional Chinese is index 3")
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[1]
-text = "".join(p.read_text() for p in (root / "scripts").glob("*.gd"))
+sources = [*(root / "scripts").rglob("*.gd"), *(root / "data").rglob("*.tres"), root / "project.godot"]
+text = "".join(p.read_text() for p in sources)
 options = subset.Options()
 options.name_IDs = ["*"]
 font = TTFont(args.font, fontNumber=args.font_index)

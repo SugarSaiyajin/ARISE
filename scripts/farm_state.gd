@@ -1,6 +1,13 @@
 class_name FarmState
 extends RefCounted
 
+const INTERIOR=preload("res://scripts/interior_layout.gd")
+var interior: Array=INTERIOR.defaults()
+const CHAPTER=preload("res://scripts/chapter_rules.gd")
+var chapter: Dictionary=CHAPTER.empty()
+const GROWTH=preload("res://scripts/growth_rules.gd")
+var growth: Dictionary=GROWTH.empty()
+
 const HOME=preload("res://scripts/home_rules.gd")
 var home: Dictionary=HOME.empty()
 
@@ -528,6 +535,7 @@ func sleep() -> void:
 
 func to_data() -> Dictionary:
 	return {
+		"interior":interior.duplicate(true), "chapter":chapter.duplicate(true), "growth":growth.duplicate(true),
 		"home": home.duplicate(true),
 		"summer_garden": summer_garden.duplicate(true),
 		"estate": estate.duplicate(true),
@@ -615,6 +623,9 @@ func _valid_data(data: Variant) -> bool:
 		return false
 	if not ESTATE.valid(data.get("estate",ESTATE.empty()),data):
 		return false
+	if not GROWTH.valid(data.get("growth",GROWTH.empty()),data): return false
+	if not CHAPTER.valid(data.get("chapter",CHAPTER.empty()),data): return false
+	if not INTERIOR.valid(data.get("interior",INTERIOR.defaults())): return false
 	if not HOME.valid(data.get("home",HOME.empty()),int(data["day"])): return false
 	if not SUMMER_GARDEN.valid(data.get("summer_garden",SUMMER_GARDEN.empty())): return false
 	if not data.get("plots") is Array or data["plots"].size() != COLS * ROWS:
@@ -708,6 +719,11 @@ func _valid_processing(data: Dictionary) -> bool:
 	return true
 
 func _apply_data(data: Dictionary) -> void:
+	interior=data.get("interior",INTERIOR.defaults()).duplicate(true)
+	for entry in interior:
+		for index in range(3): entry[index]=int(entry[index])
+	chapter=CHAPTER.normalized(data.get("chapter",CHAPTER.empty()))
+	growth=GROWTH.normalized(data.get("growth",GROWTH.empty()))
 	home=HOME.normalized(data.get("home",HOME.empty()))
 	summer_garden=data.get("summer_garden",SUMMER_GARDEN.empty()).duplicate(true)
 	summer_garden["growth"]=int(summer_garden["growth"])

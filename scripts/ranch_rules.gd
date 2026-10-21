@@ -91,6 +91,7 @@ static func care(s: RefCounted, id: String) -> Dictionary:
 		return result(false,"尚未領養、今天已照料，或體力不足。")
 	s.energy -= energy_cost
 	s.estate["care_total"]=mini(100000000,s.estate["care_total"]+1)
+	s.GROWTH.record(s,id)
 	a["cared"] = true
 	a["bond"] = mini(100,a["bond"]+1)
 	return result(true,"照料完成，好感增加。"+DATA.SPECIES[id]["hint"])

@@ -92,7 +92,7 @@ func people(page: int = 0) -> void:
 func person(id: String) -> void:
 	var s: RefCounted=game.state
 	var points := RULES.friendship(s,id)
-	var card: Panel=game._open_modal(RULES.NAMES[RULES.PEOPLE.find(id)]+" · "+RULES.stage(points),"好感%d · 每位居民每天送禮一次" % points,410)
+	var card: Panel=game._open_modal(RULES.NAMES[RULES.PEOPLE.find(id)]+" · "+RULES.stage(points),"好感%d · 每位居民每天送禮一次" % points,460)
 	var likes := "喜歡："
 	for item in RULES.LIKES[id]: likes+=RULES.item_name(item)+"  "
 	var where: String=s.RESIDENTS.location_name(id,s.minute,s.is_raining())+" · 雲橋鎮" if id in ["npc","shop","smith"] else game.life_panels.DATA.NAMES[game.life_panels.DATA.AREAS.find(game.State.RANCH_DATA.CULTURES[id])] if not s.is_raining() and s.minute>=660 and s.minute<1080 else game.State.RANCH_DATA.HOMES[game.State.RANCH_DATA.RESIDENTS[id]["home"]]
@@ -102,6 +102,8 @@ func person(id: String) -> void:
 	game._button(card,"信賴回憶" if tier==1 else "知心回憶",Rect2(248,284,204,44),event.bind(id,tier,0),true)
 	game._button(card,"一起活動",Rect2(28,354,204,44),game.estate_panels.activity_choices.bind(id))
 	game._button(card,"重讀已完成回憶",Rect2(248,354,204,44),replay.bind(id))
+
+	game._button(card,"專屬生活事件",Rect2(28,408,424,40),game.chapter_panels.story.bind(id,0))
 
 func gifts(id: String, page: int = 0) -> void:
 	var pages: int=game.inventory_panels.pages(RULES.GIFTS)

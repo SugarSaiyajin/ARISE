@@ -28,6 +28,8 @@ commands = [
     (["--script", "res://tests/test_journey.gd"], "passed, 0 failed"),
     (["--script", "res://tests/test_journey_scene.gd"], "passed, 0 failed"),
     (["--script", "res://tests/test_journey_scene.gd", "--", "--mobile-ui"], "passed, 0 failed"),
+    (["--script", "res://tests/test_chapters.gd"], "passed, 0 failed"),
+    (["--script", "res://tests/test_chapters.gd", "--", "--mobile-ui"], "passed, 0 failed"),
     (["--script", "res://tests/test_living.gd"], "passed, 0 failed"),
     (["--script", "res://tests/test_living.gd", "--", "--mobile-ui"], "passed, 0 failed"),
     (["--script", "res://tests/test_summer_art.gd"], "passed, 0 failed"),
@@ -81,3 +83,5 @@ for args, marker in commands:
         sys.exit(f"FAIL: Missing completion marker: {marker}")
 print("All import, state, touch and scene checks passed.")
 subprocess.run([sys.executable, str(ROOT / "tests/check_audio_files.py")], env=env, check=True)
+
+subprocess.run([sys.executable, str(ROOT / "tests/check_font_coverage.py")], env=env, check=True)
